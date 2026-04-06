@@ -222,6 +222,18 @@ body.in-store .topbar {
   min-width: min(280px, 100%);
 }
 
+.hero-btn-gold {
+  border-color: rgba(243, 201, 95, 0.72);
+  color: #1b1508;
+  font-weight: 800;
+  background: linear-gradient(180deg, #f9dfa0, #e4b948 58%, #c89324);
+  box-shadow: 0 0 0 1px rgba(251, 226, 150, 0.32), 0 8px 24px rgba(212, 154, 44, 0.36);
+}
+
+.hero-btn-gold:hover {
+  box-shadow: 0 0 0 1px rgba(251, 226, 150, 0.56), 0 12px 28px rgba(212, 154, 44, 0.48);
+}
+
 .hero-btn-alt {
   border-color: color-mix(in srgb, #25d366 55%, var(--border));
   background: linear-gradient(170deg, color-mix(in srgb, #25d366 35%, var(--surface)), var(--surface));
@@ -318,7 +330,8 @@ body.in-store .topbar {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 10px;
+  gap: 14px;
+  flex-wrap: wrap;
 }
 
 .brand h1 {
@@ -344,6 +357,30 @@ body.in-store .topbar {
   margin: 0.35rem 0 0;
   color: var(--muted);
   font-size: 0.9rem;
+}
+
+.main-nav {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.nav-link {
+  text-decoration: none;
+  color: color-mix(in srgb, var(--text) 88%, var(--accent) 12%);
+  font-size: 0.82rem;
+  font-weight: 700;
+  padding: 5px 8px;
+  border-radius: 7px;
+  border: 1px solid transparent;
+  transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+}
+
+.nav-link:hover {
+  color: var(--text);
+  border-color: var(--border);
+  background: color-mix(in srgb, var(--surface) 78%, var(--accent) 22%);
 }
 
 .theme-toggle {
@@ -1070,6 +1107,10 @@ body:not(.in-store) .wa-bubble {
 @media (min-width: 601px) {
   .site-wrap {
     padding-bottom: 26px;
+  }
+
+  .topbar {
+    flex-wrap: nowrap;
   }
 
   .layout {

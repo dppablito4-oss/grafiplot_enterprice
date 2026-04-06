@@ -44,6 +44,8 @@ const nodes = {
   waOnline: document.getElementById("wa-online"),
   waMsg: document.getElementById("wa-msg"),
   toggleStoreBtn: document.getElementById("toggle-store-btn"),
+  openStoreLinks: document.querySelectorAll("[data-open-store='true']"),
+  homeLinks: document.querySelectorAll("[data-go-home='true']"),
   screenFlash: document.getElementById("screen-flash"),
   storeShell: document.getElementById("catalogo"),
   servicesGrid: document.getElementById("services-grid"),
@@ -503,6 +505,27 @@ function bindEvents() {
       openStoreWithFlash();
     });
   }
+
+  nodes.openStoreLinks.forEach((link) => {
+    link.addEventListener("click", (event) => {
+      event.preventDefault();
+      if (isStoreOpen) {
+        nodes.storeShell.scrollIntoView({ behavior: "smooth", block: "start" });
+        return;
+      }
+
+      openStoreWithFlash();
+    });
+  });
+
+  nodes.homeLinks.forEach((link) => {
+    link.addEventListener("click", (event) => {
+      event.preventDefault();
+      setStoreOpen(false, true);
+      const hero = document.getElementById("inicio");
+      hero?.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+  });
 
   if (nodes.waClose && nodes.waBubble) {
     nodes.waClose.addEventListener("click", () => {
