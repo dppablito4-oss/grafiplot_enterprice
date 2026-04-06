@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="GRAFIPLOT - Impresiones, fotocopias, tesis y diseno grafico con atencion rapida.">
+	<title>GRAFIPLOT | Impresiones y Diseno</title>
+	<link rel="stylesheet" href="style.css">
+</head>
+<body>
+	<div class="site-wrap">
+		<header class="topbar">
+			<div class="brand">
+				<h1>GRAFIPLOT</h1>
+				<p>Impresiones y soluciones graficas para estudio y oficina</p>
+			</div>
+			<button id="theme-toggle" class="theme-toggle" type="button" aria-label="Cambiar tema oscuro y claro"></button>
+		</header>
+
+		<main class="layout">
+			<section class="services-grid" aria-label="Catalogo de servicios">
+				<article class="service-card" aria-labelledby="serv-a4-title">
+					<div class="card-head">
+						<div class="icon" aria-hidden="true">🖨️</div>
+					</div>
+					<h2 id="serv-a4-title">Impresion A4 (Color/B&N)</h2>
+					<p>Calidad nitida para apuntes, tareas y documentos empresariales.</p>
+					<p class="price">S/ 0.10 c/u (menos de 100) | S/ 0.09 c/u (100+)</p>
+					<div class="controls">
+						<label for="a4-copies">Cantidad de copias</label>
+						<input id="a4-copies" type="number" min="1" value="1" inputmode="numeric">
+					</div>
+					<p>Total Dynamic: <strong id="a4-total">S/ 0.10</strong></p>
+					<button class="btn add-btn" data-service="a4" type="button">Agregar al pedido</button>
+				</article>
+
+				<article class="service-card premium" aria-labelledby="serv-tesis-title">
+					<div class="card-head">
+						<div class="icon" aria-hidden="true">🎓</div>
+						<span class="badge">PREMIUM</span>
+					</div>
+					<h2 id="serv-tesis-title">Formateo de Tesis (APA, Postgrado)</h2>
+					<p>Correccion de formato academico y estructura profesional para entrega final.</p>
+					<p class="price">Desde S/ 120.00</p>
+					<button class="btn add-btn" data-service="tesis" type="button">Agregar al pedido</button>
+				</article>
+
+				<article class="service-card" aria-labelledby="serv-scan-title">
+					<div class="card-head">
+						<div class="icon" aria-hidden="true">📄</div>
+					</div>
+					<h2 id="serv-scan-title">Fotocopias &amp; Escaneado</h2>
+					<p>Copias rapidas y escaneos digitales listos para envio o archivo.</p>
+					<p class="price">Desde S/ 0.30</p>
+					<button class="btn add-btn" data-service="scan" type="button">Agregar al pedido</button>
+				</article>
+
+				<article class="service-card" aria-labelledby="serv-enc-title">
+					<div class="card-head">
+						<div class="icon" aria-hidden="true">📚</div>
+					</div>
+					<h2 id="serv-enc-title">Encuadernacion (Anillado/Espiralado)</h2>
+					<p>Presentaciones solidas y elegantes para informes, manuales y proyectos.</p>
+					<p class="price">Desde S/ 8.00</p>
+					<button class="btn add-btn" data-service="encuadernacion" type="button">Agregar al pedido</button>
+				</article>
+
+				<article class="service-card" aria-labelledby="serv-dis-title">
+					<div class="card-head">
+						<div class="icon" aria-hidden="true">✏️</div>
+					</div>
+					<h2 id="serv-dis-title">Diseno Grafico Basico</h2>
+					<p>Piezas simples para redes, avisos, flyers y material de apoyo visual.</p>
+					<p class="price">Desde S/ 45.00</p>
+					<button class="btn add-btn" data-service="diseno" type="button">Agregar al pedido</button>
+				</article>
+			</section>
+
+			<aside class="cart-panel" aria-label="Carrito de pedido">
+				<h3>Pedido actual</h3>
+				<ul id="cart-items">
+					<li class="empty">Tu pedido aun esta vacio.</li>
+				</ul>
+				<div class="cart-summary">
+					<span>Total:</span>
+					<strong id="cart-total">S/ 0.00</strong>
+				</div>
+				<button id="whatsapp-btn" class="whatsapp-btn" type="button">Contactar por WhatsApp</button>
+			</aside>
+		</main>
+	</div>
+
+	<script src="script.js"></script>
+</body>
+</html>
