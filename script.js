@@ -228,7 +228,7 @@ const nodes = {
   waBubble: document.getElementById("wa-bubble"),
   waClose: document.getElementById("wa-close"),
   toggleStoreBtn: document.getElementById("toggle-store-btn"),
-  closeStoreBtn: document.getElementById("close-store-btn"),
+  screenFlash: document.getElementById("screen-flash"),
   storeShell: document.getElementById("catalogo"),
   a4CopiesInput: document.getElementById("a4-copies"),
   a4Total: document.getElementById("a4-total"),
@@ -270,10 +270,11 @@ function setStoreOpen(nextOpen, shouldScroll = false) {
   isStoreOpen = nextOpen;
   nodes.storeShell.classList.toggle("is-open", isStoreOpen);
   nodes.storeShell.setAttribute("aria-hidden", isStoreOpen ? "false" : "true");
+  nodes.body.classList.toggle("in-store", isStoreOpen);
 
   if (nodes.toggleStoreBtn) {
     nodes.toggleStoreBtn.setAttribute("aria-expanded", isStoreOpen ? "true" : "false");
-    nodes.toggleStoreBtn.textContent = isStoreOpen ? "Cerrar tienda online" : "Ir a tienda online";
+    nodes.toggleStoreBtn.textContent = "Ir a tienda online";
   }
 
   if (shouldScroll) {
@@ -283,6 +284,18 @@ function setStoreOpen(nextOpen, shouldScroll = false) {
       document.querySelector(".hero")?.scrollIntoView({ behavior: "smooth", block: "start" });
     }
   }
+}
+
+function openStoreWithFlash() {
+  if (nodes.screenFlash) {
+    nodes.screenFlash.classList.remove("run");
+    void nodes.screenFlash.offsetWidth;
+    nodes.screenFlash.classList.add("run");
+  }
+
+  setTimeout(() => {
+    setStoreOpen(true, true);
+  }, 170);
 }
 
 function getTierLabel(service, quantity) {
@@ -779,13 +792,12 @@ function bindEvents() {
 
   if (nodes.toggleStoreBtn) {
     nodes.toggleStoreBtn.addEventListener("click", () => {
-      setStoreOpen(!isStoreOpen, true);
-    });
-  }
+      if (isStoreOpen) {
+        nodes.storeShell.scrollIntoView({ behavior: "smooth", block: "start" });
+        return;
+      }
 
-  if (nodes.closeStoreBtn) {
-    nodes.closeStoreBtn.addEventListener("click", () => {
-      setStoreOpen(false, true);
+      openStoreWithFlash();
     });
   }
 

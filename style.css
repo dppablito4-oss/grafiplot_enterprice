@@ -133,6 +133,22 @@ body::after {
   gap: 14px;
 }
 
+body.in-store .hero {
+  max-height: 0;
+  opacity: 0;
+  transform: translateY(-16px);
+  margin-top: 0;
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+  pointer-events: none;
+  transition: max-height 0.3s ease, opacity 0.25s ease, transform 0.25s ease;
+}
+
+body.in-store .topbar {
+  top: 6px;
+}
+
 .hero-kicker {
   margin: 0;
   color: var(--accent-strong);
@@ -316,6 +332,10 @@ body.light .theme-toggle::after {
   pointer-events: auto;
 }
 
+body.in-store .store-shell {
+  margin-top: 8px;
+}
+
 .store-topbar {
   border: 1px solid var(--border);
   border-radius: 12px;
@@ -331,6 +351,38 @@ body.light .theme-toggle::after {
   margin: 0;
   font-size: 0.86rem;
   color: var(--muted);
+}
+
+.screen-flash {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 130;
+  opacity: 0;
+  background:
+    radial-gradient(circle at 50% 50%, rgba(220, 247, 255, 0.55), rgba(56, 231, 255, 0.22) 38%, rgba(6, 13, 23, 0.1) 72%, rgba(6, 13, 23, 0.9));
+}
+
+.screen-flash.run {
+  animation: screenBlink 420ms ease forwards;
+}
+
+@keyframes screenBlink {
+  0% {
+    opacity: 0;
+  }
+
+  30% {
+    opacity: 1;
+  }
+
+  65% {
+    opacity: 0.65;
+  }
+
+  100% {
+    opacity: 0;
+  }
 }
 
 .catalog-panel {
