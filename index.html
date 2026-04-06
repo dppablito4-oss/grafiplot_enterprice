@@ -18,11 +18,31 @@
 		</header>
 
 		<main class="layout">
+			<section class="catalog-panel" aria-label="Exploracion del catalogo">
+				<div class="catalog-toolbar">
+					<label class="search-wrap" for="service-search">
+						<span>Buscar</span>
+						<input id="service-search" type="search" placeholder="Ejemplo: tesis, anillado, escaneado">
+					</label>
+					<label class="filter-wrap" for="category-filter">
+						<span>Categoria</span>
+						<select id="category-filter">
+							<option value="all">Todas</option>
+							<option value="impresion">Impresion y copias</option>
+							<option value="academico">Servicios academicos</option>
+							<option value="acabado">Acabados y presentacion</option>
+							<option value="diseno">Diseno</option>
+						</select>
+					</label>
+					<p id="catalog-count" class="catalog-count">Mostrando 0 servicios</p>
+				</div>
+
 			<section class="services-grid" aria-label="Catalogo de servicios">
-				<article class="service-card" aria-labelledby="serv-a4-title">
+				<article class="service-card" data-category="impresion" data-search="impresion a4 copias color blanco negro documentos" aria-labelledby="serv-a4-title">
 					<div class="card-head">
 						<div class="icon" aria-hidden="true">🖨️</div>
 					</div>
+					<p class="service-category">Impresion y copias</p>
 					<h2 id="serv-a4-title">Impresion A4 (Color/B&N)</h2>
 					<p>Calidad nitida para apuntes, tareas y documentos empresariales.</p>
 					<p class="price">S/ 0.10 c/u (menos de 100) | S/ 0.09 c/u (100+)</p>
@@ -34,46 +54,51 @@
 					<button class="btn add-btn" data-service="a4" type="button">Agregar al pedido</button>
 				</article>
 
-				<article class="service-card premium" aria-labelledby="serv-tesis-title">
+				<article class="service-card premium" data-category="academico" data-search="tesis formato apa postgrado correccion academico" aria-labelledby="serv-tesis-title">
 					<div class="card-head">
 						<div class="icon" aria-hidden="true">🎓</div>
 						<span class="badge">PREMIUM</span>
 					</div>
+					<p class="service-category">Servicios academicos</p>
 					<h2 id="serv-tesis-title">Formateo de Tesis (APA, Postgrado)</h2>
 					<p>Correccion de formato academico y estructura profesional para entrega final.</p>
 					<p class="price">Desde S/ 120.00</p>
 					<button class="btn add-btn" data-service="tesis" type="button">Agregar al pedido</button>
 				</article>
 
-				<article class="service-card" aria-labelledby="serv-scan-title">
+				<article class="service-card" data-category="impresion" data-search="fotocopias escaneado scan pdf archivos envio" aria-labelledby="serv-scan-title">
 					<div class="card-head">
 						<div class="icon" aria-hidden="true">📄</div>
 					</div>
+					<p class="service-category">Impresion y copias</p>
 					<h2 id="serv-scan-title">Fotocopias &amp; Escaneado</h2>
 					<p>Copias rapidas y escaneos digitales listos para envio o archivo.</p>
 					<p class="price">Desde S/ 0.30</p>
 					<button class="btn add-btn" data-service="scan" type="button">Agregar al pedido</button>
 				</article>
 
-				<article class="service-card" aria-labelledby="serv-enc-title">
+				<article class="service-card" data-category="acabado" data-search="encuadernacion anillado espiralado presentacion informe" aria-labelledby="serv-enc-title">
 					<div class="card-head">
 						<div class="icon" aria-hidden="true">📚</div>
 					</div>
+					<p class="service-category">Acabados y presentacion</p>
 					<h2 id="serv-enc-title">Encuadernacion (Anillado/Espiralado)</h2>
 					<p>Presentaciones solidas y elegantes para informes, manuales y proyectos.</p>
 					<p class="price">Desde S/ 8.00</p>
 					<button class="btn add-btn" data-service="encuadernacion" type="button">Agregar al pedido</button>
 				</article>
 
-				<article class="service-card" aria-labelledby="serv-dis-title">
+				<article class="service-card" data-category="diseno" data-search="diseno grafico flyer redes avisos piezas visuales" aria-labelledby="serv-dis-title">
 					<div class="card-head">
 						<div class="icon" aria-hidden="true">✏️</div>
 					</div>
+					<p class="service-category">Diseno</p>
 					<h2 id="serv-dis-title">Diseno Grafico Basico</h2>
 					<p>Piezas simples para redes, avisos, flyers y material de apoyo visual.</p>
 					<p class="price">Desde S/ 45.00</p>
 					<button class="btn add-btn" data-service="diseno" type="button">Agregar al pedido</button>
 				</article>
+			</section>
 			</section>
 
 			<aside class="cart-panel" aria-label="Carrito de pedido">
@@ -81,14 +106,32 @@
 				<ul id="cart-items">
 					<li class="empty">Tu pedido aun esta vacio.</li>
 				</ul>
+				<label class="note-wrap" for="customer-note">Nota del cliente para el pedido</label>
+				<textarea id="customer-note" rows="3" placeholder="Ejemplo: enviar PDF final por WhatsApp, lo necesito hoy"></textarea>
 				<div class="cart-summary">
 					<span>Total:</span>
 					<strong id="cart-total">S/ 0.00</strong>
+				</div>
+				<div class="biz-info" aria-label="Informacion del negocio">
+					<h4>Horario de atencion</h4>
+					<ul class="info-list">
+						<li>Lunes a viernes: 7:00 am a 10:00 pm (corrido)</li>
+						<li>Sabados: 8:00 am a 10:00 pm</li>
+						<li>Domingos: 9:00 am a 10:00 pm</li>
+						<li>Atendemos tambien feriados</li>
+					</ul>
+					<h4>Metodos de pago</h4>
+					<ul class="info-list">
+						<li>Efectivo</li>
+						<li>Billeteras digitales (Yape, Plin y similares)</li>
+						<li>Por ahora no aceptamos tarjeta (sin POS)</li>
+					</ul>
 				</div>
 				<button id="whatsapp-btn" class="whatsapp-btn" type="button">Contactar por WhatsApp</button>
 			</aside>
 		</main>
 	</div>
+	<div id="toast" class="toast" role="status" aria-live="polite"></div>
 
 	<script src="script.js"></script>
 </body>

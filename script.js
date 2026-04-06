@@ -1,6 +1,7 @@
 const STORAGE_KEYS = {
   cart: "grafiplot_cart_v1",
-  theme: "grafiplot_theme_v1"
+  theme: "grafiplot_theme_v1",
+  note: "grafiplot_note_v1"
 };
 
 const SERVICES = {
@@ -41,8 +42,16 @@ const nodes = {
   cartItems: document.getElementById("cart-items"),
   cartTotal: document.getElementById("cart-total"),
   whatsappBtn: document.getElementById("whatsapp-btn"),
-  addButtons: document.querySelectorAll(".add-btn")
+  customerNote: document.getElementById("customer-note"),
+  toast: document.getElementById("toast"),
+  serviceSearch: document.getElementById("service-search"),
+  categoryFilter: document.getElementById("category-filter"),
+  catalogCount: document.getElementById("catalog-count"),
+  addButtons: document.querySelectorAll(".add-btn"),
+  serviceCards: document.querySelectorAll(".service-card")
 };
+
+let toastTimeoutId = null;
 
 function formatMoney(value) {
   return `S/ ${value.toFixed(2)}`;
@@ -72,6 +81,10 @@ function saveCart() {
   localStorage.setItem(STORAGE_KEYS.cart, JSON.stringify(cart));
 }
 
+function saveNote() {
+  localStorage.setItem(STORAGE_KEYS.note, nodes.customerNote.value.trim());
+}
+
 function loadCart() {
   try {
     const raw = localStorage.getItem(STORAGE_KEYS.cart);
@@ -90,27 +103,55 @@ function getCartTotal() {
   return cart.reduce((sum, item) => sum + item.subtotal, 0);
 }
 
+function updateWhatsappButtonState(isEmpty) {
+  nodes.whatsappBtn.disabled = isEmpty;
+  nodes.whatsappBtn.classList.toggle("is-disabled", isEmpty);
+}
+
+function showToast(message) {
+  if (!nodes.toast) {
+    return;
+  }
+
+  if (toastTimeoutId) {
+    clearTimeout(toastTimeoutId);
+  }
+
+  nodes.toast.textContent = message;
+  nodes.toast.classList.add("show");
+  toastTimeoutId = setTimeout(() => {
+    nodes.toast.classList.remove("show");
+  }, 1600);
+}
+
 function renderCart() {
   if (cart.length === 0) {
     nodes.cartItems.innerHTML = '<li class="empty">Tu pedido aun esta vacio.</li>';
     nodes.cartTotal.textContent = formatMoney(0);
-    nodes.whatsappBtn.disabled = true;
-    nodes.whatsappBtn.style.opacity = "0.5";
-    nodes.whatsappBtn.style.cursor = "not-allowed";
+    updateWhatsappButtonState(true);
     return;
   }
 
   nodes.cartItems.innerHTML = cart
     .map(
       (item) =>
-        `<li><span>${item.name} x ${item.quantity}</span><strong>${formatMoney(item.subtotal)}</strong></li>`
+        `<li>
+          <div class="cart-item-head">
+            <span>✅ ${item.name}</span>
+            <strong>${formatMoney(item.subtotal)}</strong>
+          </div>
+          <div class="cart-item-meta">${formatMoney(item.unitPrice)} x ${item.quantity}</div>
+          <div class="cart-item-actions">
+            <button class="cart-action" type="button" data-action="decrease" data-id="${item.id}" aria-label="Quitar una unidad">-</button>
+            <button class="cart-action" type="button" data-action="increase" data-id="${item.id}" aria-label="Agregar una unidad">+</button>
+            <button class="cart-action remove" type="button" data-action="remove" data-id="${item.id}" aria-label="Eliminar servicio">x</button>
+          </div>
+        </li>`
     )
     .join("");
 
   nodes.cartTotal.textContent = formatMoney(getCartTotal());
-  nodes.whatsappBtn.disabled = false;
-  nodes.whatsappBtn.style.opacity = "1";
-  nodes.whatsappBtn.style.cursor = "pointer";
+  updateWhatsappButtonState(false);
 }
 
 function upsertCartItem(newItem) {
@@ -118,13 +159,51 @@ function upsertCartItem(newItem) {
 
   if (existing) {
     existing.quantity += newItem.quantity;
-    existing.subtotal += newItem.subtotal;
-    if (!newItem.dynamic) {
+    if (newItem.dynamic) {
+      existing.unitPrice = getA4UnitPrice(existing.quantity);
+      existing.subtotal = existing.quantity * existing.unitPrice;
+    } else {
       existing.unitPrice = newItem.unitPrice;
+      existing.subtotal = existing.quantity * existing.unitPrice;
     }
   } else {
     cart.push({ ...newItem });
   }
+
+  saveCart();
+  renderCart();
+}
+
+function changeItemQuantity(serviceId, direction) {
+  const item = cart.find((entry) => entry.id === serviceId);
+  if (!item) {
+    return;
+  }
+
+  if (direction === "remove") {
+    cart = cart.filter((entry) => entry.id !== serviceId);
+    saveCart();
+    renderCart();
+    showToast("Servicio eliminado del pedido");
+    return;
+  }
+
+  const delta = direction === "increase" ? 1 : -1;
+  const nextQuantity = item.quantity + delta;
+
+  if (nextQuantity < 1) {
+    cart = cart.filter((entry) => entry.id !== serviceId);
+    saveCart();
+    renderCart();
+    showToast("Servicio eliminado del pedido");
+    return;
+  }
+
+  item.quantity = nextQuantity;
+  if (item.dynamic) {
+    item.unitPrice = getA4UnitPrice(item.quantity);
+  }
+  item.subtotal = item.quantity * item.unitPrice;
 
   saveCart();
   renderCart();
@@ -141,6 +220,7 @@ function addServiceToCart(serviceId) {
       subtotal: result.total,
       dynamic: true
     });
+    showToast("Impresion A4 agregada al pedido");
     return;
   }
 
@@ -157,14 +237,18 @@ function addServiceToCart(serviceId) {
     subtotal: service.unitPrice,
     dynamic: false
   });
+  showToast(`${service.name} agregado al pedido`);
 }
 
 function buildWhatsAppMessage() {
-  const lines = cart.map(
-    (item) => `${item.name} x ${item.quantity} - ${formatMoney(item.subtotal)}`
-  );
+  const lines = cart.map((item, index) => {
+    return `${index + 1}. ✅ ${item.name} (${formatMoney(item.unitPrice)} x ${item.quantity}) = ${formatMoney(item.subtotal)}`;
+  });
+
+  const customerNote = nodes.customerNote.value.trim();
+  const noteSection = customerNote ? `\n📝 Nota del cliente:\n${customerNote}` : "";
   const total = formatMoney(getCartTotal());
-  return `Hola EQUIPO GRAFIPLOT, quiero hacer un pedido: ${lines.join(", ")}. Total: ${total}.`;
+  return `Hola EQUIPO GRAFIPLOT, quiero hacer un pedido:\n\n📦 Detalle del pedido:\n${lines.join("\n")}\n\n💰 Total: ${total}${noteSection}\n\nGracias.`;
 }
 
 function openWhatsAppCheckout() {
@@ -189,6 +273,32 @@ function loadTheme() {
   applyTheme(storedTheme || "dark");
 }
 
+function loadNote() {
+  const savedNote = localStorage.getItem(STORAGE_KEYS.note);
+  nodes.customerNote.value = savedNote || "";
+}
+
+function applyCatalogFilters() {
+  const query = nodes.serviceSearch.value.trim().toLowerCase();
+  const selectedCategory = nodes.categoryFilter.value;
+  let visibleCount = 0;
+
+  nodes.serviceCards.forEach((card) => {
+    const category = card.dataset.category;
+    const searchableText = `${card.dataset.search || ""} ${card.textContent}`.toLowerCase();
+    const matchCategory = selectedCategory === "all" || category === selectedCategory;
+    const matchQuery = !query || searchableText.includes(query);
+    const isVisible = matchCategory && matchQuery;
+
+    card.hidden = !isVisible;
+    if (isVisible) {
+      visibleCount += 1;
+    }
+  });
+
+  nodes.catalogCount.textContent = `Mostrando ${visibleCount} servicio${visibleCount === 1 ? "" : "s"}`;
+}
+
 function bindEvents() {
   nodes.themeToggle.addEventListener("click", () => {
     const next = nodes.body.classList.contains("light") ? "dark" : "light";
@@ -204,13 +314,34 @@ function bindEvents() {
     });
   });
 
+  nodes.cartItems.addEventListener("click", (event) => {
+    const target = event.target.closest("button[data-action]");
+    if (!target) {
+      return;
+    }
+
+    const action = target.dataset.action;
+    const id = target.dataset.id;
+    if (!action || !id) {
+      return;
+    }
+
+    changeItemQuantity(id, action);
+  });
+
+  nodes.customerNote.addEventListener("input", saveNote);
+  nodes.serviceSearch.addEventListener("input", applyCatalogFilters);
+  nodes.categoryFilter.addEventListener("change", applyCatalogFilters);
+
   nodes.whatsappBtn.addEventListener("click", openWhatsAppCheckout);
 }
 
 function init() {
   loadTheme();
   loadCart();
+  loadNote();
   calculateA4Total();
+  applyCatalogFilters();
   renderCart();
   bindEvents();
 }
