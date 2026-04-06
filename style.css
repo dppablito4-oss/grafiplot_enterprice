@@ -287,15 +287,47 @@ body.in-store .topbar {
 }
 
 .hero-btn-gold {
-  border-color: rgba(243, 201, 95, 0.72);
-  color: #1b1508;
+  border-color: rgba(255, 72, 72, 0.9);
+  color: #fff6f6;
   font-weight: 800;
-  background: linear-gradient(180deg, #f9dfa0, #e4b948 58%, #c89324);
-  box-shadow: 0 0 0 1px rgba(251, 226, 150, 0.32), 0 8px 24px rgba(212, 154, 44, 0.36);
+  font-size: clamp(1.1rem, 0.9rem + 0.5vw, 1.25rem);
+  min-width: min(420px, 100%);
+  padding: 14px 22px;
+  letter-spacing: 0.01em;
+  background: linear-gradient(180deg, #ff4e4e, #ff1f1f 56%, #c30000);
+  box-shadow:
+    0 0 0 1px rgba(255, 110, 110, 0.42),
+    0 0 16px rgba(255, 45, 45, 0.48),
+    0 0 34px rgba(255, 22, 22, 0.32),
+    0 10px 26px rgba(124, 0, 0, 0.44);
+  animation: ctaPulseZoom 1.35s ease-in-out infinite;
 }
 
 .hero-btn-gold:hover {
-  box-shadow: 0 0 0 1px rgba(251, 226, 150, 0.56), 0 12px 28px rgba(212, 154, 44, 0.48);
+  box-shadow:
+    0 0 0 1px rgba(255, 136, 136, 0.62),
+    0 0 22px rgba(255, 46, 46, 0.62),
+    0 0 42px rgba(255, 22, 22, 0.46),
+    0 14px 30px rgba(124, 0, 0, 0.54);
+}
+
+@keyframes ctaPulseZoom {
+  0%,
+  100% {
+    transform: scale(1);
+    filter: saturate(1);
+  }
+
+  50% {
+    transform: scale(1.08);
+    filter: saturate(1.16);
+  }
+}
+
+body.light .hero-btn-gold {
+  border-color: rgba(228, 30, 30, 0.92);
+  color: #ffffff;
+  background: linear-gradient(180deg, #ff5757, #ff2323 56%, #c10000);
 }
 
 .hero-btn-alt {
