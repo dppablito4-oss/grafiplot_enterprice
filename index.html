@@ -24,19 +24,26 @@
 				<p class="hero-kicker">Tienda online oficial</p>
 				<h2>Tu centro de impresion y ploteo con ritmo de chamba real</h2>
 				<p>Atendemos corrido toda la semana, incluyendo feriados. Arma tu pedido online y envialo directo por WhatsApp.</p>
-				<div class="hero-actions">
-					<button id="toggle-store-btn" class="btn hero-btn" type="button" aria-controls="catalogo" aria-expanded="false">Ir a tienda online</button>
-					<a class="btn hero-btn-alt" href="https://wa.me/918165428" target="_blank" rel="noopener noreferrer">Contactar WhatsApp</a>
-				</div>
 				<ul class="hero-meta">
 					<li>Horario extendido: lun-vie 7am-10pm, sab 8am-10pm, dom 9am-10pm</li>
 					<li>Pagos: efectivo y billeteras digitales (sin POS por ahora)</li>
-					<li>Ubicacion: <a id="maps-link" class="map-link" href="https://maps.app.goo.gl/xVdKmLRH2RPNoTJW9" target="_blank" rel="noopener noreferrer">Ver en Google Maps</a></li>
+					<li>Direccion: AV.UNIVERSITARIA 606. ref. FRENTE A LA PUERTA PRINCIPAL DE LA UNHEVAL</li>
 				</ul>
+				<div class="map-cta" aria-label="Ubicacion en Google Maps">
+					<svg class="map-icon" viewBox="0 0 48 48" aria-hidden="true" focusable="false">
+						<path fill="#EA4335" d="M24 4c-7.18 0-13 5.82-13 13 0 8.83 13 27 13 27s13-18.17 13-27c0-7.18-5.82-13-13-13z"></path>
+						<circle cx="24" cy="17" r="5.5" fill="#fff"></circle>
+						<path fill="#34A853" d="M7 42l10-9"></path>
+					</svg>
+					<a id="maps-link" class="map-btn" href="https://maps.app.goo.gl/xVdKmLRH2RPNoTJW9" target="_blank" rel="noopener noreferrer">Ver mapa</a>
+				</div>
 				<div class="wallet-strip" aria-label="Billeteras aceptadas">
 					<img src="assets/payments/yape.png" alt="Yape">
 					<img src="assets/payments/plin.png" alt="Plin">
 					<img src="assets/payments/lukita.png" alt="Lukita">
+				</div>
+				<div class="hero-actions">
+					<button id="toggle-store-btn" class="btn hero-btn" type="button" aria-controls="catalogo" aria-expanded="false">Ir a tienda online</button>
 				</div>
 			</div>
 			<figure class="hero-media">
@@ -107,9 +114,9 @@
 	<div class="wa-widget" aria-label="Chat de WhatsApp">
 		<div id="wa-bubble" class="wa-bubble" role="status" aria-live="polite">
 			<button id="wa-close" class="wa-close" type="button" aria-label="Cerrar mensaje">x</button>
-			<p class="wa-agent">Asesor 1</p>
-			<p class="wa-online">venta online</p>
-			<p class="wa-msg">Bienvenido, indicanos que producto desea consultar.</p>
+			<p id="wa-agent" class="wa-agent">WhatsApp</p>
+			<p id="wa-online" class="wa-online">atencion directa</p>
+			<p id="wa-msg" class="wa-msg">Contactar por WhatsApp</p>
 		</div>
 		<a class="wa-fab" href="https://wa.me/918165428?text=Hola%20Grafiplot%2C%20quiero%20consultar%20un%20producto" target="_blank" rel="noopener noreferrer" aria-label="Abrir chat de WhatsApp">
 			<img src="assets/whatsapp/whatsapp-logo.png" alt="WhatsApp">
