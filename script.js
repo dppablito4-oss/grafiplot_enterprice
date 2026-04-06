@@ -140,7 +140,7 @@ function openStoreWithFlash() {
 function renderCatalog() {
   const cardsMarkup = CATALOG_ITEMS.map((item) => {
     const unitPrice = getUnitPrice(item, 1);
-    const productImagePath = `assets/products/${item.id}.png`;
+    const productImagePath = `assets/products/${item.id}.svg`;
     const searchText = `${item.name} ${item.category} ${item.categoryLabel}`.toLowerCase();
 
     return `<article class="service-card" data-category="${item.category}" data-search="${searchText}" aria-labelledby="${item.id}-title">
