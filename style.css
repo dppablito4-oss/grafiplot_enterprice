@@ -290,17 +290,17 @@ body.in-store .topbar {
   border-color: rgba(255, 72, 72, 0.9);
   color: #fff6f6;
   font-weight: 800;
-  font-size: clamp(1.1rem, 0.9rem + 0.5vw, 1.25rem);
-  min-width: min(420px, 100%);
-  padding: 14px 22px;
+  font-size: clamp(1.18rem, 0.96rem + 0.55vw, 1.34rem);
+  min-width: min(470px, 100%);
+  padding: 16px 26px;
   letter-spacing: 0.01em;
-  background: linear-gradient(180deg, #ff4e4e, #ff1f1f 56%, #c30000);
+  background: linear-gradient(180deg, #ff3c3c, #ea0f0f 56%, #b80000);
   box-shadow:
     0 0 0 1px rgba(255, 110, 110, 0.42),
     0 0 16px rgba(255, 45, 45, 0.48),
     0 0 34px rgba(255, 22, 22, 0.32),
     0 10px 26px rgba(124, 0, 0, 0.44);
-  animation: ctaPulseZoom 1.35s ease-in-out infinite;
+  animation: ctaPulseZoom 3s ease-in-out infinite;
 }
 
 .hero-btn-gold:hover {
@@ -313,12 +313,13 @@ body.in-store .topbar {
 
 @keyframes ctaPulseZoom {
   0%,
+  8%,
   100% {
     transform: scale(1);
     filter: saturate(1);
   }
 
-  50% {
+  4% {
     transform: scale(1.08);
     filter: saturate(1.16);
   }
@@ -327,7 +328,7 @@ body.in-store .topbar {
 body.light .hero-btn-gold {
   border-color: rgba(228, 30, 30, 0.92);
   color: #ffffff;
-  background: linear-gradient(180deg, #ff5757, #ff2323 56%, #c10000);
+  background: linear-gradient(180deg, #ff3c3c, #ea0f0f 56%, #b80000);
 }
 
 .hero-btn-alt {
