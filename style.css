@@ -135,6 +135,56 @@ body::after {
   overflow: hidden;
 }
 
+.promo-ribbon {
+  margin-top: 10px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: linear-gradient(90deg, color-mix(in srgb, var(--surface) 86%, var(--accent) 14%), color-mix(in srgb, var(--surface-2) 90%, var(--accent) 10%));
+  overflow: hidden;
+  box-shadow: var(--shadow);
+}
+
+.promo-ribbon-track {
+  min-width: max-content;
+  display: flex;
+  align-items: center;
+  gap: 26px;
+  padding: 8px 14px;
+  color: color-mix(in srgb, var(--text) 90%, var(--accent) 10%);
+  font-weight: 700;
+  font-size: 0.78rem;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  animation: ribbonFlow 22s linear infinite;
+}
+
+.promo-ribbon-track span {
+  position: relative;
+  white-space: nowrap;
+}
+
+.promo-ribbon-track span + span::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--accent) 72%, #ffffff 28%);
+  position: absolute;
+  left: -16px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+@keyframes ribbonFlow {
+  0% {
+    transform: translateX(0);
+  }
+
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
 .hero-bg {
   position: absolute;
   inset: 0;
@@ -392,6 +442,33 @@ body.in-store .topbar {
   margin-top: 18px;
   display: grid;
   gap: 16px;
+}
+
+.business-strip {
+  margin-top: 14px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: linear-gradient(145deg, color-mix(in srgb, var(--surface) 82%, var(--accent) 18%), color-mix(in srgb, var(--surface-2) 88%, var(--accent) 12%));
+  box-shadow: var(--shadow);
+  padding: 11px 14px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.business-chip {
+  margin: 0;
+  border: 1px solid color-mix(in srgb, var(--border) 80%, #ffffff 20%);
+  background: color-mix(in srgb, var(--surface) 78%, transparent);
+  color: var(--text);
+  border-radius: 999px;
+  padding: 8px 12px;
+  font-size: 0.8rem;
+  line-height: 1.2;
+}
+
+.business-chip strong {
+  letter-spacing: 0.05em;
 }
 
 .store-shell {
@@ -1108,6 +1185,14 @@ body:not(.in-store) .wa-bubble {
     grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   }
 
+  .business-strip {
+    padding: 12px 16px;
+  }
+
+  .business-chip {
+    font-size: 0.82rem;
+  }
+
   .cart-panel {
     position: sticky;
     top: 96px;
@@ -1120,5 +1205,29 @@ body:not(.in-store) .wa-bubble {
 @media (min-width: 1100px) {
   .services-grid {
     grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  }
+}
+
+@media (max-width: 600px) {
+  .promo-ribbon-track {
+    font-size: 0.72rem;
+    gap: 20px;
+    padding: 7px 10px;
+    animation-duration: 18s;
+  }
+
+  .promo-ribbon-track span + span::before {
+    left: -12px;
+  }
+
+  .business-strip {
+    padding: 10px;
+    gap: 7px;
+  }
+
+  .business-chip {
+    width: 100%;
+    border-radius: 10px;
+    font-size: 0.78rem;
   }
 }
