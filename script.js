@@ -225,6 +225,9 @@ let servicesById = {};
 const nodes = {
   body: document.body,
   themeToggle: document.getElementById("theme-toggle"),
+  toggleStoreBtn: document.getElementById("toggle-store-btn"),
+  closeStoreBtn: document.getElementById("close-store-btn"),
+  storeShell: document.getElementById("catalogo"),
   a4CopiesInput: document.getElementById("a4-copies"),
   a4Total: document.getElementById("a4-total"),
   servicesGrid: document.getElementById("services-grid"),
@@ -243,6 +246,7 @@ const nodes = {
 };
 
 let toastTimeoutId = null;
+let isStoreOpen = false;
 
 function formatMoney(value) {
   return `S/ ${value.toFixed(2)}`;
@@ -258,6 +262,25 @@ function sanitizeQuantity(value) {
 
 function calculateA4Total() {
   return { quantity: 1, unitPrice: 0.1, total: 0.1 };
+}
+
+function setStoreOpen(nextOpen, shouldScroll = false) {
+  isStoreOpen = nextOpen;
+  nodes.storeShell.classList.toggle("is-open", isStoreOpen);
+  nodes.storeShell.setAttribute("aria-hidden", isStoreOpen ? "false" : "true");
+
+  if (nodes.toggleStoreBtn) {
+    nodes.toggleStoreBtn.setAttribute("aria-expanded", isStoreOpen ? "true" : "false");
+    nodes.toggleStoreBtn.textContent = isStoreOpen ? "Cerrar tienda online" : "Ir a tienda online";
+  }
+
+  if (shouldScroll) {
+    if (isStoreOpen) {
+      nodes.storeShell.scrollIntoView({ behavior: "smooth", block: "start" });
+    } else {
+      document.querySelector(".hero")?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  }
 }
 
 function getTierLabel(service, quantity) {
@@ -732,6 +755,18 @@ function bindEvents() {
   nodes.serviceSearch.addEventListener("input", applyCatalogFilters);
   nodes.categoryFilter.addEventListener("change", applyCatalogFilters);
 
+  if (nodes.toggleStoreBtn) {
+    nodes.toggleStoreBtn.addEventListener("click", () => {
+      setStoreOpen(!isStoreOpen, true);
+    });
+  }
+
+  if (nodes.closeStoreBtn) {
+    nodes.closeStoreBtn.addEventListener("click", () => {
+      setStoreOpen(false, true);
+    });
+  }
+
   nodes.whatsappBtn.addEventListener("click", openWhatsAppCheckout);
   nodes.clearCartBtn.addEventListener("click", clearCartWithConfirmation);
   bindCatalogControls();
@@ -745,6 +780,7 @@ function init() {
   loadCart();
   loadNote();
   calculateA4Total();
+  setStoreOpen(false, false);
   applyCatalogFilters();
   renderCart();
   bindEvents();

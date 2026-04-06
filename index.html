@@ -23,22 +23,31 @@
 				<h2>Tu centro de impresion y ploteo con ritmo de chamba real</h2>
 				<p>Atendemos corrido toda la semana, incluyendo feriados. Arma tu pedido online y envialo directo por WhatsApp.</p>
 				<div class="hero-actions">
-					<a class="btn hero-btn" href="#catalogo">Ir a tienda online</a>
+					<button id="toggle-store-btn" class="btn hero-btn" type="button" aria-controls="catalogo" aria-expanded="false">Ir a tienda online</button>
 					<a class="btn hero-btn-alt" href="https://wa.me/918165428" target="_blank" rel="noopener noreferrer">Contactar WhatsApp</a>
 				</div>
 				<ul class="hero-meta">
 					<li>Horario extendido: lun-vie 7am-10pm, sab 8am-10pm, dom 9am-10pm</li>
 					<li>Pagos: efectivo y billeteras digitales (sin POS por ahora)</li>
+					<li>Ubicacion: <a id="maps-link" class="map-link" href="https://maps.google.com/?q=Grafiplot" target="_blank" rel="noopener noreferrer">Ver en Google Maps</a></li>
 				</ul>
+				<div class="wallet-strip" aria-label="Billeteras aceptadas">
+					<img src="assets/payments/yape.png" alt="Yape">
+					<img src="assets/payments/plin.png" alt="Plin">
+					<img src="assets/payments/lukita.png" alt="Lukita">
+				</div>
 			</div>
-			<div class="hero-media" aria-hidden="true">
-				<div class="photo-card photo-main">Centro de copiado</div>
-				<div class="photo-card">Impresion A4</div>
-				<div class="photo-card">Ploteos A0-A4</div>
-			</div>
+			<figure class="hero-media">
+				<img src="assets/hero/portada-grafiplot.jpg" alt="Fachada o interior de Grafiplot">
+				<figcaption>Sube aqui tu foto real principal de la tienda</figcaption>
+			</figure>
 		</section>
 
-		<main id="catalogo" class="layout">
+		<main id="catalogo" class="layout store-shell" aria-hidden="true">
+			<div class="store-topbar">
+				<p>Tienda online activa</p>
+				<button id="close-store-btn" class="btn" type="button">Cerrar tienda</button>
+			</div>
 			<section class="catalog-panel" aria-label="Exploracion del catalogo">
 				<div class="catalog-toolbar">
 					<label class="search-wrap" for="service-search">
