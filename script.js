@@ -306,6 +306,7 @@ function getTierStatusMessage(service, quantity) {
 function renderCatalog() {
   const cardsMarkup = CATALOG_ITEMS.map((item) => {
     const hasDualPricing = item.pricing.mode === "dual";
+    const productImagePath = `assets/products/${item.id}.png`;
     const pricingBlock = hasDualPricing
       ? `<div class="price-line"><span>Unidad: <strong>${formatMoney(item.pricing.unidad)}</strong></span><span>Cantidad: <strong>${formatMoney(item.pricing.cantidad)}</strong></span></div>`
       : `<div class="price-line"><span>Precio: <strong>${formatMoney(item.pricing.value)}</strong></span></div>`;
@@ -318,6 +319,10 @@ function renderCatalog() {
       <div class="card-head">
         <div class="icon" aria-hidden="true">${item.icon}</div>
       </div>
+      <figure class="service-media" data-image-wrap="${item.id}">
+        <img class="product-image" data-image-id="${item.id}" src="${productImagePath}" alt="${item.name}" loading="lazy">
+        <span class="media-fallback">${item.name}</span>
+      </figure>
       <p class="service-category">${item.categoryLabel}</p>
       <h2 id="${item.id}-title">${item.name}</h2>
       <p>${item.description}</p>
@@ -335,6 +340,21 @@ function renderCatalog() {
   }).join("");
 
   nodes.servicesGrid.innerHTML = cardsMarkup;
+}
+
+function bindProductImageFallbacks() {
+  const images = nodes.servicesGrid.querySelectorAll(".product-image");
+  images.forEach((image) => {
+    image.addEventListener("error", () => {
+      const wrapper = image.closest(".service-media");
+      if (!wrapper) {
+        return;
+      }
+
+      wrapper.classList.add("missing-image");
+      image.remove();
+    }, { once: true });
+  });
 }
 
 function getEstimatedUnitPrice(service, quantity) {
@@ -782,6 +802,7 @@ function bindEvents() {
 
 function init() {
   renderCatalog();
+  bindProductImageFallbacks();
   refreshServicesFromDom();
   exposeCatalogHooks();
   loadTheme();

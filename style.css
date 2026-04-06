@@ -1,13 +1,13 @@
 :root {
-  --bg: #121212;
-  --surface: #171b22;
-  --surface-2: #1f2630;
-  --text: #eef3f6;
-  --muted: #b8c5cd;
-  --accent: #add8e6;
-  --accent-strong: #79b9d1;
-  --border: rgba(173, 216, 230, 0.35);
-  --shadow: 0 0 0 1px rgba(173, 216, 230, 0.2), 0 10px 28px rgba(72, 139, 166, 0.22);
+  --bg: #060d17;
+  --surface: #0d1724;
+  --surface-2: #132033;
+  --text: #edf6ff;
+  --muted: #9fb3c6;
+  --accent: #38e7ff;
+  --accent-strong: #14b8ff;
+  --border: rgba(56, 231, 255, 0.28);
+  --shadow: 0 0 0 1px rgba(56, 231, 255, 0.16), 0 16px 36px rgba(9, 42, 74, 0.45);
   --radius: 16px;
 }
 
@@ -37,16 +37,87 @@ body {
   font-family: "Segoe UI Variable", "Trebuchet MS", "Gill Sans", "Calibri", sans-serif;
   color: var(--text);
   background:
-    radial-gradient(circle at 20% -10%, rgba(176, 224, 230, 0.14), transparent 40%),
-    radial-gradient(circle at 90% 10%, rgba(121, 185, 209, 0.15), transparent 45%),
-    linear-gradient(165deg, var(--bg), color-mix(in srgb, var(--bg) 86%, #000 14%));
+    radial-gradient(circle at 12% 0%, rgba(20, 184, 255, 0.18), transparent 38%),
+    radial-gradient(circle at 92% 8%, rgba(56, 231, 255, 0.16), transparent 42%),
+    radial-gradient(circle at 48% 100%, rgba(25, 95, 156, 0.22), transparent 44%),
+    linear-gradient(160deg, var(--bg), color-mix(in srgb, var(--bg) 82%, #02060c 18%));
   transition: background 0.35s ease, color 0.25s ease;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: url("assets/brand/grafiplot-logo.png") center 56% / min(68vw, 760px) no-repeat;
+  opacity: 0.055;
+  filter: drop-shadow(0 0 18px rgba(56, 231, 255, 0.48)) drop-shadow(0 0 44px rgba(20, 184, 255, 0.26));
+  pointer-events: none;
+  z-index: 0;
+  animation: watermarkPulse 5.5s ease-in-out infinite;
+}
+
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background: linear-gradient(104deg, transparent 42%, rgba(56, 231, 255, 0.26) 50%, transparent 58%);
+  -webkit-mask-image: url("assets/brand/grafiplot-logo.png");
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center 56%;
+  -webkit-mask-size: min(68vw, 760px);
+  mask-image: url("assets/brand/grafiplot-logo.png");
+  mask-repeat: no-repeat;
+  mask-position: center 56%;
+  mask-size: min(68vw, 760px);
+  transform: translateX(-120%);
+  animation: logoScan 9s linear infinite;
+}
+
+@keyframes watermarkPulse {
+  0%,
+  100% {
+    opacity: 0.045;
+    filter: drop-shadow(0 0 14px rgba(56, 231, 255, 0.35)) drop-shadow(0 0 32px rgba(20, 184, 255, 0.2));
+  }
+
+  50% {
+    opacity: 0.07;
+    filter: drop-shadow(0 0 24px rgba(56, 231, 255, 0.62)) drop-shadow(0 0 54px rgba(20, 184, 255, 0.34));
+  }
+}
+
+@keyframes logoScan {
+  0% {
+    transform: translateX(-120%);
+    opacity: 0;
+  }
+
+  12% {
+    opacity: 1;
+  }
+
+  48% {
+    opacity: 1;
+  }
+
+  62% {
+    opacity: 0;
+  }
+
+  100% {
+    transform: translateX(120%);
+    opacity: 0;
+  }
 }
 
 .site-wrap {
   width: min(1280px, 94%);
   margin: 0 auto;
   padding: 18px 0 110px;
+  position: relative;
+  z-index: 1;
 }
 
 .hero {
@@ -148,12 +219,6 @@ body {
   max-height: 280px;
   object-fit: cover;
   display: block;
-}
-
-.hero-media figcaption {
-  font-size: 0.78rem;
-  color: var(--muted);
-  padding: 8px 10px;
 }
 
 .topbar {
@@ -345,6 +410,45 @@ body.light .theme-toggle::after {
   transform: translateY(12px);
   opacity: 0;
   animation: reveal 0.45s ease forwards;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.2s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+.service-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(125deg, rgba(56, 231, 255, 0.85), rgba(20, 184, 255, 0.15), rgba(56, 231, 255, 0.85));
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.service-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(56, 231, 255, 0.65);
+  box-shadow: 0 0 0 1px rgba(56, 231, 255, 0.32), 0 20px 38px rgba(8, 36, 62, 0.52);
+}
+
+.service-card:hover::after {
+  opacity: 1;
+  animation: cardGlowShift 2.2s linear infinite;
+}
+
+@keyframes cardGlowShift {
+  0% {
+    filter: hue-rotate(0deg);
+  }
+
+  100% {
+    filter: hue-rotate(20deg);
+  }
 }
 
 .service-card:nth-child(2) {
@@ -405,6 +509,40 @@ body.light .theme-toggle::after {
   letter-spacing: 0.04em;
   text-transform: uppercase;
   font-weight: 700;
+}
+
+.service-media {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  min-height: 128px;
+  overflow: hidden;
+  position: relative;
+  background: linear-gradient(150deg, color-mix(in srgb, var(--surface) 64%, var(--accent) 36%), var(--surface));
+}
+
+.service-media img {
+  width: 100%;
+  height: 128px;
+  object-fit: cover;
+  display: block;
+}
+
+.media-fallback {
+  display: none;
+  position: absolute;
+  inset: 0;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 12px;
+  font-size: 0.8rem;
+  color: color-mix(in srgb, var(--text) 88%, #fff 12%);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.service-media.missing-image .media-fallback {
+  display: flex;
 }
 
 .price-line {
