@@ -225,6 +225,8 @@ let servicesById = {};
 const nodes = {
   body: document.body,
   themeToggle: document.getElementById("theme-toggle"),
+  waBubble: document.getElementById("wa-bubble"),
+  waClose: document.getElementById("wa-close"),
   toggleStoreBtn: document.getElementById("toggle-store-btn"),
   closeStoreBtn: document.getElementById("close-store-btn"),
   storeShell: document.getElementById("catalogo"),
@@ -764,6 +766,12 @@ function bindEvents() {
   if (nodes.closeStoreBtn) {
     nodes.closeStoreBtn.addEventListener("click", () => {
       setStoreOpen(false, true);
+    });
+  }
+
+  if (nodes.waClose && nodes.waBubble) {
+    nodes.waClose.addEventListener("click", () => {
+      nodes.waBubble.classList.add("hide");
     });
   }
 
