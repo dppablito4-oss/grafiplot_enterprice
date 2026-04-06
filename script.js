@@ -4,51 +4,26 @@ const STORAGE_KEYS = {
   note: "grafiplot_note_v1"
 };
 
-const SERVICES = {
-  a4: {
-    id: "a4",
-    name: "Impresion A4 (Color/B&N)",
-    dynamic: true
-  },
-  tesis: {
-    id: "tesis",
-    name: "Formateo de Tesis (APA, Postgrado)",
-    unitPrice: 120
-  },
-  scan: {
-    id: "scan",
-    name: "Fotocopias & Escaneado",
-    unitPrice: 0.3
-  },
-  encuadernacion: {
-    id: "encuadernacion",
-    name: "Encuadernacion (Anillado/Espiralado)",
-    unitPrice: 8
-  },
-  diseno: {
-    id: "diseno",
-    name: "Diseno Grafico Basico",
-    unitPrice: 45
-  }
-};
-
 let cart = [];
+let servicesById = {};
 
 const nodes = {
   body: document.body,
   themeToggle: document.getElementById("theme-toggle"),
   a4CopiesInput: document.getElementById("a4-copies"),
   a4Total: document.getElementById("a4-total"),
+  servicesGrid: document.getElementById("services-grid"),
   cartItems: document.getElementById("cart-items"),
   cartTotal: document.getElementById("cart-total"),
+  orderUnits: document.getElementById("order-units"),
+  attentionStatus: document.getElementById("attention-status"),
   whatsappBtn: document.getElementById("whatsapp-btn"),
+  clearCartBtn: document.getElementById("clear-cart-btn"),
   customerNote: document.getElementById("customer-note"),
   toast: document.getElementById("toast"),
   serviceSearch: document.getElementById("service-search"),
   categoryFilter: document.getElementById("category-filter"),
-  catalogCount: document.getElementById("catalog-count"),
-  addButtons: document.querySelectorAll(".add-btn"),
-  serviceCards: document.querySelectorAll(".service-card")
+  catalogCount: document.getElementById("catalog-count")
 };
 
 let toastTimeoutId = null;
@@ -70,11 +45,38 @@ function sanitizeQuantity(value) {
 }
 
 function calculateA4Total() {
+  if (!nodes.a4CopiesInput || !nodes.a4Total) {
+    return { quantity: 1, unitPrice: 0.1, total: 0.1 };
+  }
+
   const quantity = sanitizeQuantity(nodes.a4CopiesInput.value);
   const unitPrice = getA4UnitPrice(quantity);
   const total = quantity * unitPrice;
   nodes.a4Total.textContent = formatMoney(total);
   return { quantity, unitPrice, total };
+}
+
+function refreshServicesFromDom() {
+  const addButtons = nodes.servicesGrid.querySelectorAll(".add-btn");
+  servicesById = {};
+
+  addButtons.forEach((button) => {
+    const id = button.dataset.service;
+    if (!id) {
+      return;
+    }
+
+    const name = button.dataset.name || button.closest(".service-card")?.querySelector("h2")?.textContent || id;
+    const isDynamic = button.dataset.dynamic === "tiered-a4";
+    const unitPrice = Number.parseFloat(button.dataset.price || "0");
+
+    servicesById[id] = {
+      id,
+      name,
+      dynamic: isDynamic,
+      unitPrice: Number.isFinite(unitPrice) ? unitPrice : 0
+    };
+  });
 }
 
 function saveCart() {
@@ -103,9 +105,51 @@ function getCartTotal() {
   return cart.reduce((sum, item) => sum + item.subtotal, 0);
 }
 
+function getTotalUnits() {
+  return cart.reduce((sum, item) => sum + item.quantity, 0);
+}
+
+function getAttentionStatusText(now = new Date()) {
+  const day = now.getDay();
+  const minuteOfDay = now.getHours() * 60 + now.getMinutes();
+
+  const schedules = {
+    0: { open: 9 * 60, close: 22 * 60, label: "Domingos" },
+    1: { open: 7 * 60, close: 22 * 60, label: "Lunes a viernes" },
+    2: { open: 7 * 60, close: 22 * 60, label: "Lunes a viernes" },
+    3: { open: 7 * 60, close: 22 * 60, label: "Lunes a viernes" },
+    4: { open: 7 * 60, close: 22 * 60, label: "Lunes a viernes" },
+    5: { open: 7 * 60, close: 22 * 60, label: "Lunes a viernes" },
+    6: { open: 8 * 60, close: 22 * 60, label: "Sabados" }
+  };
+
+  const today = schedules[day];
+  const isOpen = minuteOfDay >= today.open && minuteOfDay < today.close;
+
+  if (isOpen) {
+    return `Estado: atendiendo ahora (${today.label})`;
+  }
+
+  return "Estado: fuera de horario en este momento";
+}
+
+function renderQuickSummary() {
+  if (!nodes.orderUnits || !nodes.attentionStatus) {
+    return;
+  }
+
+  nodes.orderUnits.textContent = `Items totales: ${getTotalUnits()}`;
+  nodes.attentionStatus.textContent = getAttentionStatusText();
+}
+
 function updateWhatsappButtonState(isEmpty) {
   nodes.whatsappBtn.disabled = isEmpty;
   nodes.whatsappBtn.classList.toggle("is-disabled", isEmpty);
+
+  if (nodes.clearCartBtn) {
+    nodes.clearCartBtn.disabled = isEmpty;
+    nodes.clearCartBtn.classList.toggle("is-disabled", isEmpty);
+  }
 }
 
 function showToast(message) {
@@ -128,6 +172,7 @@ function renderCart() {
   if (cart.length === 0) {
     nodes.cartItems.innerHTML = '<li class="empty">Tu pedido aun esta vacio.</li>';
     nodes.cartTotal.textContent = formatMoney(0);
+    renderQuickSummary();
     updateWhatsappButtonState(true);
     return;
   }
@@ -151,6 +196,7 @@ function renderCart() {
     .join("");
 
   nodes.cartTotal.textContent = formatMoney(getCartTotal());
+  renderQuickSummary();
   updateWhatsappButtonState(false);
 }
 
@@ -210,22 +256,22 @@ function changeItemQuantity(serviceId, direction) {
 }
 
 function addServiceToCart(serviceId) {
-  if (serviceId === SERVICES.a4.id) {
+  const service = servicesById[serviceId];
+  if (!service) {
+    return;
+  }
+
+  if (service.dynamic) {
     const result = calculateA4Total();
     upsertCartItem({
-      id: SERVICES.a4.id,
-      name: SERVICES.a4.name,
+      id: service.id,
+      name: service.name,
       quantity: result.quantity,
       unitPrice: result.unitPrice,
       subtotal: result.total,
       dynamic: true
     });
     showToast("Impresion A4 agregada al pedido");
-    return;
-  }
-
-  const service = SERVICES[serviceId];
-  if (!service) {
     return;
   }
 
@@ -262,6 +308,22 @@ function openWhatsAppCheckout() {
   window.open(url, "_blank", "noopener,noreferrer");
 }
 
+function clearCartWithConfirmation() {
+  if (cart.length === 0) {
+    return;
+  }
+
+  const confirmed = window.confirm("Se vaciara todo el pedido actual. Deseas continuar?");
+  if (!confirmed) {
+    return;
+  }
+
+  cart = [];
+  saveCart();
+  renderCart();
+  showToast("Pedido vaciado correctamente");
+}
+
 function applyTheme(theme) {
   const selected = theme === "light" ? "light" : "dark";
   nodes.body.classList.toggle("light", selected === "light");
@@ -281,9 +343,10 @@ function loadNote() {
 function applyCatalogFilters() {
   const query = nodes.serviceSearch.value.trim().toLowerCase();
   const selectedCategory = nodes.categoryFilter.value;
+  const serviceCards = nodes.servicesGrid.querySelectorAll(".service-card");
   let visibleCount = 0;
 
-  nodes.serviceCards.forEach((card) => {
+  serviceCards.forEach((card) => {
     const category = card.dataset.category;
     const searchableText = `${card.dataset.search || ""} ${card.textContent}`.toLowerCase();
     const matchCategory = selectedCategory === "all" || category === selectedCategory;
@@ -299,19 +362,38 @@ function applyCatalogFilters() {
   nodes.catalogCount.textContent = `Mostrando ${visibleCount} servicio${visibleCount === 1 ? "" : "s"}`;
 }
 
+function exposeCatalogHooks() {
+  window.grafiplotCatalog = {
+    getCurrentServices: () => ({ ...servicesById }),
+    refresh: () => {
+      refreshServicesFromDom();
+      applyCatalogFilters();
+    }
+  };
+}
+
 function bindEvents() {
   nodes.themeToggle.addEventListener("click", () => {
     const next = nodes.body.classList.contains("light") ? "dark" : "light";
     applyTheme(next);
   });
 
-  nodes.a4CopiesInput.addEventListener("input", calculateA4Total);
+  if (nodes.a4CopiesInput) {
+    nodes.a4CopiesInput.addEventListener("input", calculateA4Total);
+  }
 
-  nodes.addButtons.forEach((button) => {
-    button.addEventListener("click", () => {
-      const serviceId = button.dataset.service;
-      addServiceToCart(serviceId);
-    });
+  nodes.servicesGrid.addEventListener("click", (event) => {
+    const button = event.target.closest(".add-btn");
+    if (!button) {
+      return;
+    }
+
+    const serviceId = button.dataset.service;
+    if (!serviceId) {
+      return;
+    }
+
+    addServiceToCart(serviceId);
   });
 
   nodes.cartItems.addEventListener("click", (event) => {
@@ -334,9 +416,12 @@ function bindEvents() {
   nodes.categoryFilter.addEventListener("change", applyCatalogFilters);
 
   nodes.whatsappBtn.addEventListener("click", openWhatsAppCheckout);
+  nodes.clearCartBtn.addEventListener("click", clearCartWithConfirmation);
 }
 
 function init() {
+  refreshServicesFromDom();
+  exposeCatalogHooks();
   loadTheme();
   loadCart();
   loadNote();
