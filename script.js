@@ -1,6 +1,5 @@
 const STORAGE_KEYS = {
   cart: "grafiplot_cart_v1",
-  theme: "grafiplot_theme_v1",
   note: "grafiplot_note_v1"
 };
 
@@ -34,10 +33,10 @@ const servicesById = Object.fromEntries(CATALOG_ITEMS.map((item) => [item.id, it
 let cart = [];
 let toastTimeoutId = null;
 let isStoreOpen = false;
+const systemThemeQuery = window.matchMedia("(prefers-color-scheme: light)");
 
 const nodes = {
   body: document.body,
-  themeToggle: document.getElementById("theme-toggle"),
   waBubble: document.getElementById("wa-bubble"),
   waClose: document.getElementById("wa-close"),
   waAgent: document.getElementById("wa-agent"),
@@ -443,22 +442,26 @@ function clearCartWithConfirmation() {
   showToast("Pedido vaciado correctamente");
 }
 
-function applyTheme(theme) {
-  const selected = theme === "light" ? "light" : "dark";
-  nodes.body.classList.toggle("light", selected === "light");
-  localStorage.setItem(STORAGE_KEYS.theme, selected);
+function applySystemTheme(isLight) {
+  nodes.body.classList.toggle("light", isLight);
 }
 
-function loadTheme() {
-  applyTheme(localStorage.getItem(STORAGE_KEYS.theme) || "dark");
+function initSystemTheme() {
+  applySystemTheme(systemThemeQuery.matches);
+
+  if (typeof systemThemeQuery.addEventListener === "function") {
+    systemThemeQuery.addEventListener("change", (event) => {
+      applySystemTheme(event.matches);
+    });
+    return;
+  }
+
+  systemThemeQuery.addListener((event) => {
+    applySystemTheme(event.matches);
+  });
 }
 
 function bindEvents() {
-  nodes.themeToggle.addEventListener("click", () => {
-    const next = nodes.body.classList.contains("light") ? "dark" : "light";
-    applyTheme(next);
-  });
-
   nodes.servicesGrid.addEventListener("input", (event) => {
     const quantityInput = event.target.closest(".quantity-input");
     if (!quantityInput) {
@@ -542,7 +545,7 @@ function init() {
     updateCardPricing(card);
   });
 
-  loadTheme();
+  initSystemTheme();
   loadCart();
   loadNote();
   setStoreOpen(false, false);
