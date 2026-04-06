@@ -465,19 +465,35 @@ body.light .hero-btn-gold {
 
 .nav-link {
   text-decoration: none;
-  color: color-mix(in srgb, var(--text) 88%, var(--accent) 12%);
+  color: color-mix(in srgb, var(--text) 94%, var(--accent) 6%);
   font-size: 0.82rem;
   font-weight: 700;
-  padding: 5px 8px;
-  border-radius: 7px;
-  border: 1px solid transparent;
-  transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+  padding: 7px 11px;
+  border-radius: 10px;
+  border: 1px solid color-mix(in srgb, var(--border) 80%, rgba(255, 255, 255, 0.24) 20%);
+  background: linear-gradient(165deg, color-mix(in srgb, var(--surface) 66%, var(--accent) 34%), color-mix(in srgb, var(--surface-2) 86%, transparent));
+  box-shadow: 0 0 0 1px rgba(39, 221, 255, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease, transform 0.2s ease;
 }
 
 .nav-link:hover {
   color: var(--text);
-  border-color: var(--border);
-  background: color-mix(in srgb, var(--surface) 78%, var(--accent) 22%);
+  border-color: color-mix(in srgb, var(--accent) 75%, #ffffff 25%);
+  background: linear-gradient(165deg, color-mix(in srgb, var(--surface) 54%, var(--accent) 46%), color-mix(in srgb, var(--surface-2) 72%, var(--accent) 28%));
+  transform: translateY(-1px);
+}
+
+body.light .nav-link {
+  color: #16374d;
+  border-color: rgba(0, 153, 204, 0.3);
+  background: linear-gradient(165deg, rgba(187, 233, 249, 0.92), rgba(255, 245, 221, 0.94));
+  box-shadow: 0 0 0 1px rgba(0, 153, 204, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+}
+
+body.light .nav-link:hover {
+  color: #0f2a3b;
+  border-color: rgba(0, 153, 204, 0.52);
+  background: linear-gradient(165deg, rgba(156, 223, 246, 0.98), rgba(255, 236, 197, 0.98));
 }
 
 .layout {

@@ -424,7 +424,7 @@ function openWhatsAppCheckout() {
   }
 
   const encoded = encodeURIComponent(buildWhatsAppMessage());
-  window.open(`https://wa.me/918165428?text=${encoded}`, "_blank", "noopener,noreferrer");
+  window.open(`https://wa.me/952628844?text=${encoded}`, "_blank", "noopener,noreferrer");
 }
 
 function clearCartWithConfirmation() {
