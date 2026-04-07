@@ -786,6 +786,11 @@ body.in-store .store-shell {
   display: block;
 }
 
+.service-tab-panel[data-tab-panel="produccion"].active {
+  display: grid;
+  gap: 18px;
+}
+
 .print-configurator {
   border: 1px solid var(--border);
   border-radius: 16px;
@@ -829,6 +834,22 @@ body.in-store .store-shell {
   padding: 10px;
   display: grid;
   gap: 8px;
+}
+
+.production-configurator .config-step:nth-of-type(1) {
+  background: linear-gradient(160deg, color-mix(in srgb, #1b6ea3 28%, var(--surface) 72%), var(--surface));
+}
+
+.production-configurator .config-step:nth-of-type(2) {
+  background: linear-gradient(160deg, color-mix(in srgb, #2f8f7b 26%, var(--surface) 74%), var(--surface));
+}
+
+.production-configurator .config-step:nth-of-type(3) {
+  background: linear-gradient(160deg, color-mix(in srgb, #8f6d2f 24%, var(--surface) 76%), var(--surface));
+}
+
+.production-configurator .config-step:nth-of-type(4) {
+  background: linear-gradient(160deg, color-mix(in srgb, #8b3f68 20%, var(--surface) 80%), var(--surface));
 }
 
 .config-step-title {
@@ -900,7 +921,7 @@ body.in-store .store-shell {
 .binding-configurator {
   border: 1px solid var(--border);
   border-radius: 14px;
-  background: linear-gradient(160deg, color-mix(in srgb, var(--surface) 84%, var(--accent) 16%), var(--surface));
+  background: linear-gradient(160deg, color-mix(in srgb, #6a4fa6 24%, var(--surface) 76%), var(--surface));
   box-shadow: var(--shadow);
   padding: 12px;
   display: grid;
@@ -1021,8 +1042,37 @@ body.light .service-tab-btn.active {
   box-shadow: 0 0 0 1px rgba(255, 76, 76, 0.38), 0 0 16px rgba(255, 57, 57, 0.28);
 }
 
+.field-shake {
+  animation: invalidFieldShake 260ms ease;
+}
+
+@keyframes invalidFieldShake {
+  0%,
+  100% { transform: translateX(0); }
+  20% { transform: translateX(-4px); }
+  40% { transform: translateX(4px); }
+  60% { transform: translateX(-3px); }
+  80% { transform: translateX(3px); }
+}
+
 body.light .config-step {
   background: rgba(255, 255, 255, 0.78);
+}
+
+body.light .production-configurator .config-step:nth-of-type(1) {
+  background: linear-gradient(160deg, rgba(214, 239, 255, 0.95), rgba(245, 252, 255, 0.94));
+}
+
+body.light .production-configurator .config-step:nth-of-type(2) {
+  background: linear-gradient(160deg, rgba(221, 247, 237, 0.95), rgba(247, 255, 251, 0.94));
+}
+
+body.light .production-configurator .config-step:nth-of-type(3) {
+  background: linear-gradient(160deg, rgba(255, 244, 216, 0.95), rgba(255, 250, 238, 0.94));
+}
+
+body.light .production-configurator .config-step:nth-of-type(4) {
+  background: linear-gradient(160deg, rgba(255, 232, 241, 0.95), rgba(255, 246, 251, 0.94));
 }
 
 body.light .option-btn {
@@ -1041,7 +1091,7 @@ body.light .config-quantity {
 }
 
 body.light .binding-configurator {
-  background: linear-gradient(160deg, #edf7ff, #deefff);
+  background: linear-gradient(160deg, #efe9ff, #e5dcff);
 }
 
 body.light .config-summary {

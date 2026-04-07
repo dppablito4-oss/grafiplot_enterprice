@@ -346,6 +346,16 @@ function showConfigCheer(message) {
   }, 1700);
 }
 
+function triggerFieldShake(field) {
+  if (!field) {
+    return;
+  }
+
+  field.classList.remove("field-shake");
+  void field.offsetWidth;
+  field.classList.add("field-shake");
+}
+
 function triggerCartFabFeedback() {
   if (!nodes.cartFab || !nodes.cartFabCount) {
     return;
@@ -665,6 +675,7 @@ function addConfiguredItemToCart() {
   const typedQuantity = parseQuantityOrNull(nodes.configQuantity.value);
   if (typedQuantity === null) {
     showToast("Ingresa una cantidad valida para continuar.");
+    triggerFieldShake(nodes.configQuantity);
     nodes.configQuantity?.focus();
     return;
   }
@@ -679,6 +690,7 @@ function addBindingToCart() {
   const parsed = parseQuantityOrNull(nodes.bindingPages?.value || "");
   if (parsed === null) {
     showToast("Ingresa hojas validas para encuadernado.");
+    triggerFieldShake(nodes.bindingPages);
     nodes.bindingPages?.focus();
     return;
   }
