@@ -896,25 +896,19 @@ body.in-store .store-shell {
   background: color-mix(in srgb, var(--surface) 90%, transparent);
 }
 
-.binding-wrap {
-  border: 1px dashed var(--border);
-  border-radius: 10px;
-  padding: 9px;
+.binding-configurator {
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: linear-gradient(160deg, color-mix(in srgb, var(--surface) 84%, var(--accent) 16%), var(--surface));
+  box-shadow: var(--shadow);
+  padding: 12px;
   display: grid;
-  gap: 8px;
+  gap: 9px;
 }
 
-.binding-toggle {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 0.84rem;
-  font-weight: 700;
-  color: var(--text);
-}
-
-.binding-toggle input {
-  accent-color: #ff5a5a;
+.binding-configurator h4 {
+  margin: 0;
+  font-size: 0.92rem;
 }
 
 .config-summary {
@@ -1041,6 +1035,10 @@ body.light .config-quantity {
 body.light .config-paper-select {
   color: #17364d;
   background: #ffffff;
+}
+
+body.light .binding-configurator {
+  background: linear-gradient(160deg, #edf7ff, #deefff);
 }
 
 body.light .config-summary {

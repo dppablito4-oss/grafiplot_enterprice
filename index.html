@@ -146,21 +146,6 @@
 								<option value="cartulina-hilo">Cartulina de hilo</option>
 							</select>
 							<p id="paper-lock-hint" class="config-hint" hidden>Para A2, A1 y A0 solo aplica papel bond 75g.</p>
-
-							<div id="binding-wrap" class="binding-wrap" hidden>
-								<label class="binding-toggle" for="binding-toggle">
-									<input id="binding-toggle" type="checkbox">
-									<span>¿Deseas anillarlo?</span>
-								</label>
-								<div id="binding-options-wrap" hidden>
-									<label class="config-qty-label" for="binding-type">Tipo de anillado</label>
-									<select id="binding-type" class="config-paper-select">
-										<option value="simple">Simple (Espiral): S/ 1.50 por bloque de 100 hojas</option>
-										<option value="mediano">Mediano: S/ 2.00 por bloque de 200 hojas</option>
-										<option value="grueso">Grueso: S/ 3.00 por bloque de 300 hojas</option>
-									</select>
-								</div>
-							</div>
 							<p id="bulk-hint" class="config-hint"></p>
 							<div class="config-summary" aria-live="polite">
 								<p id="config-selection">Selecciona tamaño, caras y estilo para calcular.</p>
@@ -169,6 +154,19 @@
 							</div>
 							<button id="add-config-btn" class="btn add-btn config-add-btn" type="button" disabled>Agregar al pedido</button>
 						</section>
+					</div>
+
+					<div class="binding-configurator" aria-label="Bloque de encuadernado">
+						<h4>ENCUADERNADO</h4>
+						<p class="config-subtitle">Servicio separado del bloque de impresion. S/ 6.00 por bloque de hasta 200 hojas.</p>
+						<label class="config-qty-label" for="binding-pages">Cantidad de hojas para encuadernar</label>
+						<input id="binding-pages" class="config-quantity" type="number" min="1" value="1" inputmode="numeric">
+						<div class="config-summary" aria-live="polite">
+							<p>Bloques calculados: <strong id="binding-blocks">1</strong></p>
+							<p>Total encuadernado: <strong id="binding-total">S/ 6.00</strong></p>
+						</div>
+						<p class="config-hint">Aviso: valor estimado. Contactenos para un precio mas acorde a su presupuesto.</p>
+						<button id="add-binding-btn" class="btn btn-soft" type="button">Agregar encuadernado al pedido</button>
 					</div>
 				</section>
 
