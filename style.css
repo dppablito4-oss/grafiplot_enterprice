@@ -732,6 +732,49 @@ body.in-store .store-shell {
   gap: 14px;
 }
 
+.service-tabs {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.service-tab-btn {
+  border: 1px solid var(--border);
+  border-radius: 11px;
+  padding: 10px 12px;
+  background: linear-gradient(160deg, color-mix(in srgb, var(--surface) 84%, var(--accent) 16%), var(--surface));
+  color: var(--text);
+  font-size: 0.83rem;
+  font-weight: 800;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.tab-icon {
+  width: 18px;
+  height: 18px;
+  display: block;
+  fill: currentColor;
+  opacity: 0.92;
+}
+
+.service-tab-btn.active {
+  border-color: rgba(255, 90, 90, 0.8);
+  background: linear-gradient(160deg, rgba(255, 66, 66, 0.25), rgba(130, 0, 0, 0.3));
+  color: #fff7f7;
+}
+
+.service-tab-panel {
+  display: none;
+}
+
+.service-tab-panel.active {
+  display: block;
+}
+
 .print-configurator {
   border: 1px solid var(--border);
   border-radius: 16px;
@@ -745,6 +788,12 @@ body.in-store .store-shell {
 .print-configurator h3 {
   margin: 0;
   font-size: 1rem;
+}
+
+.config-subtitle {
+  margin: 0;
+  font-size: 0.84rem;
+  color: var(--muted);
 }
 
 .config-step {
@@ -846,8 +895,78 @@ body.in-store .store-shell {
   cursor: not-allowed;
 }
 
+.apa-alert {
+  border: 1px solid rgba(255, 110, 110, 0.66);
+  border-radius: 12px;
+  padding: 10px;
+  background: linear-gradient(165deg, rgba(255, 84, 84, 0.16), rgba(82, 8, 8, 0.24));
+}
+
+.apa-alert p {
+  margin: 0;
+  color: color-mix(in srgb, var(--text) 92%, #ffd8d8 8%);
+  font-size: 0.84rem;
+}
+
+.apa-alert p + p {
+  margin-top: 6px;
+}
+
+.service-bullets {
+  margin: 0;
+  padding-left: 18px;
+  display: grid;
+  gap: 5px;
+  color: var(--muted);
+  font-size: 0.84rem;
+}
+
+.tech-table-wrap {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.tech-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.tech-table th,
+.tech-table td {
+  padding: 12px 10px;
+  text-align: left;
+  vertical-align: top;
+  border-bottom: 1px solid color-mix(in srgb, var(--border) 70%, rgba(255, 255, 255, 0.24) 30%);
+}
+
+.tech-table th {
+  font-size: 0.88rem;
+  color: var(--text);
+}
+
+.tech-table td {
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.tech-table td:first-child {
+  color: var(--text);
+  font-weight: 800;
+  width: 38%;
+}
+
 body.light .print-configurator {
   background: linear-gradient(160deg, #f7fcff, #e8f4ff);
+}
+
+body.light .service-tab-btn {
+  color: #16344b;
+  background: linear-gradient(160deg, #edf7ff, #dff0ff);
+}
+
+body.light .service-tab-btn.active {
+  color: #fff9f9;
 }
 
 body.light .config-step {
@@ -871,6 +990,22 @@ body.light .config-quantity {
 
 body.light .config-summary {
   background: #f3faff;
+}
+
+body.light .apa-alert {
+  background: linear-gradient(165deg, rgba(255, 118, 118, 0.18), rgba(255, 230, 230, 0.68));
+}
+
+body.light .apa-alert p {
+  color: #4f1f1f;
+}
+
+body.light .tech-table td {
+  color: #456175;
+}
+
+body.light .tech-table td:first-child {
+  color: #1b3850;
 }
 
 .catalog-toolbar {
@@ -1832,6 +1967,20 @@ body:not(.in-store) .wa-bubble {
 }
 
 @media (max-width: 600px) {
+  .service-tabs {
+    grid-template-columns: 1fr;
+  }
+
+  .service-tab-btn {
+    font-size: 0.8rem;
+  }
+
+  .tech-table th,
+  .tech-table td {
+    padding: 9px 8px;
+    font-size: 0.78rem;
+  }
+
   .promo-ribbon-track {
     font-size: 0.72rem;
     gap: 20px;

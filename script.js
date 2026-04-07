@@ -88,6 +88,8 @@ const nodes = {
   mobileCartItems: document.getElementById("mobile-cart-items"),
   mobileCartTotal: document.getElementById("mobile-cart-total"),
   mobileCartOrder: document.getElementById("mobile-cart-order"),
+  serviceTabButtons: document.querySelectorAll("[data-tab-btn]"),
+  serviceTabPanels: document.querySelectorAll("[data-tab-panel]"),
   sizeOptions: document.getElementById("size-options"),
   sidesOptions: document.getElementById("sides-options"),
   sidesLockHint: document.getElementById("sides-lock-hint"),
@@ -615,7 +617,27 @@ function bindConfiguratorEvents() {
   nodes.addConfigBtn?.addEventListener("click", addConfiguredItemToCart);
 }
 
+function setActiveServiceTab(tabKey) {
+  nodes.serviceTabButtons.forEach((button) => {
+    const isActive = button.dataset.tabBtn === tabKey;
+    button.classList.toggle("active", isActive);
+    button.setAttribute("aria-selected", isActive ? "true" : "false");
+  });
+
+  nodes.serviceTabPanels.forEach((panel) => {
+    const isActive = panel.dataset.tabPanel === tabKey;
+    panel.classList.toggle("active", isActive);
+    panel.hidden = !isActive;
+  });
+}
+
 function bindEvents() {
+  nodes.serviceTabButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+      setActiveServiceTab(button.dataset.tabBtn);
+    });
+  });
+
   nodes.cartFab?.addEventListener("click", () => {
     if (mobileCartQuery.matches) {
       setMobileCartOpen(!isMobileCartOpen);
@@ -722,6 +744,7 @@ function init() {
   loadCart();
   hydrateCartForNewModel();
   loadNote();
+  setActiveServiceTab("produccion");
   setMobileCartOpen(false);
   setStoreOpen(false, false);
   updateSidesStepState();

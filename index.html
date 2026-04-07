@@ -78,50 +78,132 @@
 
 		<main id="catalogo" class="layout store-shell" aria-hidden="true">
 			<section class="catalog-panel" aria-label="Exploracion del catalogo">
-				<div class="print-configurator" aria-label="Configurador de impresiones Grafiplot Pro">
-					<h3>Configurador de Impresiones Grafiplot Pro</h3>
-
-					<section class="config-step" aria-labelledby="step-size-title">
-						<p id="step-size-title" class="config-step-title">Paso 1: Seleccion de Tamaño</p>
-						<div id="size-options" class="option-row" role="group" aria-label="Seleccionar tamaño">
-							<button class="option-btn" type="button" data-size="a4">A4</button>
-							<button class="option-btn" type="button" data-size="a3">A3</button>
-							<button class="option-btn" type="button" data-size="a2">A2</button>
-							<button class="option-btn" type="button" data-size="a1">A1</button>
-							<button class="option-btn" type="button" data-size="a0">A0</button>
-						</div>
-					</section>
-
-					<section class="config-step" aria-labelledby="step-sides-title">
-						<p id="step-sides-title" class="config-step-title">Paso 2: Seleccion de Caras</p>
-						<div id="sides-options" class="option-row" role="group" aria-label="Seleccionar caras">
-							<button class="option-btn" type="button" data-side="single">Una sola cara</button>
-							<button class="option-btn" type="button" data-side="duplex">Ambas caras (Duplex)</button>
-						</div>
-						<p id="sides-lock-hint" class="config-hint" hidden>Solo disponible a una cara (Limite de maquina).</p>
-					</section>
-
-					<section class="config-step" aria-labelledby="step-style-title">
-						<p id="step-style-title" class="config-step-title">Paso 3: Estilo de Impresion</p>
-						<div id="style-options" class="option-row" role="group" aria-label="Seleccionar estilo">
-							<button class="option-btn" type="button" data-style="bn">Blanco y Negro</button>
-							<button class="option-btn" type="button" data-style="color">Color</button>
-						</div>
-					</section>
-
-					<section class="config-step config-qty-step" aria-labelledby="step-qty-title">
-						<p id="step-qty-title" class="config-step-title">Paso 4: Cantidad y Precio Real</p>
-						<label class="config-qty-label" for="config-quantity">Cantidad de hojas</label>
-						<input id="config-quantity" class="config-quantity" type="number" min="1" value="1" inputmode="numeric">
-						<p id="bulk-hint" class="config-hint"></p>
-						<div class="config-summary" aria-live="polite">
-							<p id="config-selection">Selecciona tamaño, caras y estilo para calcular.</p>
-							<p>Precio unitario: <strong id="config-unit-price">S/ 0.00</strong></p>
-							<p>Total estimado: <strong id="config-total-price">S/ 0.00</strong></p>
-						</div>
-						<button id="add-config-btn" class="btn add-btn config-add-btn" type="button" disabled>Agregar al pedido</button>
-					</section>
+				<div class="service-tabs" role="tablist" aria-label="Bloques de servicios">
+					<button class="service-tab-btn active" type="button" role="tab" aria-selected="true" data-tab-btn="produccion">
+						<svg class="tab-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+							<path d="M7 8V4h10v4H7zm10 2h2a3 3 0 0 1 3 3v5h-4v2H6v-2H2v-5a3 3 0 0 1 3-3h2v4h10v-4zm-2 8v-2H9v2h6z"></path>
+						</svg>
+						<span>Produccion y Acabados</span>
+					</button>
+					<button class="service-tab-btn" type="button" role="tab" aria-selected="false" data-tab-btn="tesis">
+						<svg class="tab-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+							<path d="M12 3L1 8l11 5 9-4.09V16h2V8L12 3zm-7 8.2V15c0 2.8 3.1 5 7 5s7-2.2 7-5v-3.8l-7 3.18L5 11.2z"></path>
+						</svg>
+						<span>Tesis y Normas APA</span>
+					</button>
+					<button class="service-tab-btn" type="button" role="tab" aria-selected="false" data-tab-btn="soporte">
+						<svg class="tab-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+							<path d="M9 3h6v2h2.5a1.5 1.5 0 0 1 1.5 1.5V9h2v6h-2v2.5a1.5 1.5 0 0 1-1.5 1.5H15v2H9v-2H6.5A1.5 1.5 0 0 1 5 17.5V15H3V9h2V6.5A1.5 1.5 0 0 1 6.5 5H9V3zm-2 4v10h10V7H7zm2 2h6v6H9V9z"></path>
+						</svg>
+						<span>Soporte Tecnico PC</span>
+					</button>
 				</div>
+
+				<section class="service-tab-panel active" data-tab-panel="produccion" role="tabpanel" aria-label="Centro de Produccion y Acabados">
+					<div class="print-configurator" aria-label="Configurador de impresiones Grafiplot Pro">
+						<h3>CENTRO DE PRODUCCION Y ACABADOS</h3>
+						<p class="config-subtitle">Configura tu impresion por tamaño, caras, estilo y cantidad en un solo flujo rapido.</p>
+
+						<section class="config-step" aria-labelledby="step-size-title">
+							<p id="step-size-title" class="config-step-title">Paso 1: Seleccion de Tamaño</p>
+							<div id="size-options" class="option-row" role="group" aria-label="Seleccionar tamaño">
+								<button class="option-btn" type="button" data-size="a4">A4</button>
+								<button class="option-btn" type="button" data-size="a3">A3</button>
+								<button class="option-btn" type="button" data-size="a2">A2</button>
+								<button class="option-btn" type="button" data-size="a1">A1</button>
+								<button class="option-btn" type="button" data-size="a0">A0</button>
+							</div>
+						</section>
+
+						<section class="config-step" aria-labelledby="step-sides-title">
+							<p id="step-sides-title" class="config-step-title">Paso 2: Seleccion de Caras</p>
+							<div id="sides-options" class="option-row" role="group" aria-label="Seleccionar caras">
+								<button class="option-btn" type="button" data-side="single">Una sola cara</button>
+								<button class="option-btn" type="button" data-side="duplex">Ambas caras (Duplex)</button>
+							</div>
+							<p id="sides-lock-hint" class="config-hint" hidden>Solo disponible a una cara (Limite de maquina).</p>
+						</section>
+
+						<section class="config-step" aria-labelledby="step-style-title">
+							<p id="step-style-title" class="config-step-title">Paso 3: Estilo de Impresion</p>
+							<div id="style-options" class="option-row" role="group" aria-label="Seleccionar estilo">
+								<button class="option-btn" type="button" data-style="bn">Blanco y Negro</button>
+								<button class="option-btn" type="button" data-style="color">Color</button>
+							</div>
+						</section>
+
+						<section class="config-step config-qty-step" aria-labelledby="step-qty-title">
+							<p id="step-qty-title" class="config-step-title">Paso 4: Cantidad y Precio Real</p>
+							<label class="config-qty-label" for="config-quantity">Cantidad de hojas</label>
+							<input id="config-quantity" class="config-quantity" type="number" min="1" value="1" inputmode="numeric">
+							<p id="bulk-hint" class="config-hint"></p>
+							<div class="config-summary" aria-live="polite">
+								<p id="config-selection">Selecciona tamaño, caras y estilo para calcular.</p>
+								<p>Precio unitario: <strong id="config-unit-price">S/ 0.00</strong></p>
+								<p>Total estimado: <strong id="config-total-price">S/ 0.00</strong></p>
+							</div>
+							<button id="add-config-btn" class="btn add-btn config-add-btn" type="button" disabled>Agregar al pedido</button>
+						</section>
+					</div>
+				</section>
+
+				<section class="service-tab-panel" data-tab-panel="tesis" role="tabpanel" aria-label="Tesis y Formato Academico" hidden>
+					<div class="print-configurator thesis-panel">
+						<h3>TESIS PRO: FORMATO &amp; ESTILO APA</h3>
+						<div class="apa-alert" role="alert" aria-live="polite">
+							<p><strong>⚠️ AVISO IMPORTANTE:</strong></p>
+							<p>En Grafiplot, cuidamos tu integridad academica. NO realizamos redaccion de tesis ni trabajos desde cero.</p>
+							<p>Nuestro servicio se enfoca exclusivamente en el formateo profesional segun las Normas APA (7ma edicion) o los lineamientos especificos de tu facultad, ademas del empastado de alta calidad. ¡Nosotros nos encargamos del diseño, tu del conocimiento!</p>
+						</div>
+						<div class="config-step">
+							<p class="config-step-title">Servicios de soporte academico</p>
+							<ul class="service-bullets">
+								<li>Formateo de tesis en APA 7ma edicion</li>
+								<li>Ajuste de margenes, numeracion, indices y tablas</li>
+								<li>Revision visual para sustentacion y entrega final</li>
+								<li>Empastado premium y acabados de presentacion</li>
+							</ul>
+						</div>
+					</div>
+				</section>
+
+				<section class="service-tab-panel" data-tab-panel="soporte" role="tabpanel" aria-label="Soporte Tecnico y Hardware" hidden>
+					<div class="print-configurator tech-panel">
+						<h3>SERVICIO TECNICO &amp; OPTIMIZACION PC</h3>
+						<div class="tech-table-wrap">
+							<table class="tech-table" aria-label="Servicios tecnicos disponibles">
+								<thead>
+									<tr>
+										<th>Servicio</th>
+										<th>Descripcion Tecnica</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td>Limpieza Profunda</td>
+										<td>Eliminacion de polvo y mantenimiento preventivo integral.</td>
+									</tr>
+									<tr>
+										<td>Cambio de Pasta Termica</td>
+										<td>Aplicacion de pasta de alta conductividad para bajar temperaturas.</td>
+									</tr>
+									<tr>
+										<td>Optimizacion de Sistema</td>
+										<td>Limpieza de archivos basura y configuracion para maximo rendimiento.</td>
+									</tr>
+									<tr>
+										<td>Formateo e Instalacion</td>
+										<td>Windows limpio con drivers actualizados y paquetes esenciales.</td>
+									</tr>
+									<tr>
+										<td>Upgrade de Hardware</td>
+										<td>Asesoria en compra e instalacion de SSDs y memorias RAM.</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</section>
 			</section>
 
 			<aside id="cart-panel" class="cart-panel" aria-label="Carrito de pedido">
