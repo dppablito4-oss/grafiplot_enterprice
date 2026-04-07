@@ -1422,6 +1422,69 @@ body.light .mobile-cart-backdrop {
   transform: translateX(-50%) translateY(0);
 }
 
+.site-credits {
+  position: relative;
+  z-index: 3;
+  width: min(1280px, 94%);
+  margin: 18px auto 14px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: linear-gradient(160deg, color-mix(in srgb, var(--surface) 72%, var(--accent) 28%), color-mix(in srgb, var(--surface-2) 78%, #ffb66b 22%));
+  box-shadow: var(--shadow);
+  padding: 12px 14px;
+  display: grid;
+  gap: 4px;
+  text-align: center;
+}
+
+.credits-main,
+.credits-dev {
+  margin: 0;
+}
+
+.credits-main {
+  font-size: clamp(0.84rem, 0.75rem + 0.34vw, 1rem);
+  color: color-mix(in srgb, var(--text) 94%, #ffffff 6%);
+  letter-spacing: 0.02em;
+}
+
+.credits-main strong {
+  color: #ffffff;
+  text-shadow: 0 0 12px rgba(39, 221, 255, 0.28);
+}
+
+.credits-dev {
+  font-size: 0.78rem;
+  color: var(--muted);
+}
+
+.credits-dev span {
+  color: #ffd189;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+}
+
+body.light .site-credits {
+  background: linear-gradient(160deg, #dff3ff, #fff0d6);
+}
+
+body.light .credits-main {
+  color: #17384f;
+}
+
+body.light .credits-main strong {
+  color: #0f2b40;
+  text-shadow: none;
+}
+
+body.light .credits-dev {
+  color: #4a6476;
+}
+
+body.light .credits-dev span {
+  color: #b45c0a;
+}
+
 .wa-widget {
   position: fixed;
   right: 18px;
@@ -1604,5 +1667,18 @@ body:not(.in-store) .wa-bubble {
     right: 12px;
     width: 54px;
     height: 54px;
+  }
+
+  .site-credits {
+    margin: 16px auto 12px;
+    padding: 10px;
+  }
+
+  .credits-main {
+    font-size: 0.78rem;
+  }
+
+  .credits-dev {
+    font-size: 0.72rem;
   }
 }
