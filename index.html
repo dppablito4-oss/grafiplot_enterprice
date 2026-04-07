@@ -96,7 +96,7 @@
 			<p id="catalog-hint" class="catalog-hint">Tip: en productos con dos tarifas, el sistema aplica Unidad para 1-100 hojas y Cantidad para 101+ hojas.</p>
 			</section>
 
-			<aside class="cart-panel" aria-label="Carrito de pedido">
+			<aside id="cart-panel" class="cart-panel" aria-label="Carrito de pedido">
 				<h3>Pedido actual</h3>
 				<ul id="cart-items">
 					<li class="empty">Tu pedido aun esta vacio.</li>
@@ -131,6 +131,27 @@
 			</aside>
 		</main>
 	</div>
+	<button id="cart-fab" class="cart-fab" type="button" aria-label="Abrir carrito rapido" aria-controls="mobile-cart-sheet" aria-expanded="false">
+		<span class="cart-fab-glyph" aria-hidden="true">🛒</span>
+		<span id="cart-fab-count" class="cart-fab-count">0</span>
+	</button>
+
+	<aside id="mobile-cart-sheet" class="mobile-cart-sheet" aria-label="Resumen rapido del carrito" aria-hidden="true">
+		<header class="mobile-cart-head">
+			<h3>Tu pedido rapido</h3>
+			<button id="mobile-cart-close" class="mobile-cart-close" type="button" aria-label="Cerrar carrito rapido">x</button>
+		</header>
+		<ul id="mobile-cart-items" class="mobile-cart-items">
+			<li class="empty">Tu pedido aun esta vacio.</li>
+		</ul>
+		<div class="mobile-cart-total-line">
+			<span>Total:</span>
+			<strong id="mobile-cart-total">S/ 0.00</strong>
+		</div>
+		<button id="mobile-cart-order" class="btn mobile-cart-order" type="button">Ordenar y ver detalle</button>
+	</aside>
+	<div id="mobile-cart-backdrop" class="mobile-cart-backdrop" aria-hidden="true"></div>
+
 	<div id="screen-flash" class="screen-flash" aria-hidden="true"></div>
 	<div class="wa-widget" aria-label="Chat de WhatsApp">
 		<div id="wa-bubble" class="wa-bubble" role="status" aria-live="polite">
