@@ -22,16 +22,16 @@ const PRINT_CONFIG = {
 
 const PAPER_OPTIONS = {
   "bond-75": { label: "Papel bond 75g", surcharge: 0 },
-  fotografico: { label: "Papel fotografico", surcharge: 1.5 },
-  couche: { label: "Papel couche", surcharge: 2 },
-  "cartulina-escolar": { label: "Cartulina escolar", surcharge: 0.5 },
-  "cartulina-hilo": { label: "Cartulina de hilo", surcharge: 1 }
+  fotografico: { label: "Papel fotografico (precio por definir)", surcharge: 0 },
+  couche: { label: "Papel couche (precio por definir)", surcharge: 0 },
+  "cartulina-escolar": { label: "Cartulina escolar (precio por definir)", surcharge: 0 },
+  "cartulina-hilo": { label: "Cartulina de hilo (precio por definir)", surcharge: 0 }
 };
 
 const BINDING_OPTIONS = {
-  simple: { label: "Simple (Espiral)", price: 1.5 },
-  mediano: { label: "Mediano", price: 2 },
-  grueso: { label: "Grueso", price: 3 }
+  simple: { label: "Simple (Espiral)", price: 1.5, blockSize: 100 },
+  mediano: { label: "Mediano", price: 2, blockSize: 200 },
+  grueso: { label: "Grueso", price: 3, blockSize: 300 }
 };
 
 const PRICE_MATRIX = {
@@ -51,8 +51,8 @@ const PRICE_MATRIX = {
       bn: { unit: 0.5, bulk: 0.5, name: "Ploteo formato A3 - Blanco y Negro" }
     },
     duplex: {
-      color: { unit: 0.55, bulk: 0.55, name: "A3 ambas caras (duplex) - Color" },
-      bn: { unit: 0.55, bulk: 0.55, name: "A3 ambas caras (duplex) - Blanco y Negro" }
+      color: { unit: 0.5, bulk: 0.5, name: "A3 ambas caras (duplex) - Color" },
+      bn: { unit: 0.5, bulk: 0.5, name: "A3 ambas caras (duplex) - Blanco y Negro" }
     }
   },
   a2: {
@@ -169,12 +169,18 @@ function getPaperSelection() {
   return PAPER_OPTIONS[configState.paperType] || PAPER_OPTIONS["bond-75"];
 }
 
-function getBindingSelection() {
+function getBindingSelection(quantity = configState.quantity) {
   if (!configState.wantsBinding) {
     return null;
   }
 
-  return BINDING_OPTIONS[configState.bindingType] || BINDING_OPTIONS.simple;
+  const selected = BINDING_OPTIONS[configState.bindingType] || BINDING_OPTIONS.simple;
+  const blocks = Math.max(1, Math.ceil(quantity / selected.blockSize));
+  return {
+    ...selected,
+    blocks,
+    total: blocks * selected.price
+  };
 }
 
 function getCurrentPriceRule() {
@@ -210,7 +216,7 @@ function buildConfigItemName() {
   }
 
   const paper = getPaperSelection();
-  const binding = getBindingSelection();
+  const binding = getBindingSelection(configState.quantity);
   const bindingLabel = binding ? ` + Anillado ${binding.label}` : "";
   return `${rule.name} | ${paper.label}${bindingLabel}`;
 }
@@ -395,6 +401,13 @@ function renderMobileCartSummary() {
 function recomputeCartItem(item) {
   const baseUnit = item.bulkUnitPrice && item.quantity > BULK_THRESHOLD ? item.bulkUnitPrice : item.baseUnitPrice;
   const unit = baseUnit + (item.paperSurcharge || 0);
+
+  if (item.bindingType && BINDING_OPTIONS[item.bindingType]) {
+    const bindingRule = BINDING_OPTIONS[item.bindingType];
+    item.bindingBlocks = Math.max(1, Math.ceil(item.quantity / bindingRule.blockSize));
+    item.bindingPrice = item.bindingBlocks * bindingRule.price;
+  }
+
   item.unitPrice = unit;
   item.subtotal = item.unitPrice * item.quantity + (item.bindingPrice || 0);
 }
@@ -417,7 +430,7 @@ function renderCart() {
           <strong>${formatMoney(item.subtotal)}</strong>
         </div>
         <div class="cart-item-meta">${formatMoney(item.unitPrice)} x ${item.quantity}</div>
-        ${item.bindingPrice ? `<div class="cart-item-meta">Anillado: ${formatMoney(item.bindingPrice)}</div>` : ""}
+        ${item.bindingPrice ? `<div class="cart-item-meta">Anillado (${item.bindingBlocks || 1} bloque${(item.bindingBlocks || 1) === 1 ? "" : "s"}): ${formatMoney(item.bindingPrice)}</div>` : ""}
         <div class="cart-item-actions">
           <button class="cart-action" type="button" data-action="decrease" data-id="${item.id}" aria-label="Quitar una unidad">-</button>
           <button class="cart-action" type="button" data-action="increase" data-id="${item.id}" aria-label="Agregar una unidad">+</button>
@@ -444,7 +457,7 @@ function upsertCartItemFromConfig(quantity) {
   const key = `${configState.size}-${configState.side}-${configState.style}-${configState.paperType}-${configState.wantsBinding ? configState.bindingType : "sin-anillado"}`;
   const existing = cart.find((item) => item.id === key);
   const paper = getPaperSelection();
-  const binding = getBindingSelection();
+  const binding = getBindingSelection(quantity);
 
   if (existing) {
     existing.quantity += quantity;
@@ -464,9 +477,10 @@ function upsertCartItemFromConfig(quantity) {
       paperLabel: paper.label,
       paperSurcharge: paper.surcharge,
       bindingType: configState.wantsBinding ? configState.bindingType : null,
-      bindingPrice: binding ? binding.price : 0,
+      bindingBlocks: binding ? binding.blocks : 0,
+      bindingPrice: binding ? binding.total : 0,
       unitPrice,
-      subtotal: unitPrice * quantity + (binding ? binding.price : 0)
+      subtotal: unitPrice * quantity + (binding ? binding.total : 0)
     });
   }
 
@@ -586,21 +600,21 @@ function updateConfigSummary() {
   }
 
   const unitPrice = getEffectiveUnitPrice(rule, quantity);
-  const binding = getBindingSelection();
-  const bindingPrice = binding ? binding.price : 0;
+  const binding = getBindingSelection(quantity);
+  const bindingPrice = binding ? binding.total : 0;
   const totalPrice = unitPrice * quantity + bindingPrice;
   const sideLabel = PRINT_CONFIG.sideLabels[configState.side] || "";
   const styleLabel = PRINT_CONFIG.styleLabels[configState.style] || "";
   const paperLabel = getPaperSelection().label;
 
-  nodes.configSelection.textContent = `${configState.size.toUpperCase()} | ${sideLabel} | ${styleLabel} | ${paperLabel}${binding ? ` | Anillado ${binding.label}` : ""}`;
+  nodes.configSelection.textContent = `${configState.size.toUpperCase()} | ${sideLabel} | ${styleLabel} | ${paperLabel}${binding ? ` | Anillado ${binding.label} (${binding.blocks} bloque${binding.blocks === 1 ? "" : "s"})` : ""}`;
   nodes.configUnitPrice.textContent = formatMoney(unitPrice);
   nodes.configTotalPrice.textContent = formatMoney(totalPrice);
   const baseUnit = getBaseUnitFromRule(rule, quantity);
   if (quantity > BULK_THRESHOLD && typeof rule.bulk === "number") {
-    nodes.bulkHint.textContent = `Se activo precio por mayor. Base: ${formatMoney(baseUnit)} + papel: ${formatMoney(getPaperSelection().surcharge)}${binding ? ` + anillado: ${formatMoney(binding.price)}` : ""}.`;
+    nodes.bulkHint.textContent = `Se activo precio por mayor. Base: ${formatMoney(baseUnit)} + papel: ${formatMoney(getPaperSelection().surcharge)}${binding ? ` + anillado: ${formatMoney(binding.total)}` : ""}.`;
   } else {
-    nodes.bulkHint.textContent = `Precio unitario para 1-100 hojas. Papel adicional: ${formatMoney(getPaperSelection().surcharge)}${binding ? ` | Anillado: ${formatMoney(binding.price)}` : ""}.`;
+    nodes.bulkHint.textContent = `Precio unitario para 1-100 hojas. Papel adicional: ${formatMoney(getPaperSelection().surcharge)}${binding ? ` | Anillado: ${formatMoney(binding.total)}` : ""}.`;
   }
   nodes.addConfigBtn.disabled = false;
 }
@@ -879,6 +893,7 @@ function hydrateCartForNewModel() {
     if (typeof item.baseUnitPrice === "number") {
       item.paperSurcharge = typeof item.paperSurcharge === "number" ? item.paperSurcharge : 0;
       item.bindingPrice = typeof item.bindingPrice === "number" ? item.bindingPrice : 0;
+      item.bindingBlocks = typeof item.bindingBlocks === "number" ? item.bindingBlocks : 0;
       recomputeCartItem(item);
       return item;
     }
@@ -890,6 +905,7 @@ function hydrateCartForNewModel() {
       bulkUnitPrice: null,
       paperSurcharge: 0,
       bindingPrice: 0,
+      bindingBlocks: 0,
       subtotal: fallbackBaseUnit * item.quantity,
       unitPrice: fallbackBaseUnit
     };
