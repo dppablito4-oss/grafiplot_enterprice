@@ -918,19 +918,17 @@ body.in-store .store-shell {
   margin-top: 2px;
 }
 
-.binding-configurator {
-  border: 1px solid var(--border);
-  border-radius: 14px;
-  background: linear-gradient(160deg, color-mix(in srgb, #6a4fa6 24%, var(--surface) 76%), var(--surface));
-  box-shadow: var(--shadow);
-  padding: 12px;
-  display: grid;
-  gap: 9px;
+.binding-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.84rem;
+  font-weight: 700;
+  color: var(--text);
 }
 
-.binding-configurator h4 {
-  margin: 0;
-  font-size: 0.92rem;
+.binding-toggle input {
+  accent-color: #ff5a5a;
 }
 
 .config-summary {
@@ -1088,10 +1086,6 @@ body.light .option-btn.active {
 body.light .config-quantity {
   color: #15354b;
   background: #ffffff;
-}
-
-body.light .binding-configurator {
-  background: linear-gradient(160deg, #efe9ff, #e5dcff);
 }
 
 body.light .config-summary {
