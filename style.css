@@ -809,6 +809,10 @@ body.in-store .store-shell {
   transition: transform 0.2s ease, box-shadow 0.25s ease, border-color 0.25s ease;
 }
 
+.service-card[hidden] {
+  display: none !important;
+}
+
 .service-card::after {
   content: "";
   position: absolute;
