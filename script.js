@@ -96,6 +96,7 @@ const nodes = {
   styleOptions: document.getElementById("style-options"),
   configQuantity: document.getElementById("config-quantity"),
   bulkHint: document.getElementById("bulk-hint"),
+  configCheer: document.getElementById("config-cheer"),
   configSelection: document.getElementById("config-selection"),
   configUnitPrice: document.getElementById("config-unit-price"),
   configTotalPrice: document.getElementById("config-total-price"),
@@ -104,6 +105,7 @@ const nodes = {
 
 let cart = [];
 let toastTimeoutId = null;
+let cheerTimeoutId = null;
 let isStoreOpen = false;
 let isMobileCartOpen = false;
 
@@ -264,6 +266,22 @@ function showToast(message) {
   toastTimeoutId = setTimeout(() => {
     nodes.toast.classList.remove("show");
   }, 1600);
+}
+
+function showConfigCheer(message) {
+  if (!nodes.configCheer) {
+    return;
+  }
+
+  if (cheerTimeoutId) {
+    clearTimeout(cheerTimeoutId);
+  }
+
+  nodes.configCheer.textContent = message;
+  nodes.configCheer.classList.add("show");
+  cheerTimeoutId = setTimeout(() => {
+    nodes.configCheer.classList.remove("show");
+  }, 1700);
 }
 
 function triggerCartFabFeedback() {
@@ -585,6 +603,9 @@ function bindConfiguratorEvents() {
     if (isLockedToSingleSide(configState.size)) {
       configState.side = "single";
       setActiveOption(nodes.sidesOptions, "single", "side");
+      showConfigCheer("Perfecto. Ese tamaño va una sola cara por limite de maquina.");
+    } else {
+      showConfigCheer("Genial, tamaño elegido. Ya estas cerca de tener tu trabajo listo.");
     }
 
     updateSidesStepState();
@@ -599,6 +620,7 @@ function bindConfiguratorEvents() {
 
     configState.side = button.dataset.side;
     setActiveOption(nodes.sidesOptions, configState.side, "side");
+    showConfigCheer("Buena eleccion de caras. Vamos firme con tu pedido.");
     updateConfigSummary();
   });
 
@@ -610,10 +632,17 @@ function bindConfiguratorEvents() {
 
     configState.style = button.dataset.style;
     setActiveOption(nodes.styleOptions, configState.style, "style");
+    showConfigCheer("Excelente. El estilo de impresion ya esta definido.");
     updateConfigSummary();
   });
 
-  nodes.configQuantity?.addEventListener("input", updateConfigSummary);
+  nodes.configQuantity?.addEventListener("input", () => {
+    updateConfigSummary();
+    const qty = sanitizeQuantity(nodes.configQuantity.value);
+    if (qty > BULK_THRESHOLD) {
+      showConfigCheer("Activaste precio por mayor. Muy buena jugada.");
+    }
+  });
   nodes.addConfigBtn?.addEventListener("click", addConfiguredItemToCart);
 }
 

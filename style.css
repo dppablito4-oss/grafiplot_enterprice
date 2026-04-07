@@ -767,6 +767,10 @@ body.in-store .store-shell {
   color: #fff7f7;
 }
 
+.service-tab-btn.active .tab-icon {
+  filter: drop-shadow(0 0 6px rgba(255, 120, 120, 0.72)) drop-shadow(0 0 14px rgba(255, 70, 70, 0.46));
+}
+
 .service-tab-panel {
   display: none;
 }
@@ -794,6 +798,21 @@ body.in-store .store-shell {
   margin: 0;
   font-size: 0.84rem;
   color: var(--muted);
+}
+
+.config-cheer {
+  margin: 0;
+  min-height: 20px;
+  font-size: 0.82rem;
+  color: #9de8ff;
+  opacity: 0;
+  transform: translateY(-3px);
+  transition: opacity 0.28s ease, transform 0.28s ease;
+}
+
+.config-cheer.show {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 .config-step {
@@ -990,6 +1009,10 @@ body.light .config-quantity {
 
 body.light .config-summary {
   background: #f3faff;
+}
+
+body.light .config-cheer {
+  color: #0b6f95;
 }
 
 body.light .apa-alert {
