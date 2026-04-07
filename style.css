@@ -295,7 +295,7 @@ body.in-store .hero {
 }
 
 body.in-store .topbar {
-  top: 6px;
+  top: 0;
 }
 
 .hero-kicker {
@@ -474,19 +474,26 @@ body.light .hero-btn-gold {
 
 .topbar {
   position: sticky;
-  top: 8px;
-  z-index: 20;
+  top: 0;
+  z-index: 60;
   backdrop-filter: blur(8px);
   background: color-mix(in srgb, var(--bg) 76%, transparent);
-  border: 1px solid var(--border);
+  border: 1px solid color-mix(in srgb, var(--border) 78%, rgba(255, 255, 255, 0.16) 22%);
   box-shadow: var(--shadow);
-  border-radius: 18px;
-  padding: 12px 14px;
+  border-radius: 0;
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
+  padding: 12px clamp(14px, 3.2vw, 34px);
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 14px;
   flex-wrap: wrap;
+}
+
+body.light .topbar {
+  background: color-mix(in srgb, #f7fcff 86%, #d9ecfb 14%);
 }
 
 .brand h1 {
@@ -1004,7 +1011,14 @@ body.light .service-tab-btn {
 }
 
 body.light .service-tab-btn.active {
-  color: #fff9f9;
+  color: #551919;
+  border-color: rgba(201, 77, 77, 0.72);
+  background: linear-gradient(160deg, rgba(255, 170, 170, 0.62), rgba(255, 226, 226, 0.92));
+}
+
+.field-error {
+  border-color: rgba(255, 76, 76, 0.94) !important;
+  box-shadow: 0 0 0 1px rgba(255, 76, 76, 0.38), 0 0 16px rgba(255, 57, 57, 0.28);
 }
 
 body.light .config-step {
@@ -1448,12 +1462,15 @@ body.light .add-btn:hover {
   position: fixed;
   top: 88px;
   right: 18px;
-  z-index: 122;
-  width: 56px;
+  backdrop-filter: blur(8px);
+  background: color-mix(in srgb, var(--bg) 76%, transparent);
   height: 56px;
   border-radius: 50%;
-  border: 1px solid rgba(255, 255, 255, 0.28);
-  background: linear-gradient(160deg, #0f2f46, #0b1e31);
+  border-radius: 0;
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
+  padding: 12px clamp(14px, 3.2vw, 34px);
   color: #f1f8ff;
   box-shadow: 0 8px 22px rgba(2, 15, 28, 0.45), 0 0 0 1px rgba(39, 221, 255, 0.22);
   display: grid;
@@ -1469,13 +1486,15 @@ body.light .add-btn:hover {
 .cart-fab-count {
   position: absolute;
   top: -6px;
-  right: -4px;
+  top: 0;
   min-width: 22px;
   height: 22px;
   border-radius: 999px;
   background: linear-gradient(180deg, #ff4d4d, #d70000);
   color: #ffffff;
-  font-size: 0.72rem;
+  color: #551919;
+  border-color: rgba(201, 77, 77, 0.72);
+  background: linear-gradient(160deg, rgba(255, 170, 170, 0.62), rgba(255, 226, 226, 0.92));
   font-weight: 800;
   display: grid;
   place-items: center;

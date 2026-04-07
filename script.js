@@ -607,6 +607,8 @@ function updateConfigSummary() {
   const quantity = parseQuantityOrNull(nodes.configQuantity.value);
   configState.quantity = quantity ?? 0;
 
+  nodes.configQuantity.classList.toggle("field-error", quantity === null);
+
   if (!rule || quantity === null) {
     nodes.configSelection.textContent = "Selecciona tamaño, caras y estilo para calcular.";
     nodes.configUnitPrice.textContent = formatMoney(0);
@@ -640,6 +642,7 @@ function updateConfigSummary() {
 function updateBindingSummary() {
   const parsed = parseQuantityOrNull(nodes.bindingPages?.value || "");
   const calc = getBindingCalc(parsed ?? 1);
+  nodes.bindingPages?.classList.toggle("field-error", parsed === null);
   if (nodes.bindingBlocks) {
     nodes.bindingBlocks.textContent = String(calc.blocks);
   }
