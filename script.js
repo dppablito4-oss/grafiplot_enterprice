@@ -23,11 +23,11 @@ const PRINT_CONFIG = {
 };
 
 const PAPER_OPTIONS = {
-  "bond-75": { label: "Papel bond 75g", surchargeBySize: { any: 0 } },
-  fotografico: { label: "Papel fotografico", surchargeBySize: { a4: 1.5, a3: 3 } },
-  couche: { label: "Papel couche", surchargeBySize: { a4: 2, a3: 4 } },
-  "cartulina-escolar": { label: "Cartulina escolar", surchargeBySize: { a4: 0.5, a3: 1 } },
-  "cartulina-hilo": { label: "Cartulina de hilo", surchargeBySize: { a4: 1, a3: 2 } }
+  "bond-75": { label: "Papel bond 75g", absolutePriceBySize: { any: null } },
+  fotografico: { label: "Papel fotografico", absolutePriceBySize: { a4: 1.5, a3: 3 } },
+  couche: { label: "Papel couche", absolutePriceBySize: { a4: 2, a3: 4 } },
+  "cartulina-escolar": { label: "Cartulina escolar", absolutePriceBySize: { a4: 0.5, a3: 1 } },
+  "cartulina-hilo": { label: "Cartulina de hilo", absolutePriceBySize: { a4: 1, a3: 2 } }
 };
 
 const PRICE_MATRIX = {
@@ -178,13 +178,17 @@ function getPaperSelection() {
   return PAPER_OPTIONS[configState.paperType] || PAPER_OPTIONS["bond-75"];
 }
 
-function getPaperSurcharge(size, paperType) {
+function getPaperPriceOverride(size, paperType) {
   const option = PAPER_OPTIONS[paperType] || PAPER_OPTIONS["bond-75"];
-  if (typeof option.surchargeBySize.any === "number") {
-    return option.surchargeBySize.any;
+  if (Object.prototype.hasOwnProperty.call(option.absolutePriceBySize, "any")) {
+    return option.absolutePriceBySize.any;
   }
 
-  return option.surchargeBySize[size] || 0;
+  if (Object.prototype.hasOwnProperty.call(option.absolutePriceBySize, size)) {
+    return option.absolutePriceBySize[size];
+  }
+
+  return null;
 }
 
 function getCurrentPriceRule() {
@@ -206,8 +210,8 @@ function getBaseUnitFromRule(rule, quantity) {
 
 function getEffectiveUnitPrice(rule, quantity) {
   const base = getBaseUnitFromRule(rule, quantity);
-  const surcharge = getPaperSurcharge(configState.size, configState.paperType);
-  return base + surcharge;
+  const override = getPaperPriceOverride(configState.size, configState.paperType);
+  return typeof override === "number" ? override : base;
 }
 
 function buildConfigItemName() {
@@ -427,7 +431,8 @@ function renderMobileCartSummary() {
 
 function recomputeCartItem(item) {
   const baseUnit = item.bulkUnitPrice && item.quantity > BULK_THRESHOLD ? item.bulkUnitPrice : item.baseUnitPrice;
-  const unit = baseUnit + (item.paperSurcharge || 0);
+  const override = typeof item.paperPriceOverride === "number" ? item.paperPriceOverride : null;
+  const unit = override ?? baseUnit;
   const bindingCalc = item.includeBinding ? getBindingCalc(item.quantity) : null;
   item.unitPrice = unit;
   item.bindingBlocks = bindingCalc ? bindingCalc.blocks : 0;
@@ -481,7 +486,7 @@ function upsertCartItemFromConfig(quantity) {
   const key = `${configState.size}-${configState.side}-${configState.style}-${configState.paperType}-${configState.includeBinding ? "bind" : "nobind"}`;
   const existing = cart.find((item) => item.id === key);
   const paper = getPaperSelection();
-  const paperSurcharge = getPaperSurcharge(configState.size, configState.paperType);
+  const paperPriceOverride = getPaperPriceOverride(configState.size, configState.paperType);
 
   if (existing) {
     existing.quantity += quantity;
@@ -499,7 +504,7 @@ function upsertCartItemFromConfig(quantity) {
       bulkUnitPrice: typeof rule.bulk === "number" ? rule.bulk : null,
       paperType: configState.paperType,
       paperLabel: paper.label,
-      paperSurcharge,
+      paperPriceOverride,
       includeBinding: configState.includeBinding,
       unitPrice,
       subtotal: unitPrice * quantity
@@ -655,7 +660,7 @@ function updateConfigSummary() {
   const sideLabel = PRINT_CONFIG.sideLabels[configState.side] || "";
   const styleLabel = PRINT_CONFIG.styleLabels[configState.style] || "";
   const paper = getPaperSelection();
-  const paperSurcharge = getPaperSurcharge(configState.size, configState.paperType);
+  const paperOverride = getPaperPriceOverride(configState.size, configState.paperType);
 
   nodes.configSelection.textContent = `${configState.size.toUpperCase()} | ${sideLabel} | ${styleLabel} | ${paper.label}`;
   nodes.configUnitPrice.textContent = formatMoney(unitPrice);
@@ -667,9 +672,9 @@ function updateConfigSummary() {
 
   const baseUnit = getBaseUnitFromRule(rule, quantity);
   if (quantity > BULK_THRESHOLD && typeof rule.bulk === "number") {
-    nodes.bulkHint.textContent = `Se activo precio por mayor. Base: ${formatMoney(baseUnit)} + papel: ${formatMoney(paperSurcharge)}${bindingCalc ? ` + encuadernado: ${formatMoney(bindingCalc.total)}` : ""}.`;
+    nodes.bulkHint.textContent = `Se activo precio por mayor. Base: ${formatMoney(baseUnit)}${typeof paperOverride === "number" ? ` | Papel final: ${formatMoney(paperOverride)}` : ""}${bindingCalc ? ` + encuadernado: ${formatMoney(bindingCalc.total)}` : ""}.`;
   } else {
-    nodes.bulkHint.textContent = `Precio unitario para 1-100 hojas. Papel adicional: ${formatMoney(paperSurcharge)}${bindingCalc ? ` | Encuadernado: ${formatMoney(bindingCalc.total)}` : ""}.`;
+    nodes.bulkHint.textContent = `Precio unitario para 1-100 hojas.${typeof paperOverride === "number" ? ` Papel final: ${formatMoney(paperOverride)}.` : ""}${bindingCalc ? ` Encuadernado: ${formatMoney(bindingCalc.total)}.` : ""}`;
   }
 
   nodes.addConfigBtn.disabled = false;
@@ -953,11 +958,17 @@ function bindEvents() {
 function hydrateCartForNewModel() {
   cart = cart.map((item) => {
     const baseUnit = typeof item.baseUnitPrice === "number" ? item.baseUnitPrice : (typeof item.unitPrice === "number" ? item.unitPrice : 0);
+    const size = typeof item.size === "string" ? item.size : configState.size;
+    const paperType = typeof item.paperType === "string" ? item.paperType : "bond-75";
+    const overrideFromPaper = size ? getPaperPriceOverride(size, paperType) : null;
+    const fallbackOverride = typeof item.paperSurcharge === "number" && item.paperSurcharge > 0 ? baseUnit + item.paperSurcharge : null;
     return {
       ...item,
       baseUnitPrice: baseUnit,
       bulkUnitPrice: typeof item.bulkUnitPrice === "number" ? item.bulkUnitPrice : null,
-      paperSurcharge: typeof item.paperSurcharge === "number" ? item.paperSurcharge : 0,
+      paperPriceOverride: typeof item.paperPriceOverride === "number"
+        ? item.paperPriceOverride
+        : (typeof overrideFromPaper === "number" ? overrideFromPaper : fallbackOverride),
       includeBinding: Boolean(item.includeBinding),
       quantity: sanitizeQuantity(item.quantity),
       unitPrice: baseUnit,
