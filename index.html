@@ -78,26 +78,50 @@
 
 		<main id="catalogo" class="layout store-shell" aria-hidden="true">
 			<section class="catalog-panel" aria-label="Exploracion del catalogo">
-				<div class="catalog-toolbar">
-					<label class="search-wrap" for="service-search">
-						<span>Buscar</span>
-						<input id="service-search" type="search" placeholder="Ejemplo: a4 duplex, anillado, ploteo a1">
-					</label>
-					<label class="filter-wrap" for="category-filter">
-						<span>Categoria</span>
-						<select id="category-filter">
-							<option value="all">Todas</option>
-							<option value="impresiones-a4">Impresiones A4</option>
-							<option value="ploteos">Ploteos</option>
-							<option value="encuadernacion">Encuadernacion</option>
-							<option value="papeleria">Papeleria especial</option>
-						</select>
-					</label>
-					<p id="catalog-count" class="catalog-count">Mostrando 0 servicios</p>
-				</div>
+				<div class="print-configurator" aria-label="Configurador de impresiones Grafiplot Pro">
+					<h3>Configurador de Impresiones Grafiplot Pro</h3>
 
-			<section id="services-grid" class="services-grid" aria-label="Catalogo de servicios"></section>
-			<p id="catalog-hint" class="catalog-hint">Tip: en productos con dos tarifas, el sistema aplica Unidad para 1-100 hojas y Cantidad para 101+ hojas.</p>
+					<section class="config-step" aria-labelledby="step-size-title">
+						<p id="step-size-title" class="config-step-title">Paso 1: Seleccion de Tamaño</p>
+						<div id="size-options" class="option-row" role="group" aria-label="Seleccionar tamaño">
+							<button class="option-btn" type="button" data-size="a4">A4</button>
+							<button class="option-btn" type="button" data-size="a3">A3</button>
+							<button class="option-btn" type="button" data-size="a2">A2</button>
+							<button class="option-btn" type="button" data-size="a1">A1</button>
+							<button class="option-btn" type="button" data-size="a0">A0</button>
+						</div>
+					</section>
+
+					<section class="config-step" aria-labelledby="step-sides-title">
+						<p id="step-sides-title" class="config-step-title">Paso 2: Seleccion de Caras</p>
+						<div id="sides-options" class="option-row" role="group" aria-label="Seleccionar caras">
+							<button class="option-btn" type="button" data-side="single">Una sola cara</button>
+							<button class="option-btn" type="button" data-side="duplex">Ambas caras (Duplex)</button>
+						</div>
+						<p id="sides-lock-hint" class="config-hint" hidden>Solo disponible a una cara (Limite de maquina).</p>
+					</section>
+
+					<section class="config-step" aria-labelledby="step-style-title">
+						<p id="step-style-title" class="config-step-title">Paso 3: Estilo de Impresion</p>
+						<div id="style-options" class="option-row" role="group" aria-label="Seleccionar estilo">
+							<button class="option-btn" type="button" data-style="bn">Blanco y Negro</button>
+							<button class="option-btn" type="button" data-style="color">Color</button>
+						</div>
+					</section>
+
+					<section class="config-step config-qty-step" aria-labelledby="step-qty-title">
+						<p id="step-qty-title" class="config-step-title">Paso 4: Cantidad y Precio Real</p>
+						<label class="config-qty-label" for="config-quantity">Cantidad de hojas</label>
+						<input id="config-quantity" class="config-quantity" type="number" min="1" value="1" inputmode="numeric">
+						<p id="bulk-hint" class="config-hint"></p>
+						<div class="config-summary" aria-live="polite">
+							<p id="config-selection">Selecciona tamaño, caras y estilo para calcular.</p>
+							<p>Precio unitario: <strong id="config-unit-price">S/ 0.00</strong></p>
+							<p>Total estimado: <strong id="config-total-price">S/ 0.00</strong></p>
+						</div>
+						<button id="add-config-btn" class="btn add-btn config-add-btn" type="button" disabled>Agregar al pedido</button>
+					</section>
+				</div>
 			</section>
 
 			<aside id="cart-panel" class="cart-panel" aria-label="Carrito de pedido">

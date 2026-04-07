@@ -5,36 +5,59 @@ const STORAGE_KEYS = {
 
 const BULK_THRESHOLD = 100;
 
-const CATALOG_ITEMS = [
-  { id: "a4-una-cara-color", category: "impresiones-a4", categoryLabel: "Impresiones A4", icon: "🖨️", name: "A4 una cara - Color", unitPrice: 0.1, bulkUnitPrice: 0.1 },
-  { id: "a4-una-cara-bn", category: "impresiones-a4", categoryLabel: "Impresiones A4", icon: "🖨️", name: "A4 una cara - Blanco y Negro", unitPrice: 0.1, bulkUnitPrice: 0.07 },
-  { id: "a4-duplex-color", category: "impresiones-a4", categoryLabel: "Impresiones A4", icon: "📄", name: "A4 ambas caras (duplex) - Color", unitPrice: 0.15, bulkUnitPrice: 0.12 },
-  { id: "a4-duplex-bn", category: "impresiones-a4", categoryLabel: "Impresiones A4", icon: "📄", name: "A4 ambas caras (duplex) - Blanco y Negro", unitPrice: 0.1, bulkUnitPrice: 0.09 },
-  { id: "a4-folleto-color", category: "impresiones-a4", categoryLabel: "Impresiones A4", icon: "📰", name: "A4 folleto - Color", unitPrice: 0.15, bulkUnitPrice: 0.12 },
-  { id: "a4-folleto-bn", category: "impresiones-a4", categoryLabel: "Impresiones A4", icon: "📰", name: "A4 folleto - Blanco y Negro", unitPrice: 0.1, bulkUnitPrice: 0.09 },
-  { id: "triptico-color", category: "impresiones-a4", categoryLabel: "Impresiones A4", icon: "📘", name: "Triptico - Color", unitPrice: 0.15, bulkUnitPrice: 0.12 },
-  { id: "triptico-bn", category: "impresiones-a4", categoryLabel: "Impresiones A4", icon: "📘", name: "Triptico - Blanco y Negro", unitPrice: 0.1, bulkUnitPrice: 0.1 },
-  { id: "ploteo-a0", category: "ploteos", categoryLabel: "Ploteos", icon: "📐", name: "Ploteo formato A0", unitPrice: 4, bulkUnitPrice: 3.8 },
-  { id: "ploteo-a1", category: "ploteos", categoryLabel: "Ploteos", icon: "📐", name: "Ploteo formato A1", unitPrice: 2, bulkUnitPrice: 1.9 },
-  { id: "ploteo-a2", category: "ploteos", categoryLabel: "Ploteos", icon: "📐", name: "Ploteo formato A2", unitPrice: 1.5, bulkUnitPrice: 1.4 },
-  { id: "ploteo-a3", category: "ploteos", categoryLabel: "Ploteos", icon: "📐", name: "Ploteo formato A3", unitPrice: 0.5, bulkUnitPrice: 0.5 },
-  { id: "ploteo-a4", category: "ploteos", categoryLabel: "Ploteos", icon: "📐", name: "Ploteo formato A4", unitPrice: 0.1, bulkUnitPrice: 0.1 },
-  { id: "anillado-simple", category: "encuadernacion", categoryLabel: "Encuadernacion", icon: "📚", name: "Anillado simple", unitPrice: 1.5 },
-  { id: "anillado-mediano", category: "encuadernacion", categoryLabel: "Encuadernacion", icon: "📚", name: "Anillado mediano", unitPrice: 2 },
-  { id: "anillado-grueso", category: "encuadernacion", categoryLabel: "Encuadernacion", icon: "📚", name: "Anillado grueso", unitPrice: 3 },
-  { id: "empastado-fuerte", category: "encuadernacion", categoryLabel: "Encuadernacion", icon: "📕", name: "Empastado/Encuadernado fuerte", unitPrice: 6 },
-  { id: "papel-fotografico", category: "papeleria", categoryLabel: "Papeleria especial", icon: "🖼️", name: "Papel fotografico", unitPrice: 1.5 },
-  { id: "papel-couche", category: "papeleria", categoryLabel: "Papeleria especial", icon: "📇", name: "Impresion en papel couche", unitPrice: 2 },
-  { id: "cartulina-escolar", category: "papeleria", categoryLabel: "Papeleria especial", icon: "🧾", name: "Impresion en cartulina escolar", unitPrice: 0.5 },
-  { id: "cartulina-hilo", category: "papeleria", categoryLabel: "Papeleria especial", icon: "🧾", name: "Impresion en cartulina de hilo", unitPrice: 1 }
-];
+const PRINT_CONFIG = {
+  sizes: ["a4", "a3", "a2", "a1", "a0"],
+  lockedSingleSideSizes: ["a2", "a1", "a0"],
+  sideLabels: {
+    single: "Una sola cara",
+    duplex: "Ambas caras (Duplex)"
+  },
+  styleLabels: {
+    bn: "Blanco y Negro",
+    color: "Color"
+  }
+};
 
-const servicesById = Object.fromEntries(CATALOG_ITEMS.map((item) => [item.id, item]));
-let cart = [];
-let toastTimeoutId = null;
-let isStoreOpen = false;
-const systemThemeQuery = window.matchMedia("(prefers-color-scheme: light)");
-const mobileCartQuery = window.matchMedia("(max-width: 600px)");
+const PRICE_MATRIX = {
+  a4: {
+    single: {
+      color: { unit: 0.1, bulk: 0.1, name: "A4 una cara - Color" },
+      bn: { unit: 0.1, bulk: 0.07, name: "A4 una cara - Blanco y Negro" }
+    },
+    duplex: {
+      color: { unit: 0.15, bulk: 0.12, name: "A4 ambas caras (duplex) - Color" },
+      bn: { unit: 0.1, bulk: 0.09, name: "A4 ambas caras (duplex) - Blanco y Negro" }
+    }
+  },
+  a3: {
+    single: {
+      color: { unit: 0.5, bulk: 0.5, name: "Ploteo formato A3 - Color" },
+      bn: { unit: 0.5, bulk: 0.5, name: "Ploteo formato A3 - Blanco y Negro" }
+    },
+    duplex: {
+      color: { unit: 0.55, bulk: 0.55, name: "A3 ambas caras (duplex) - Color" },
+      bn: { unit: 0.55, bulk: 0.55, name: "A3 ambas caras (duplex) - Blanco y Negro" }
+    }
+  },
+  a2: {
+    single: {
+      color: { unit: 1.5, bulk: 1.4, name: "Ploteo formato A2 - Color" },
+      bn: { unit: 1.5, bulk: 1.4, name: "Ploteo formato A2 - Blanco y Negro" }
+    }
+  },
+  a1: {
+    single: {
+      color: { unit: 2, bulk: 1.9, name: "Ploteo formato A1 - Color" },
+      bn: { unit: 2, bulk: 1.9, name: "Ploteo formato A1 - Blanco y Negro" }
+    }
+  },
+  a0: {
+    single: {
+      color: { unit: 4, bulk: 3.8, name: "Ploteo formato A0 - Color" },
+      bn: { unit: 4, bulk: 3.8, name: "Ploteo formato A0 - Blanco y Negro" }
+    }
+  }
+};
 
 const nodes = {
   body: document.body,
@@ -48,7 +71,6 @@ const nodes = {
   homeLinks: document.querySelectorAll("[data-go-home='true']"),
   screenFlash: document.getElementById("screen-flash"),
   storeShell: document.getElementById("catalogo"),
-  servicesGrid: document.getElementById("services-grid"),
   cartItems: document.getElementById("cart-items"),
   cartTotal: document.getElementById("cart-total"),
   orderUnits: document.getElementById("order-units"),
@@ -57,9 +79,6 @@ const nodes = {
   clearCartBtn: document.getElementById("clear-cart-btn"),
   customerNote: document.getElementById("customer-note"),
   toast: document.getElementById("toast"),
-  serviceSearch: document.getElementById("service-search"),
-  categoryFilter: document.getElementById("category-filter"),
-  catalogCount: document.getElementById("catalog-count"),
   cartPanel: document.getElementById("cart-panel"),
   cartFab: document.getElementById("cart-fab"),
   cartFabCount: document.getElementById("cart-fab-count"),
@@ -68,137 +87,36 @@ const nodes = {
   mobileCartClose: document.getElementById("mobile-cart-close"),
   mobileCartItems: document.getElementById("mobile-cart-items"),
   mobileCartTotal: document.getElementById("mobile-cart-total"),
-  mobileCartOrder: document.getElementById("mobile-cart-order")
+  mobileCartOrder: document.getElementById("mobile-cart-order"),
+  sizeOptions: document.getElementById("size-options"),
+  sidesOptions: document.getElementById("sides-options"),
+  sidesLockHint: document.getElementById("sides-lock-hint"),
+  styleOptions: document.getElementById("style-options"),
+  configQuantity: document.getElementById("config-quantity"),
+  bulkHint: document.getElementById("bulk-hint"),
+  configSelection: document.getElementById("config-selection"),
+  configUnitPrice: document.getElementById("config-unit-price"),
+  configTotalPrice: document.getElementById("config-total-price"),
+  addConfigBtn: document.getElementById("add-config-btn")
 };
 
-const categoryBaseLabels = new Map(
-  Array.from(nodes.categoryFilter?.options || []).map((option) => [option.value, option.textContent.trim()])
-);
-
+let cart = [];
+let toastTimeoutId = null;
+let isStoreOpen = false;
 let isMobileCartOpen = false;
+
+const systemThemeQuery = window.matchMedia("(prefers-color-scheme: light)");
+const mobileCartQuery = window.matchMedia("(max-width: 600px)");
+
+const configState = {
+  size: null,
+  side: null,
+  style: null,
+  quantity: 1
+};
 
 function formatMoney(value) {
   return `S/ ${value.toFixed(2)}`;
-}
-
-function normalizeText(value) {
-  return `${value || ""}`
-    .toLowerCase()
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .replace(/[^a-z0-9\s-]/g, " ")
-    .replace(/\s+/g, " ")
-    .trim();
-}
-
-function boundedLevenshteinDistance(a, b, maxDistance) {
-  const source = `${a}`;
-  const target = `${b}`;
-
-  if (source === target) {
-    return 0;
-  }
-
-  if (Math.abs(source.length - target.length) > maxDistance) {
-    return maxDistance + 1;
-  }
-
-  const previous = new Array(target.length + 1);
-  const current = new Array(target.length + 1);
-
-  for (let j = 0; j <= target.length; j += 1) {
-    previous[j] = j;
-  }
-
-  for (let i = 1; i <= source.length; i += 1) {
-    current[0] = i;
-    let minInRow = current[0];
-
-    for (let j = 1; j <= target.length; j += 1) {
-      const cost = source[i - 1] === target[j - 1] ? 0 : 1;
-      current[j] = Math.min(
-        previous[j] + 1,
-        current[j - 1] + 1,
-        previous[j - 1] + cost
-      );
-
-      if (current[j] < minInRow) {
-        minInRow = current[j];
-      }
-    }
-
-    if (minInRow > maxDistance) {
-      return maxDistance + 1;
-    }
-
-    for (let j = 0; j <= target.length; j += 1) {
-      previous[j] = current[j];
-    }
-  }
-
-  return previous[target.length];
-}
-
-function tokenMatchesWordWithTolerance(token, word) {
-  if (!token || !word) {
-    return false;
-  }
-
-  const cleanWord = word.replace(/-/g, "");
-  const cleanToken = token.replace(/-/g, "");
-
-  if (cleanWord.includes(cleanToken)) {
-    return true;
-  }
-
-  if (cleanToken.length <= 2) {
-    return false;
-  }
-
-  if (cleanWord.length < 3) {
-    return false;
-  }
-
-  if (cleanToken[0] !== cleanWord[0]) {
-    return false;
-  }
-
-  if (cleanToken.length >= 5 && cleanWord.length >= 5 && cleanToken.slice(0, 2) !== cleanWord.slice(0, 2)) {
-    return false;
-  }
-
-  if (Math.abs(cleanToken.length - cleanWord.length) > 2) {
-    return false;
-  }
-
-  if (cleanToken.length <= 4) {
-    return boundedLevenshteinDistance(cleanToken, cleanWord, 1) <= 1;
-  }
-
-  if (cleanToken.length <= 7) {
-    return boundedLevenshteinDistance(cleanToken, cleanWord, 1) <= 1;
-  }
-
-  return boundedLevenshteinDistance(cleanToken, cleanWord, 2) <= 2;
-}
-
-function matchesQueryTokens(searchText, tokens) {
-  if (tokens.length === 0) {
-    return true;
-  }
-
-  const words = searchText
-    .split(" ")
-    .flatMap((word) => word.split("-"))
-    .filter(Boolean);
-
-  return tokens.every((token) => {
-    if (token.length <= 2) {
-      return searchText.includes(token);
-    }
-
-    return words.some((word) => tokenMatchesWordWithTolerance(token, word));
-  });
 }
 
 function sanitizeQuantity(value) {
@@ -206,24 +124,38 @@ function sanitizeQuantity(value) {
   return Number.isNaN(parsed) || parsed < 1 ? 1 : parsed;
 }
 
-function hasBulkPrice(service) {
-  return typeof service.bulkUnitPrice === "number";
+function isLockedToSingleSide(size) {
+  return PRINT_CONFIG.lockedSingleSideSizes.includes(size);
 }
 
-function getUnitPrice(service, quantity) {
-  if (!hasBulkPrice(service)) {
-    return service.unitPrice;
+function getCurrentPriceRule() {
+  const { size, side, style } = configState;
+  if (!size || !side || !style) {
+    return null;
   }
 
-  return quantity > BULK_THRESHOLD ? service.bulkUnitPrice : service.unitPrice;
+  return PRICE_MATRIX[size]?.[side]?.[style] || null;
 }
 
-function getTierMessage(service, quantity) {
-  if (!hasBulkPrice(service)) {
+function getEffectiveUnitPrice(rule, quantity) {
+  if (!rule) {
+    return 0;
+  }
+
+  if (typeof rule.bulk === "number" && quantity > BULK_THRESHOLD) {
+    return rule.bulk;
+  }
+
+  return rule.unit;
+}
+
+function buildConfigItemName() {
+  const rule = getCurrentPriceRule();
+  if (!rule) {
     return "";
   }
 
-  return quantity > BULK_THRESHOLD ? "Se activo precio por mayor" : "";
+  return rule.name;
 }
 
 function setStoreOpen(nextOpen, shouldScroll = false) {
@@ -274,61 +206,6 @@ function openStoreWithFlash() {
   }, 170);
 }
 
-function renderCatalog() {
-  const cardsMarkup = CATALOG_ITEMS.map((item) => {
-    const unitPrice = getUnitPrice(item, 1);
-    const productImagePath = `assets/products/${item.id}.svg`;
-    const searchText = normalizeText(`${item.name} ${item.category} ${item.categoryLabel} ${item.id}`);
-
-    return `<article class="service-card" data-category="${item.category}" data-search="${searchText}" aria-labelledby="${item.id}-title">
-      <div class="card-head"><div class="icon" aria-hidden="true">${item.icon}</div></div>
-      <figure class="service-media" data-image-wrap="${item.id}">
-        <img class="product-image" src="${productImagePath}" alt="${item.name}" loading="lazy">
-        <span class="media-fallback">${item.name}</span>
-      </figure>
-      <p class="service-category">${item.categoryLabel}</p>
-      <h2 id="${item.id}-title">${item.name}</h2>
-      <p class="unit-line">Precio unitario: <strong id="unit-${item.id}">${formatMoney(unitPrice)}</strong></p>
-      <div class="service-controls">
-        <div class="controls">
-          <label><span>Cantidad</span><input class="quantity-input" data-id="${item.id}" type="number" min="1" value="1" inputmode="numeric"></label>
-        </div>
-        <p class="tier-status" id="tier-${item.id}"></p>
-        <p class="total-preview">Precio estimado: <strong id="preview-${item.id}">${formatMoney(unitPrice)}</strong></p>
-      </div>
-      <button class="btn add-btn" data-service="${item.id}" type="button">Agregar producto</button>
-    </article>`;
-  }).join("");
-
-  nodes.servicesGrid.innerHTML = cardsMarkup;
-}
-
-function bindProductImageFallbacks() {
-  nodes.servicesGrid.querySelectorAll(".product-image").forEach((image) => {
-    image.addEventListener(
-      "error",
-      () => {
-        const wrapper = image.closest(".service-media");
-        if (!wrapper) {
-          return;
-        }
-
-        wrapper.classList.add("missing-image");
-        image.remove();
-      },
-      { once: true }
-    );
-  });
-}
-
-function getCartTotal() {
-  return cart.reduce((sum, item) => sum + item.subtotal, 0);
-}
-
-function getTotalUnits() {
-  return cart.reduce((sum, item) => sum + item.quantity, 0);
-}
-
 function saveCart() {
   localStorage.setItem(STORAGE_KEYS.cart, JSON.stringify(cart));
 }
@@ -371,8 +248,20 @@ function getAttentionStatusText(now = new Date()) {
 }
 
 function renderQuickSummary() {
-  nodes.orderUnits.textContent = `Items totales: ${getTotalUnits()}`;
+  nodes.orderUnits.textContent = `Items totales: ${cart.reduce((sum, item) => sum + item.quantity, 0)}`;
   nodes.attentionStatus.textContent = getAttentionStatusText();
+}
+
+function showToast(message) {
+  if (toastTimeoutId) {
+    clearTimeout(toastTimeoutId);
+  }
+
+  nodes.toast.textContent = message;
+  nodes.toast.classList.add("show");
+  toastTimeoutId = setTimeout(() => {
+    nodes.toast.classList.remove("show");
+  }, 1600);
 }
 
 function triggerCartFabFeedback() {
@@ -387,27 +276,12 @@ function triggerCartFabFeedback() {
   nodes.cartFabCount.classList.add("bump");
 }
 
-function setMobileCartOpen(nextOpen) {
-  if (!nodes.mobileCartSheet || !nodes.cartFab) {
-    return;
-  }
-
-  isMobileCartOpen = nextOpen;
-  document.body.classList.toggle("mobile-cart-open", isMobileCartOpen);
-  nodes.mobileCartSheet.setAttribute("aria-hidden", isMobileCartOpen ? "false" : "true");
-  nodes.cartFab.setAttribute("aria-expanded", isMobileCartOpen ? "true" : "false");
-}
-
-function scrollToDetailedCart() {
-  if (!isStoreOpen) {
-    openStoreWithFlash();
-    setTimeout(() => {
-      nodes.cartPanel?.scrollIntoView({ behavior: "smooth", block: "start" });
-    }, 260);
-    return;
-  }
-
-  nodes.cartPanel?.scrollIntoView({ behavior: "smooth", block: "start" });
+function updateCheckoutStates() {
+  const isEmpty = cart.length === 0;
+  nodes.whatsappBtn.disabled = isEmpty;
+  nodes.whatsappBtn.classList.toggle("is-disabled", isEmpty);
+  nodes.clearCartBtn.disabled = isEmpty;
+  nodes.clearCartBtn.classList.toggle("is-disabled", isEmpty);
 }
 
 function renderMobileCartSummary() {
@@ -415,7 +289,7 @@ function renderMobileCartSummary() {
     return;
   }
 
-  const totalUnits = getTotalUnits();
+  const totalUnits = cart.reduce((sum, item) => sum + item.quantity, 0);
   nodes.cartFabCount.textContent = String(totalUnits);
 
   if (cart.length === 0) {
@@ -441,38 +315,14 @@ function renderMobileCartSummary() {
     )
     .join("");
 
-  nodes.mobileCartTotal.textContent = formatMoney(getCartTotal());
-}
-
-function showToast(message) {
-  if (toastTimeoutId) {
-    clearTimeout(toastTimeoutId);
-  }
-
-  nodes.toast.textContent = message;
-  nodes.toast.classList.add("show");
-  toastTimeoutId = setTimeout(() => {
-    nodes.toast.classList.remove("show");
-  }, 1600);
-}
-
-function updateCheckoutStates() {
-  const isEmpty = cart.length === 0;
-  nodes.whatsappBtn.disabled = isEmpty;
-  nodes.whatsappBtn.classList.toggle("is-disabled", isEmpty);
-  nodes.clearCartBtn.disabled = isEmpty;
-  nodes.clearCartBtn.classList.toggle("is-disabled", isEmpty);
+  const total = cart.reduce((sum, item) => sum + item.subtotal, 0);
+  nodes.mobileCartTotal.textContent = formatMoney(total);
 }
 
 function recomputeCartItem(item) {
-  const service = servicesById[item.sourceServiceId];
-  if (!service) {
-    return;
-  }
-
-  item.unitPrice = getUnitPrice(service, item.quantity);
-  item.subtotal = item.quantity * item.unitPrice;
-  item.name = service.name;
+  const unit = item.bulkUnitPrice && item.quantity > BULK_THRESHOLD ? item.bulkUnitPrice : item.baseUnitPrice;
+  item.unitPrice = unit;
+  item.subtotal = item.unitPrice * item.quantity;
 }
 
 function renderCart() {
@@ -502,47 +352,54 @@ function renderCart() {
     )
     .join("");
 
-  nodes.cartTotal.textContent = formatMoney(getCartTotal());
+  const total = cart.reduce((sum, item) => sum + item.subtotal, 0);
+  nodes.cartTotal.textContent = formatMoney(total);
   renderQuickSummary();
   renderMobileCartSummary();
   updateCheckoutStates();
 }
 
-function upsertCartItem(serviceId, quantity) {
-  const service = servicesById[serviceId];
-  if (!service) {
+function upsertCartItemFromConfig(quantity) {
+  const rule = getCurrentPriceRule();
+  if (!rule) {
     return;
   }
 
-  const existing = cart.find((item) => item.id === serviceId);
+  const name = buildConfigItemName();
+  const key = `${configState.size}-${configState.side}-${configState.style}`;
+  const existing = cart.find((item) => item.id === key);
+
   if (existing) {
     existing.quantity += quantity;
     recomputeCartItem(existing);
   } else {
-    const newItem = {
-      id: serviceId,
-      sourceServiceId: serviceId,
-      name: service.name,
+    const unitPrice = getEffectiveUnitPrice(rule, quantity);
+    cart.push({
+      id: key,
+      name,
+      size: configState.size,
+      side: configState.side,
+      style: configState.style,
       quantity,
-      unitPrice: getUnitPrice(service, quantity),
-      subtotal: 0
-    };
-    newItem.subtotal = newItem.quantity * newItem.unitPrice;
-    cart.push(newItem);
+      baseUnitPrice: rule.unit,
+      bulkUnitPrice: typeof rule.bulk === "number" ? rule.bulk : null,
+      unitPrice,
+      subtotal: unitPrice * quantity
+    });
   }
 
   saveCart();
   renderCart();
 }
 
-function changeItemQuantity(serviceId, action) {
-  const item = cart.find((entry) => entry.id === serviceId);
+function changeItemQuantity(itemId, action) {
+  const item = cart.find((entry) => entry.id === itemId);
   if (!item) {
     return;
   }
 
   if (action === "remove") {
-    cart = cart.filter((entry) => entry.id !== serviceId);
+    cart = cart.filter((entry) => entry.id !== itemId);
     saveCart();
     renderCart();
     showToast("Servicio eliminado del pedido");
@@ -552,7 +409,7 @@ function changeItemQuantity(serviceId, action) {
   const delta = action === "increase" ? 1 : -1;
   const nextQuantity = item.quantity + delta;
   if (nextQuantity < 1) {
-    cart = cart.filter((entry) => entry.id !== serviceId);
+    cart = cart.filter((entry) => entry.id !== itemId);
     saveCart();
     renderCart();
     return;
@@ -564,107 +421,107 @@ function changeItemQuantity(serviceId, action) {
   renderCart();
 }
 
-function updateCardPricing(card) {
-  const serviceId = card.querySelector(".add-btn")?.dataset.service;
-  if (!serviceId) {
-    return;
-  }
-
-  const service = servicesById[serviceId];
-  const qtyInput = card.querySelector(`.quantity-input[data-id="${serviceId}"]`);
-  const unitNode = card.querySelector(`#unit-${serviceId}`);
-  const previewNode = card.querySelector(`#preview-${serviceId}`);
-  const tierNode = card.querySelector(`#tier-${serviceId}`);
-  if (!service || !qtyInput || !unitNode || !previewNode || !tierNode) {
-    return;
-  }
-
-  const quantity = sanitizeQuantity(qtyInput.value);
-  qtyInput.value = String(quantity);
-  const unitPrice = getUnitPrice(service, quantity);
-  const total = unitPrice * quantity;
-
-  unitNode.textContent = formatMoney(unitPrice);
-  previewNode.textContent = formatMoney(total);
-  tierNode.textContent = getTierMessage(service, quantity);
-  tierNode.classList.toggle("is-bulk", quantity > BULK_THRESHOLD && hasBulkPrice(service));
+function setActiveOption(container, value, attrName) {
+  container?.querySelectorAll(".option-btn").forEach((button) => {
+    const isActive = button.dataset[attrName] === value;
+    button.classList.toggle("active", isActive);
+  });
 }
 
-function addServiceToCart(serviceId) {
-  const quantityInput = nodes.servicesGrid.querySelector(`.quantity-input[data-id="${serviceId}"]`);
-  const quantity = sanitizeQuantity(quantityInput ? quantityInput.value : 1);
-  upsertCartItem(serviceId, quantity);
+function updateSidesStepState() {
+  const size = configState.size;
+  const isLocked = size && isLockedToSingleSide(size);
+
+  if (!size) {
+    nodes.sidesLockHint.hidden = true;
+    nodes.sidesOptions.querySelectorAll(".option-btn").forEach((button) => {
+      button.disabled = false;
+    });
+    return;
+  }
+
+  nodes.sidesOptions.querySelectorAll(".option-btn").forEach((button) => {
+    const isDuplex = button.dataset.side === "duplex";
+    button.disabled = isLocked && isDuplex;
+  });
+
+  if (isLocked) {
+    configState.side = "single";
+    setActiveOption(nodes.sidesOptions, "single", "side");
+    nodes.sidesLockHint.hidden = false;
+  } else {
+    nodes.sidesLockHint.hidden = true;
+  }
+}
+
+function updateConfigSummary() {
+  const rule = getCurrentPriceRule();
+  const quantity = sanitizeQuantity(nodes.configQuantity.value);
+  configState.quantity = quantity;
+  nodes.configQuantity.value = String(quantity);
+
+  if (!rule) {
+    nodes.configSelection.textContent = "Selecciona tamaño, caras y estilo para calcular.";
+    nodes.configUnitPrice.textContent = formatMoney(0);
+    nodes.configTotalPrice.textContent = formatMoney(0);
+    nodes.bulkHint.textContent = "";
+    nodes.addConfigBtn.disabled = true;
+    return;
+  }
+
+  const unitPrice = getEffectiveUnitPrice(rule, quantity);
+  const totalPrice = unitPrice * quantity;
+  const sideLabel = PRINT_CONFIG.sideLabels[configState.side] || "";
+  const styleLabel = PRINT_CONFIG.styleLabels[configState.style] || "";
+
+  nodes.configSelection.textContent = `${configState.size.toUpperCase()} | ${sideLabel} | ${styleLabel}`;
+  nodes.configUnitPrice.textContent = formatMoney(unitPrice);
+  nodes.configTotalPrice.textContent = formatMoney(totalPrice);
+  nodes.bulkHint.textContent = quantity > BULK_THRESHOLD && typeof rule.bulk === "number"
+    ? "Se activo precio por mayor en esta configuracion."
+    : "Precio unitario para 1-100 hojas. Precio por mayor se activa en 101+ hojas.";
+  nodes.addConfigBtn.disabled = false;
+}
+
+function addConfiguredItemToCart() {
+  const rule = getCurrentPriceRule();
+  if (!rule) {
+    showToast("Completa la configuracion antes de agregar.");
+    return;
+  }
+
+  const quantity = sanitizeQuantity(nodes.configQuantity.value);
+  upsertCartItemFromConfig(quantity);
   triggerCartFabFeedback();
-  showToast("Producto agregado al pedido");
+  showToast("Configuracion agregada al pedido");
 }
 
-function updateCategoryFilterOptions(categoryMatchCount, currentSelectedCategory) {
-  if (!nodes.categoryFilter) {
-    return false;
-  }
-
-  const totalMatches = Object.values(categoryMatchCount).reduce((sum, count) => sum + count, 0);
-
-  Array.from(nodes.categoryFilter.options).forEach((option) => {
-    const baseLabel = categoryBaseLabels.get(option.value) || option.textContent.trim();
-
-    if (option.value === "all") {
-      option.textContent = `${baseLabel} (${totalMatches})`;
-      option.hidden = false;
-      option.disabled = false;
-      return;
-    }
-
-    const count = categoryMatchCount[option.value] || 0;
-    option.textContent = `${baseLabel} (${count})`;
-    option.hidden = count === 0;
-    option.disabled = count === 0;
-  });
-
-  if (currentSelectedCategory !== "all" && (categoryMatchCount[currentSelectedCategory] || 0) === 0) {
-    nodes.categoryFilter.value = "all";
-    return true;
-  }
-
-  return false;
-}
-
-function applyCatalogFilters() {
-  const query = normalizeText(nodes.serviceSearch.value);
-  const queryTokens = query ? query.split(" ").filter(Boolean) : [];
-  const selectedCategory = nodes.categoryFilter.value;
-  const categoryMatchCount = {};
-  let visibleCount = 0;
-
-  nodes.servicesGrid.querySelectorAll(".service-card").forEach((card) => {
-    const category = card.dataset.category;
-    const searchableText = `${card.dataset.search || ""}`;
-    const matchCategory = selectedCategory === "all" || category === selectedCategory;
-    const matchQuery = matchesQueryTokens(searchableText, queryTokens);
-
-    if (matchQuery) {
-      categoryMatchCount[category] = (categoryMatchCount[category] || 0) + 1;
-    }
-
-    const isVisible = matchCategory && matchQuery;
-    card.hidden = !isVisible;
-    if (isVisible) {
-      visibleCount += 1;
-    }
-  });
-
-  const selectionChanged = updateCategoryFilterOptions(categoryMatchCount, selectedCategory);
-  if (selectionChanged) {
-    applyCatalogFilters();
+function setMobileCartOpen(nextOpen) {
+  if (!nodes.mobileCartSheet || !nodes.cartFab) {
     return;
   }
 
-  nodes.catalogCount.textContent = `Mostrando ${visibleCount} servicio${visibleCount === 1 ? "" : "s"}`;
+  isMobileCartOpen = nextOpen;
+  document.body.classList.toggle("mobile-cart-open", isMobileCartOpen);
+  nodes.mobileCartSheet.setAttribute("aria-hidden", isMobileCartOpen ? "false" : "true");
+  nodes.cartFab.setAttribute("aria-expanded", isMobileCartOpen ? "true" : "false");
+}
+
+function scrollToDetailedCart() {
+  if (!isStoreOpen) {
+    openStoreWithFlash();
+    setTimeout(() => {
+      nodes.cartPanel?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }, 260);
+    return;
+  }
+
+  nodes.cartPanel?.scrollIntoView({ behavior: "smooth", block: "start" });
 }
 
 function buildWhatsAppMessage() {
   const lines = cart.map((item, index) => `${index + 1}. ✅ ${item.name} (${formatMoney(item.unitPrice)} x ${item.quantity}) = ${formatMoney(item.subtotal)}`);
-  const total = formatMoney(getCartTotal());
+  const total = formatMoney(cart.reduce((sum, item) => sum + item.subtotal, 0));
   const customerNote = nodes.customerNote.value.trim();
   const noteSection = customerNote ? `\n📝 Nota del cliente:\n${customerNote}` : "";
   return `Hola EQUIPO GRAFIPLOT, quiero hacer un pedido:\n\n📦 Detalle del pedido:\n${lines.join("\n")}\n\n💰 Total: ${total}${noteSection}\n\nGracias.`;
@@ -713,6 +570,51 @@ function initSystemTheme() {
   });
 }
 
+function bindConfiguratorEvents() {
+  nodes.sizeOptions?.addEventListener("click", (event) => {
+    const button = event.target.closest(".option-btn[data-size]");
+    if (!button) {
+      return;
+    }
+
+    configState.size = button.dataset.size;
+    setActiveOption(nodes.sizeOptions, configState.size, "size");
+
+    if (isLockedToSingleSide(configState.size)) {
+      configState.side = "single";
+      setActiveOption(nodes.sidesOptions, "single", "side");
+    }
+
+    updateSidesStepState();
+    updateConfigSummary();
+  });
+
+  nodes.sidesOptions?.addEventListener("click", (event) => {
+    const button = event.target.closest(".option-btn[data-side]");
+    if (!button || button.disabled) {
+      return;
+    }
+
+    configState.side = button.dataset.side;
+    setActiveOption(nodes.sidesOptions, configState.side, "side");
+    updateConfigSummary();
+  });
+
+  nodes.styleOptions?.addEventListener("click", (event) => {
+    const button = event.target.closest(".option-btn[data-style]");
+    if (!button) {
+      return;
+    }
+
+    configState.style = button.dataset.style;
+    setActiveOption(nodes.styleOptions, configState.style, "style");
+    updateConfigSummary();
+  });
+
+  nodes.configQuantity?.addEventListener("input", updateConfigSummary);
+  nodes.addConfigBtn?.addEventListener("click", addConfiguredItemToCart);
+}
+
 function bindEvents() {
   nodes.cartFab?.addEventListener("click", () => {
     if (mobileCartQuery.matches) {
@@ -745,27 +647,6 @@ function bindEvents() {
     scrollToDetailedCart();
   });
 
-  nodes.servicesGrid.addEventListener("input", (event) => {
-    const quantityInput = event.target.closest(".quantity-input");
-    if (!quantityInput) {
-      return;
-    }
-
-    const card = quantityInput.closest(".service-card");
-    if (card) {
-      updateCardPricing(card);
-    }
-  });
-
-  nodes.servicesGrid.addEventListener("click", (event) => {
-    const button = event.target.closest(".add-btn");
-    if (!button) {
-      return;
-    }
-
-    addServiceToCart(button.dataset.service);
-  });
-
   nodes.cartItems.addEventListener("click", (event) => {
     const target = event.target.closest("button[data-action]");
     if (!target) {
@@ -776,9 +657,6 @@ function bindEvents() {
   });
 
   nodes.customerNote.addEventListener("input", saveNote);
-  nodes.serviceSearch.addEventListener("input", applyCatalogFilters);
-  nodes.categoryFilter.addEventListener("input", applyCatalogFilters);
-  nodes.categoryFilter.addEventListener("change", applyCatalogFilters);
   nodes.whatsappBtn.addEventListener("click", openWhatsAppCheckout);
   nodes.clearCartBtn.addEventListener("click", clearCartWithConfirmation);
 
@@ -821,21 +699,35 @@ function bindEvents() {
   }
 }
 
-function init() {
-  renderCatalog();
-  bindProductImageFallbacks();
+function hydrateCartForNewModel() {
+  cart = cart.map((item) => {
+    if (typeof item.baseUnitPrice === "number") {
+      recomputeCartItem(item);
+      return item;
+    }
 
-  nodes.servicesGrid.querySelectorAll(".service-card").forEach((card) => {
-    updateCardPricing(card);
+    const fallbackBaseUnit = typeof item.unitPrice === "number" ? item.unitPrice : 0;
+    return {
+      ...item,
+      baseUnitPrice: fallbackBaseUnit,
+      bulkUnitPrice: null,
+      subtotal: fallbackBaseUnit * item.quantity,
+      unitPrice: fallbackBaseUnit
+    };
   });
+}
 
+function init() {
   initSystemTheme();
   loadCart();
+  hydrateCartForNewModel();
   loadNote();
   setMobileCartOpen(false);
   setStoreOpen(false, false);
-  applyCatalogFilters();
+  updateSidesStepState();
+  updateConfigSummary();
   renderCart();
+  bindConfiguratorEvents();
   bindEvents();
 }
 

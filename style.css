@@ -732,6 +732,147 @@ body.in-store .store-shell {
   gap: 14px;
 }
 
+.print-configurator {
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: linear-gradient(160deg, var(--surface), color-mix(in srgb, var(--surface-2) 84%, var(--accent) 16%));
+  box-shadow: var(--shadow);
+  padding: 14px;
+  display: grid;
+  gap: 12px;
+}
+
+.print-configurator h3 {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.config-step {
+  border: 1px solid color-mix(in srgb, var(--border) 72%, rgba(255, 255, 255, 0.28) 28%);
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--surface) 82%, var(--accent) 18%);
+  padding: 10px;
+  display: grid;
+  gap: 8px;
+}
+
+.config-step-title {
+  margin: 0;
+  font-size: 0.86rem;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.option-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 8px;
+}
+
+.option-btn {
+  border: 1px solid var(--border);
+  background: linear-gradient(165deg, color-mix(in srgb, var(--surface) 80%, var(--accent) 20%), var(--surface));
+  color: var(--text);
+  border-radius: 10px;
+  padding: 10px;
+  font-weight: 700;
+  font-size: 0.84rem;
+  cursor: pointer;
+}
+
+.option-btn:hover {
+  border-color: color-mix(in srgb, var(--accent) 78%, #ffffff 22%);
+}
+
+.option-btn.active {
+  border-color: rgba(255, 90, 90, 0.85);
+  background: linear-gradient(170deg, rgba(255, 58, 58, 0.24), rgba(155, 0, 0, 0.32));
+  color: #fff4f4;
+  box-shadow: 0 0 0 1px rgba(255, 86, 86, 0.32), 0 0 20px rgba(255, 26, 26, 0.22);
+}
+
+.option-btn:disabled {
+  opacity: 0.52;
+  cursor: not-allowed;
+}
+
+.config-hint {
+  margin: 0;
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+.config-qty-label {
+  font-size: 0.82rem;
+}
+
+.config-quantity {
+  width: 100%;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 12px;
+  min-height: 52px;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--text);
+  background: color-mix(in srgb, var(--surface) 90%, transparent);
+}
+
+.config-summary {
+  border: 1px dashed var(--border);
+  border-radius: 10px;
+  padding: 10px;
+  background: color-mix(in srgb, var(--surface) 86%, var(--accent) 14%);
+  display: grid;
+  gap: 4px;
+}
+
+.config-summary p {
+  margin: 0;
+  font-size: 0.86rem;
+  color: var(--muted);
+}
+
+.config-summary strong {
+  color: var(--text);
+}
+
+.config-add-btn {
+  width: 100%;
+}
+
+.config-add-btn:disabled {
+  opacity: 0.56;
+  cursor: not-allowed;
+}
+
+body.light .print-configurator {
+  background: linear-gradient(160deg, #f7fcff, #e8f4ff);
+}
+
+body.light .config-step {
+  background: rgba(255, 255, 255, 0.78);
+}
+
+body.light .option-btn {
+  color: #17364d;
+  background: linear-gradient(165deg, #ecf7ff, #ddf0ff);
+}
+
+body.light .option-btn.active {
+  color: #fff7f7;
+  background: linear-gradient(170deg, rgba(255, 75, 75, 0.78), rgba(184, 0, 0, 0.84));
+}
+
+body.light .config-quantity {
+  color: #15354b;
+  background: #ffffff;
+}
+
+body.light .config-summary {
+  background: #f3faff;
+}
+
 .catalog-toolbar {
   border: 1px solid var(--border);
   background: linear-gradient(170deg, var(--surface), color-mix(in srgb, var(--surface) 86%, var(--accent) 10%));
