@@ -152,6 +152,26 @@ body::after {
   box-shadow: var(--shadow);
 }
 
+.dev-notice {
+  margin-top: 10px;
+  border: 1px solid color-mix(in srgb, var(--border) 72%, #ffd08a 28%);
+  border-radius: 10px;
+  background: linear-gradient(165deg, color-mix(in srgb, var(--surface) 82%, #ffca7a 18%), color-mix(in srgb, var(--surface) 92%, transparent));
+  box-shadow: var(--shadow);
+  padding: 7px 10px;
+}
+
+.dev-notice p {
+  margin: 0;
+  font-size: 0.78rem;
+  color: color-mix(in srgb, var(--text) 90%, #ffefcf 10%);
+  text-align: center;
+}
+
+.dev-notice strong {
+  color: #ffd089;
+}
+
 .promo-ribbon-track {
   min-width: max-content;
   display: flex;
@@ -589,6 +609,19 @@ body.light .nav-link:hover {
 
 body.light .promo-ribbon {
   background: linear-gradient(90deg, #d8f2ff, #fff2d7);
+}
+
+body.light .dev-notice {
+  border-color: rgba(212, 143, 48, 0.42);
+  background: linear-gradient(165deg, #fff4de, #fff9ef);
+}
+
+body.light .dev-notice p {
+  color: #65431c;
+}
+
+body.light .dev-notice strong {
+  color: #9f5408;
 }
 
 body.light .promo-ribbon-track {
@@ -1060,6 +1093,20 @@ body.light .btn.hero-btn-gold {
 
 .add-btn:hover {
   box-shadow: 0 0 0 1px rgba(25, 240, 255, 0.45), 0 0 26px rgba(25, 240, 255, 0.38);
+}
+
+body.light .add-btn {
+  color: #f6fbff;
+  background:
+    linear-gradient(140deg, rgba(0, 152, 196, 0.75), rgba(7, 70, 112, 0.94)),
+    linear-gradient(180deg, #0f5b88, #093f60);
+  border-color: rgba(0, 129, 176, 0.52);
+  box-shadow: 0 0 0 1px rgba(0, 146, 196, 0.24), 0 0 16px rgba(0, 146, 196, 0.22);
+}
+
+body.light .add-btn:hover {
+  color: #ffffff;
+  box-shadow: 0 0 0 1px rgba(0, 146, 196, 0.42), 0 0 24px rgba(0, 146, 196, 0.32);
 }
 
 .btn:hover {
