@@ -1504,22 +1504,21 @@ body.light .add-btn:hover {
 
 .cart-fab {
   position: fixed;
-  top: 88px;
+  bottom: 18px;
   right: 18px;
+  z-index: 130;
   backdrop-filter: blur(8px);
   background: color-mix(in srgb, var(--bg) 76%, transparent);
   height: 56px;
   border-radius: 50%;
-  border-radius: 0;
-  width: 100vw;
-  margin-left: calc(50% - 50vw);
-  margin-right: calc(50% - 50vw);
-  padding: 12px clamp(14px, 3.2vw, 34px);
+  width: 56px;
+  padding: 0;
   color: #f1f8ff;
   box-shadow: 0 8px 22px rgba(2, 15, 28, 0.45), 0 0 0 1px rgba(39, 221, 255, 0.22);
   display: grid;
   place-items: center;
   cursor: pointer;
+  border: 1px solid rgba(39, 221, 255, 0.22);
 }
 
 .cart-fab-glyph {
@@ -1530,15 +1529,12 @@ body.light .add-btn:hover {
 .cart-fab-count {
   position: absolute;
   top: -6px;
-  top: 0;
+  right: -6px;
   min-width: 22px;
   height: 22px;
   border-radius: 999px;
   background: linear-gradient(180deg, #ff4d4d, #d70000);
   color: #ffffff;
-  color: #551919;
-  border-color: rgba(201, 77, 77, 0.72);
-  background: linear-gradient(160deg, rgba(255, 170, 170, 0.62), rgba(255, 226, 226, 0.92));
   font-weight: 800;
   display: grid;
   place-items: center;

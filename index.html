@@ -146,19 +146,29 @@
 								<button class="option-btn" type="button" data-paper="cartulina-hilo">Cartulina de hilo</button>
 							</div>
 							<p id="paper-lock-hint" class="config-hint" hidden>Para A2, A1 y A0 solo aplica papel bond 75g.</p>
-							<label class="binding-toggle" for="include-binding">
-								<input id="include-binding" type="checkbox">
-								<span>Incluir encuadernado automatico (segun cantidad de hojas)</span>
-							</label>
-							<p id="binding-lock-hint" class="config-hint" hidden>El encuadernado en este configurador solo aplica para A4 y A3.</p>
 							<p id="bulk-hint" class="config-hint"></p>
 							<div class="config-summary" aria-live="polite">
 								<p id="config-selection">Selecciona tamaño, caras y estilo para calcular.</p>
 								<p>Precio unitario: <strong id="config-unit-price">S/ 0.00</strong></p>
-								<p id="config-binding-line" hidden>Encuadernado: <strong id="config-binding-price">S/ 0.00</strong></p>
 								<p>Total estimado: <strong id="config-total-price">S/ 0.00</strong></p>
 							</div>
 							<button id="add-config-btn" class="btn add-btn config-add-btn" type="button" disabled>Agregar al pedido</button>
+						</section>
+					</div>
+
+					<div class="print-configurator binding-configurator" aria-label="Bloque de anillado">
+						<h3>ANILLADO</h3>
+						<p class="config-subtitle">Servicio separado de impresion. Calcula por bloques de 200 hojas.</p>
+						<section class="config-step" aria-labelledby="binding-step-title">
+							<p id="binding-step-title" class="config-step-title">Bloque de Anillado</p>
+							<label class="config-qty-label" for="binding-quantity">Cantidad de hojas a anillar</label>
+							<input id="binding-quantity" class="config-quantity" type="number" min="1" value="1" inputmode="numeric">
+							<p class="config-hint">Precio: S/ 6.00 por cada bloque de 200 hojas.</p>
+							<div class="config-summary" aria-live="polite">
+								<p id="binding-blocks">Bloques: 1</p>
+								<p>Total anillado: <strong id="binding-total">S/ 6.00</strong></p>
+							</div>
+							<button id="add-binding-btn" class="btn add-btn config-add-btn" type="button">Agregar anillado</button>
 						</section>
 					</div>
 				</section>
