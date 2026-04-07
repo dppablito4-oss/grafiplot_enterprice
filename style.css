@@ -211,6 +211,44 @@ body::after {
     linear-gradient(180deg, rgba(7, 14, 24, 0.25), rgba(7, 14, 24, 0.82));
 }
 
+body.light .hero {
+  background: linear-gradient(165deg, #eff8ff, #dbeefe);
+  border-color: rgba(0, 153, 204, 0.34);
+}
+
+body.light .hero-bg {
+  filter: saturate(0.88) contrast(0.84) brightness(1.08);
+}
+
+body.light .hero-overlay {
+  background:
+    radial-gradient(circle at 50% 34%, rgba(236, 246, 255, 0.12), rgba(221, 238, 252, 0.56) 62%),
+    linear-gradient(180deg, rgba(236, 246, 255, 0.26), rgba(205, 228, 247, 0.64));
+}
+
+body.light .hero-kicker {
+  color: #1d5d80;
+}
+
+body.light .hero-content h2 {
+  color: #112c40;
+  text-shadow: 0 2px 8px rgba(255, 255, 255, 0.5);
+}
+
+body.light .hero-content p,
+body.light .hero-sub {
+  color: #24465d;
+}
+
+body.light .hero-info {
+  border-color: rgba(0, 153, 204, 0.4);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.68), rgba(226, 242, 255, 0.62));
+}
+
+body.light .hero-info p {
+  color: #173950;
+}
+
 .hero-content {
   position: relative;
   z-index: 1;
@@ -980,6 +1018,35 @@ input[type="number"] {
   font-size: 0.86rem;
   cursor: pointer;
   transition: transform 0.18s ease, box-shadow 0.25s ease;
+}
+
+.btn.hero-btn-gold {
+  width: min(520px, 100%);
+  min-width: 0;
+  padding: 17px 28px;
+  border-radius: 14px;
+  border-color: rgba(255, 72, 72, 0.95);
+  color: #fff6f6;
+  font-size: clamp(1.2rem, 0.95rem + 0.62vw, 1.4rem);
+  font-weight: 900;
+  background: linear-gradient(180deg, #ff3f3f, #e90000 56%, #a80000);
+  box-shadow:
+    0 0 0 1px rgba(255, 128, 128, 0.36),
+    0 0 22px rgba(255, 30, 30, 0.52),
+    0 0 42px rgba(255, 16, 16, 0.35),
+    0 12px 30px rgba(105, 0, 0, 0.5);
+}
+
+.btn.hero-btn-gold:hover {
+  color: #ffffff;
+  border-color: rgba(255, 146, 146, 0.95);
+  background: linear-gradient(180deg, #ff5a5a, #ff1515 56%, #b00000);
+}
+
+body.light .btn.hero-btn-gold {
+  border-color: rgba(228, 30, 30, 0.94);
+  color: #ffffff;
+  background: linear-gradient(180deg, #ff4c4c, #ef1010 56%, #b70000);
 }
 
 .add-btn {
