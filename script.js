@@ -71,10 +71,111 @@ const nodes = {
   mobileCartOrder: document.getElementById("mobile-cart-order")
 };
 
+const categoryBaseLabels = new Map(
+  Array.from(nodes.categoryFilter?.options || []).map((option) => [option.value, option.textContent.trim()])
+);
+
 let isMobileCartOpen = false;
 
 function formatMoney(value) {
   return `S/ ${value.toFixed(2)}`;
+}
+
+function normalizeText(value) {
+  return `${value || ""}`
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-z0-9\s-]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function boundedLevenshteinDistance(a, b, maxDistance) {
+  const source = `${a}`;
+  const target = `${b}`;
+
+  if (source === target) {
+    return 0;
+  }
+
+  if (Math.abs(source.length - target.length) > maxDistance) {
+    return maxDistance + 1;
+  }
+
+  const previous = new Array(target.length + 1);
+  const current = new Array(target.length + 1);
+
+  for (let j = 0; j <= target.length; j += 1) {
+    previous[j] = j;
+  }
+
+  for (let i = 1; i <= source.length; i += 1) {
+    current[0] = i;
+    let minInRow = current[0];
+
+    for (let j = 1; j <= target.length; j += 1) {
+      const cost = source[i - 1] === target[j - 1] ? 0 : 1;
+      current[j] = Math.min(
+        previous[j] + 1,
+        current[j - 1] + 1,
+        previous[j - 1] + cost
+      );
+
+      if (current[j] < minInRow) {
+        minInRow = current[j];
+      }
+    }
+
+    if (minInRow > maxDistance) {
+      return maxDistance + 1;
+    }
+
+    for (let j = 0; j <= target.length; j += 1) {
+      previous[j] = current[j];
+    }
+  }
+
+  return previous[target.length];
+}
+
+function tokenMatchesWordWithTolerance(token, word) {
+  if (!token || !word) {
+    return false;
+  }
+
+  if (word.includes(token)) {
+    return true;
+  }
+
+  if (token.length <= 2) {
+    return false;
+  }
+
+  if (token.length <= 4) {
+    return boundedLevenshteinDistance(token, word, 1) <= 1;
+  }
+
+  if (token.length <= 7) {
+    return boundedLevenshteinDistance(token, word, 1) <= 1;
+  }
+
+  return boundedLevenshteinDistance(token, word, 2) <= 2;
+}
+
+function matchesQueryTokens(searchText, tokens) {
+  if (tokens.length === 0) {
+    return true;
+  }
+
+  const words = searchText.split(" ").filter(Boolean);
+  return tokens.every((token) => {
+    if (token.length <= 2) {
+      return searchText.includes(token);
+    }
+
+    return words.some((word) => tokenMatchesWordWithTolerance(token, word));
+  });
 }
 
 function sanitizeQuantity(value) {
@@ -154,7 +255,7 @@ function renderCatalog() {
   const cardsMarkup = CATALOG_ITEMS.map((item) => {
     const unitPrice = getUnitPrice(item, 1);
     const productImagePath = `assets/products/${item.id}.svg`;
-    const searchText = `${item.name} ${item.category} ${item.categoryLabel}`.toLowerCase();
+    const searchText = normalizeText(`${item.name} ${item.category} ${item.categoryLabel} ${item.id}`);
 
     return `<article class="service-card" data-category="${item.category}" data-search="${searchText}" aria-labelledby="${item.id}-title">
       <div class="card-head"><div class="icon" aria-hidden="true">${item.icon}</div></div>
@@ -474,22 +575,66 @@ function addServiceToCart(serviceId) {
   showToast("Producto agregado al pedido");
 }
 
+function updateCategoryFilterOptions(categoryMatchCount, currentSelectedCategory) {
+  if (!nodes.categoryFilter) {
+    return false;
+  }
+
+  const totalMatches = Object.values(categoryMatchCount).reduce((sum, count) => sum + count, 0);
+
+  Array.from(nodes.categoryFilter.options).forEach((option) => {
+    const baseLabel = categoryBaseLabels.get(option.value) || option.textContent.trim();
+
+    if (option.value === "all") {
+      option.textContent = `${baseLabel} (${totalMatches})`;
+      option.hidden = false;
+      option.disabled = false;
+      return;
+    }
+
+    const count = categoryMatchCount[option.value] || 0;
+    option.textContent = `${baseLabel} (${count})`;
+    option.hidden = count === 0;
+    option.disabled = count === 0;
+  });
+
+  if (currentSelectedCategory !== "all" && (categoryMatchCount[currentSelectedCategory] || 0) === 0) {
+    nodes.categoryFilter.value = "all";
+    return true;
+  }
+
+  return false;
+}
+
 function applyCatalogFilters() {
-  const query = nodes.serviceSearch.value.trim().toLowerCase();
+  const query = normalizeText(nodes.serviceSearch.value);
+  const queryTokens = query ? query.split(" ").filter(Boolean) : [];
   const selectedCategory = nodes.categoryFilter.value;
+  const categoryMatchCount = {};
   let visibleCount = 0;
 
   nodes.servicesGrid.querySelectorAll(".service-card").forEach((card) => {
     const category = card.dataset.category;
     const searchableText = `${card.dataset.search || ""}`;
     const matchCategory = selectedCategory === "all" || category === selectedCategory;
-    const matchQuery = !query || searchableText.includes(query);
+    const matchQuery = matchesQueryTokens(searchableText, queryTokens);
+
+    if (matchQuery) {
+      categoryMatchCount[category] = (categoryMatchCount[category] || 0) + 1;
+    }
+
     const isVisible = matchCategory && matchQuery;
     card.hidden = !isVisible;
     if (isVisible) {
       visibleCount += 1;
     }
   });
+
+  const selectionChanged = updateCategoryFilterOptions(categoryMatchCount, selectedCategory);
+  if (selectionChanged) {
+    applyCatalogFilters();
+    return;
+  }
 
   nodes.catalogCount.textContent = `Mostrando ${visibleCount} servicio${visibleCount === 1 ? "" : "s"}`;
 }
@@ -609,6 +754,7 @@ function bindEvents() {
 
   nodes.customerNote.addEventListener("input", saveNote);
   nodes.serviceSearch.addEventListener("input", applyCatalogFilters);
+  nodes.categoryFilter.addEventListener("input", applyCatalogFilters);
   nodes.categoryFilter.addEventListener("change", applyCatalogFilters);
   nodes.whatsappBtn.addEventListener("click", openWhatsAppCheckout);
   nodes.clearCartBtn.addEventListener("click", clearCartWithConfirmation);
