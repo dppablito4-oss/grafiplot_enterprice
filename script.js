@@ -8,6 +8,8 @@ const BULK_THRESHOLD = 100;
 const PRINT_CONFIG = {
   sizes: ["a4", "a3", "a2", "a1", "a0"],
   lockedSingleSideSizes: ["a2", "a1", "a0"],
+  paperRestrictedSizes: ["a2", "a1", "a0"],
+  bindingAllowedSizes: ["a4", "a3"],
   sideLabels: {
     single: "Una sola cara",
     duplex: "Ambas caras (Duplex)"
@@ -16,6 +18,20 @@ const PRINT_CONFIG = {
     bn: "Blanco y Negro",
     color: "Color"
   }
+};
+
+const PAPER_OPTIONS = {
+  "bond-75": { label: "Papel bond 75g", surcharge: 0 },
+  fotografico: { label: "Papel fotografico", surcharge: 1.5 },
+  couche: { label: "Papel couche", surcharge: 2 },
+  "cartulina-escolar": { label: "Cartulina escolar", surcharge: 0.5 },
+  "cartulina-hilo": { label: "Cartulina de hilo", surcharge: 1 }
+};
+
+const BINDING_OPTIONS = {
+  simple: { label: "Simple (Espiral)", price: 1.5 },
+  mediano: { label: "Mediano", price: 2 },
+  grueso: { label: "Grueso", price: 3 }
 };
 
 const PRICE_MATRIX = {
@@ -95,6 +111,12 @@ const nodes = {
   sidesLockHint: document.getElementById("sides-lock-hint"),
   styleOptions: document.getElementById("style-options"),
   configQuantity: document.getElementById("config-quantity"),
+  paperType: document.getElementById("paper-type"),
+  paperLockHint: document.getElementById("paper-lock-hint"),
+  bindingWrap: document.getElementById("binding-wrap"),
+  bindingToggle: document.getElementById("binding-toggle"),
+  bindingOptionsWrap: document.getElementById("binding-options-wrap"),
+  bindingType: document.getElementById("binding-type"),
   bulkHint: document.getElementById("bulk-hint"),
   configCheer: document.getElementById("config-cheer"),
   configSelection: document.getElementById("config-selection"),
@@ -116,7 +138,10 @@ const configState = {
   size: null,
   side: null,
   style: null,
-  quantity: 1
+  quantity: 1,
+  paperType: "bond-75",
+  wantsBinding: false,
+  bindingType: "simple"
 };
 
 function formatMoney(value) {
@@ -130,6 +155,26 @@ function sanitizeQuantity(value) {
 
 function isLockedToSingleSide(size) {
   return PRINT_CONFIG.lockedSingleSideSizes.includes(size);
+}
+
+function isPaperRestricted(size) {
+  return PRINT_CONFIG.paperRestrictedSizes.includes(size);
+}
+
+function allowsBinding(size) {
+  return PRINT_CONFIG.bindingAllowedSizes.includes(size);
+}
+
+function getPaperSelection() {
+  return PAPER_OPTIONS[configState.paperType] || PAPER_OPTIONS["bond-75"];
+}
+
+function getBindingSelection() {
+  if (!configState.wantsBinding) {
+    return null;
+  }
+
+  return BINDING_OPTIONS[configState.bindingType] || BINDING_OPTIONS.simple;
 }
 
 function getCurrentPriceRule() {
@@ -146,11 +191,16 @@ function getEffectiveUnitPrice(rule, quantity) {
     return 0;
   }
 
-  if (typeof rule.bulk === "number" && quantity > BULK_THRESHOLD) {
-    return rule.bulk;
+  const base = typeof rule.bulk === "number" && quantity > BULK_THRESHOLD ? rule.bulk : rule.unit;
+  return base + getPaperSelection().surcharge;
+}
+
+function getBaseUnitFromRule(rule, quantity) {
+  if (!rule) {
+    return 0;
   }
 
-  return rule.unit;
+  return typeof rule.bulk === "number" && quantity > BULK_THRESHOLD ? rule.bulk : rule.unit;
 }
 
 function buildConfigItemName() {
@@ -159,7 +209,10 @@ function buildConfigItemName() {
     return "";
   }
 
-  return rule.name;
+  const paper = getPaperSelection();
+  const binding = getBindingSelection();
+  const bindingLabel = binding ? ` + Anillado ${binding.label}` : "";
+  return `${rule.name} | ${paper.label}${bindingLabel}`;
 }
 
 function setStoreOpen(nextOpen, shouldScroll = false) {
@@ -340,9 +393,10 @@ function renderMobileCartSummary() {
 }
 
 function recomputeCartItem(item) {
-  const unit = item.bulkUnitPrice && item.quantity > BULK_THRESHOLD ? item.bulkUnitPrice : item.baseUnitPrice;
+  const baseUnit = item.bulkUnitPrice && item.quantity > BULK_THRESHOLD ? item.bulkUnitPrice : item.baseUnitPrice;
+  const unit = baseUnit + (item.paperSurcharge || 0);
   item.unitPrice = unit;
-  item.subtotal = item.unitPrice * item.quantity;
+  item.subtotal = item.unitPrice * item.quantity + (item.bindingPrice || 0);
 }
 
 function renderCart() {
@@ -363,6 +417,7 @@ function renderCart() {
           <strong>${formatMoney(item.subtotal)}</strong>
         </div>
         <div class="cart-item-meta">${formatMoney(item.unitPrice)} x ${item.quantity}</div>
+        ${item.bindingPrice ? `<div class="cart-item-meta">Anillado: ${formatMoney(item.bindingPrice)}</div>` : ""}
         <div class="cart-item-actions">
           <button class="cart-action" type="button" data-action="decrease" data-id="${item.id}" aria-label="Quitar una unidad">-</button>
           <button class="cart-action" type="button" data-action="increase" data-id="${item.id}" aria-label="Agregar una unidad">+</button>
@@ -386,8 +441,10 @@ function upsertCartItemFromConfig(quantity) {
   }
 
   const name = buildConfigItemName();
-  const key = `${configState.size}-${configState.side}-${configState.style}`;
+  const key = `${configState.size}-${configState.side}-${configState.style}-${configState.paperType}-${configState.wantsBinding ? configState.bindingType : "sin-anillado"}`;
   const existing = cart.find((item) => item.id === key);
+  const paper = getPaperSelection();
+  const binding = getBindingSelection();
 
   if (existing) {
     existing.quantity += quantity;
@@ -403,8 +460,13 @@ function upsertCartItemFromConfig(quantity) {
       quantity,
       baseUnitPrice: rule.unit,
       bulkUnitPrice: typeof rule.bulk === "number" ? rule.bulk : null,
+      paperType: configState.paperType,
+      paperLabel: paper.label,
+      paperSurcharge: paper.surcharge,
+      bindingType: configState.wantsBinding ? configState.bindingType : null,
+      bindingPrice: binding ? binding.price : 0,
       unitPrice,
-      subtotal: unitPrice * quantity
+      subtotal: unitPrice * quantity + (binding ? binding.price : 0)
     });
   }
 
@@ -474,6 +536,40 @@ function updateSidesStepState() {
   }
 }
 
+function updatePaperAndBindingState() {
+  const size = configState.size;
+  if (!size) {
+    nodes.paperType.value = "bond-75";
+    nodes.paperType.disabled = false;
+    nodes.paperLockHint.hidden = true;
+    nodes.bindingWrap.hidden = true;
+    nodes.bindingOptionsWrap.hidden = true;
+    nodes.bindingToggle.checked = false;
+    return;
+  }
+
+  if (isPaperRestricted(size)) {
+    configState.paperType = "bond-75";
+    nodes.paperType.value = "bond-75";
+    nodes.paperType.disabled = true;
+    nodes.paperLockHint.hidden = false;
+  } else {
+    nodes.paperType.disabled = false;
+    nodes.paperLockHint.hidden = true;
+  }
+
+  const canBind = allowsBinding(size);
+  nodes.bindingWrap.hidden = !canBind;
+  if (!canBind) {
+    configState.wantsBinding = false;
+    nodes.bindingToggle.checked = false;
+    nodes.bindingOptionsWrap.hidden = true;
+    return;
+  }
+
+  nodes.bindingOptionsWrap.hidden = !nodes.bindingToggle.checked;
+}
+
 function updateConfigSummary() {
   const rule = getCurrentPriceRule();
   const quantity = sanitizeQuantity(nodes.configQuantity.value);
@@ -490,16 +586,22 @@ function updateConfigSummary() {
   }
 
   const unitPrice = getEffectiveUnitPrice(rule, quantity);
-  const totalPrice = unitPrice * quantity;
+  const binding = getBindingSelection();
+  const bindingPrice = binding ? binding.price : 0;
+  const totalPrice = unitPrice * quantity + bindingPrice;
   const sideLabel = PRINT_CONFIG.sideLabels[configState.side] || "";
   const styleLabel = PRINT_CONFIG.styleLabels[configState.style] || "";
+  const paperLabel = getPaperSelection().label;
 
-  nodes.configSelection.textContent = `${configState.size.toUpperCase()} | ${sideLabel} | ${styleLabel}`;
+  nodes.configSelection.textContent = `${configState.size.toUpperCase()} | ${sideLabel} | ${styleLabel} | ${paperLabel}${binding ? ` | Anillado ${binding.label}` : ""}`;
   nodes.configUnitPrice.textContent = formatMoney(unitPrice);
   nodes.configTotalPrice.textContent = formatMoney(totalPrice);
-  nodes.bulkHint.textContent = quantity > BULK_THRESHOLD && typeof rule.bulk === "number"
-    ? "Se activo precio por mayor en esta configuracion."
-    : "Precio unitario para 1-100 hojas. Precio por mayor se activa en 101+ hojas.";
+  const baseUnit = getBaseUnitFromRule(rule, quantity);
+  if (quantity > BULK_THRESHOLD && typeof rule.bulk === "number") {
+    nodes.bulkHint.textContent = `Se activo precio por mayor. Base: ${formatMoney(baseUnit)} + papel: ${formatMoney(getPaperSelection().surcharge)}${binding ? ` + anillado: ${formatMoney(binding.price)}` : ""}.`;
+  } else {
+    nodes.bulkHint.textContent = `Precio unitario para 1-100 hojas. Papel adicional: ${formatMoney(getPaperSelection().surcharge)}${binding ? ` | Anillado: ${formatMoney(binding.price)}` : ""}.`;
+  }
   nodes.addConfigBtn.disabled = false;
 }
 
@@ -608,6 +710,7 @@ function bindConfiguratorEvents() {
       showConfigCheer("Genial, tamaño elegido. Ya estas cerca de tener tu trabajo listo.");
     }
 
+    updatePaperAndBindingState();
     updateSidesStepState();
     updateConfigSummary();
   });
@@ -633,6 +736,27 @@ function bindConfiguratorEvents() {
     configState.style = button.dataset.style;
     setActiveOption(nodes.styleOptions, configState.style, "style");
     showConfigCheer("Excelente. El estilo de impresion ya esta definido.");
+    updateConfigSummary();
+  });
+
+  nodes.paperType?.addEventListener("change", () => {
+    configState.paperType = nodes.paperType.value;
+    showConfigCheer("Perfecto, tipo de papel actualizado.");
+    updateConfigSummary();
+  });
+
+  nodes.bindingToggle?.addEventListener("change", () => {
+    configState.wantsBinding = nodes.bindingToggle.checked;
+    nodes.bindingOptionsWrap.hidden = !nodes.bindingToggle.checked;
+    if (nodes.bindingToggle.checked) {
+      showConfigCheer("Buenisimo. Activaste anillado para este trabajo.");
+    }
+    updateConfigSummary();
+  });
+
+  nodes.bindingType?.addEventListener("change", () => {
+    configState.bindingType = nodes.bindingType.value;
+    showConfigCheer("Tipo de anillado seleccionado.");
     updateConfigSummary();
   });
 
@@ -753,6 +877,8 @@ function bindEvents() {
 function hydrateCartForNewModel() {
   cart = cart.map((item) => {
     if (typeof item.baseUnitPrice === "number") {
+      item.paperSurcharge = typeof item.paperSurcharge === "number" ? item.paperSurcharge : 0;
+      item.bindingPrice = typeof item.bindingPrice === "number" ? item.bindingPrice : 0;
       recomputeCartItem(item);
       return item;
     }
@@ -762,6 +888,8 @@ function hydrateCartForNewModel() {
       ...item,
       baseUnitPrice: fallbackBaseUnit,
       bulkUnitPrice: null,
+      paperSurcharge: 0,
+      bindingPrice: 0,
       subtotal: fallbackBaseUnit * item.quantity,
       unitPrice: fallbackBaseUnit
     };
@@ -776,6 +904,7 @@ function init() {
   setActiveServiceTab("produccion");
   setMobileCartOpen(false);
   setStoreOpen(false, false);
+  updatePaperAndBindingState();
   updateSidesStepState();
   updateConfigSummary();
   renderCart();

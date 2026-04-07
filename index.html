@@ -137,6 +137,30 @@
 							<p id="step-qty-title" class="config-step-title">Paso 4: Cantidad y Precio Real</p>
 							<label class="config-qty-label" for="config-quantity">Cantidad de hojas</label>
 							<input id="config-quantity" class="config-quantity" type="number" min="1" value="1" inputmode="numeric">
+							<label class="config-qty-label" for="paper-type">Tipo de papel</label>
+							<select id="paper-type" class="config-paper-select">
+								<option value="bond-75">Papel bond 75g</option>
+								<option value="fotografico">Papel fotografico</option>
+								<option value="couche">Papel couche</option>
+								<option value="cartulina-escolar">Cartulina escolar</option>
+								<option value="cartulina-hilo">Cartulina de hilo</option>
+							</select>
+							<p id="paper-lock-hint" class="config-hint" hidden>Para A2, A1 y A0 solo aplica papel bond 75g.</p>
+
+							<div id="binding-wrap" class="binding-wrap" hidden>
+								<label class="binding-toggle" for="binding-toggle">
+									<input id="binding-toggle" type="checkbox">
+									<span>¿Deseas anillarlo?</span>
+								</label>
+								<div id="binding-options-wrap" hidden>
+									<label class="config-qty-label" for="binding-type">Tipo de anillado</label>
+									<select id="binding-type" class="config-paper-select">
+										<option value="simple">Simple (Espiral): S/ 1.50 (hasta 100 hojas)</option>
+										<option value="mediano">Mediano: S/ 2.00 (hasta 200 hojas)</option>
+										<option value="grueso">Grueso: S/ 3.00 (300+ hojas)</option>
+									</select>
+								</div>
+							</div>
 							<p id="bulk-hint" class="config-hint"></p>
 							<div class="config-summary" aria-live="polite">
 								<p id="config-selection">Selecciona tamaño, caras y estilo para calcular.</p>

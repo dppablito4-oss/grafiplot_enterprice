@@ -886,6 +886,37 @@ body.in-store .store-shell {
   background: color-mix(in srgb, var(--surface) 90%, transparent);
 }
 
+.config-paper-select {
+  width: 100%;
+  min-height: 44px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 9px 10px;
+  color: var(--text);
+  background: color-mix(in srgb, var(--surface) 90%, transparent);
+}
+
+.binding-wrap {
+  border: 1px dashed var(--border);
+  border-radius: 10px;
+  padding: 9px;
+  display: grid;
+  gap: 8px;
+}
+
+.binding-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.84rem;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.binding-toggle input {
+  accent-color: #ff5a5a;
+}
+
 .config-summary {
   border: 1px dashed var(--border);
   border-radius: 10px;
@@ -1004,6 +1035,11 @@ body.light .option-btn.active {
 
 body.light .config-quantity {
   color: #15354b;
+  background: #ffffff;
+}
+
+body.light .config-paper-select {
+  color: #17364d;
   background: #ffffff;
 }
 
