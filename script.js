@@ -144,23 +144,42 @@ function tokenMatchesWordWithTolerance(token, word) {
     return false;
   }
 
-  if (word.includes(token)) {
+  const cleanWord = word.replace(/-/g, "");
+  const cleanToken = token.replace(/-/g, "");
+
+  if (cleanWord.includes(cleanToken)) {
     return true;
   }
 
-  if (token.length <= 2) {
+  if (cleanToken.length <= 2) {
     return false;
   }
 
-  if (token.length <= 4) {
-    return boundedLevenshteinDistance(token, word, 1) <= 1;
+  if (cleanWord.length < 3) {
+    return false;
   }
 
-  if (token.length <= 7) {
-    return boundedLevenshteinDistance(token, word, 1) <= 1;
+  if (cleanToken[0] !== cleanWord[0]) {
+    return false;
   }
 
-  return boundedLevenshteinDistance(token, word, 2) <= 2;
+  if (cleanToken.length >= 5 && cleanWord.length >= 5 && cleanToken.slice(0, 2) !== cleanWord.slice(0, 2)) {
+    return false;
+  }
+
+  if (Math.abs(cleanToken.length - cleanWord.length) > 2) {
+    return false;
+  }
+
+  if (cleanToken.length <= 4) {
+    return boundedLevenshteinDistance(cleanToken, cleanWord, 1) <= 1;
+  }
+
+  if (cleanToken.length <= 7) {
+    return boundedLevenshteinDistance(cleanToken, cleanWord, 1) <= 1;
+  }
+
+  return boundedLevenshteinDistance(cleanToken, cleanWord, 2) <= 2;
 }
 
 function matchesQueryTokens(searchText, tokens) {
@@ -168,7 +187,11 @@ function matchesQueryTokens(searchText, tokens) {
     return true;
   }
 
-  const words = searchText.split(" ").filter(Boolean);
+  const words = searchText
+    .split(" ")
+    .flatMap((word) => word.split("-"))
+    .filter(Boolean);
+
   return tokens.every((token) => {
     if (token.length <= 2) {
       return searchText.includes(token);
