@@ -106,7 +106,7 @@ const nodes = {
   sidesLockHint: document.getElementById("sides-lock-hint"),
   styleOptions: document.getElementById("style-options"),
   configQuantity: document.getElementById("config-quantity"),
-  paperType: document.getElementById("paper-type"),
+  paperOptions: document.getElementById("paper-options"),
   paperLockHint: document.getElementById("paper-lock-hint"),
   bulkHint: document.getElementById("bulk-hint"),
   configCheer: document.getElementById("config-cheer"),
@@ -144,6 +144,20 @@ function formatMoney(value) {
 function sanitizeQuantity(value) {
   const parsed = Number.parseInt(value, 10);
   return Number.isNaN(parsed) || parsed < 1 ? 1 : parsed;
+}
+
+function parseQuantityOrNull(value) {
+  const raw = `${value ?? ""}`.trim();
+  if (raw === "") {
+    return null;
+  }
+
+  const parsed = Number.parseInt(raw, 10);
+  if (Number.isNaN(parsed) || parsed < 1) {
+    return null;
+  }
+
+  return parsed;
 }
 
 function isLockedToSingleSide(size) {
@@ -565,34 +579,39 @@ function updatePaperState() {
 
   if (!size) {
     configState.paperType = "bond-75";
-    nodes.paperType.value = "bond-75";
-    nodes.paperType.disabled = false;
+    setActiveOption(nodes.paperOptions, "bond-75", "paper");
+    nodes.paperOptions.querySelectorAll(".option-btn").forEach((button) => {
+      button.disabled = false;
+    });
     nodes.paperLockHint.hidden = true;
     return;
   }
 
   if (isPaperRestricted(size)) {
     configState.paperType = "bond-75";
-    nodes.paperType.value = "bond-75";
-    nodes.paperType.disabled = true;
+    setActiveOption(nodes.paperOptions, "bond-75", "paper");
+    nodes.paperOptions.querySelectorAll(".option-btn").forEach((button) => {
+      button.disabled = button.dataset.paper !== "bond-75";
+    });
     nodes.paperLockHint.hidden = false;
   } else {
-    nodes.paperType.disabled = false;
+    nodes.paperOptions.querySelectorAll(".option-btn").forEach((button) => {
+      button.disabled = false;
+    });
     nodes.paperLockHint.hidden = true;
   }
 }
 
 function updateConfigSummary() {
   const rule = getCurrentPriceRule();
-  const quantity = sanitizeQuantity(nodes.configQuantity.value);
-  configState.quantity = quantity;
-  nodes.configQuantity.value = String(quantity);
+  const quantity = parseQuantityOrNull(nodes.configQuantity.value);
+  configState.quantity = quantity ?? 0;
 
-  if (!rule) {
+  if (!rule || quantity === null) {
     nodes.configSelection.textContent = "Selecciona tamaño, caras y estilo para calcular.";
     nodes.configUnitPrice.textContent = formatMoney(0);
     nodes.configTotalPrice.textContent = formatMoney(0);
-    nodes.bulkHint.textContent = "";
+    nodes.bulkHint.textContent = quantity === null ? "Ingresa una cantidad valida para continuar." : "";
     nodes.addConfigBtn.disabled = true;
     return;
   }
@@ -619,15 +638,17 @@ function updateConfigSummary() {
 }
 
 function updateBindingSummary() {
-  const calc = getBindingCalc(nodes.bindingPages?.value || 1);
-  if (nodes.bindingPages) {
-    nodes.bindingPages.value = String(calc.pages);
-  }
+  const parsed = parseQuantityOrNull(nodes.bindingPages?.value || "");
+  const calc = getBindingCalc(parsed ?? 1);
   if (nodes.bindingBlocks) {
     nodes.bindingBlocks.textContent = String(calc.blocks);
   }
   if (nodes.bindingTotal) {
     nodes.bindingTotal.textContent = formatMoney(calc.total);
+  }
+
+  if (nodes.addBindingBtn) {
+    nodes.addBindingBtn.disabled = parsed === null;
   }
 }
 
@@ -638,14 +659,28 @@ function addConfiguredItemToCart() {
     return;
   }
 
-  const quantity = sanitizeQuantity(nodes.configQuantity.value);
+  const typedQuantity = parseQuantityOrNull(nodes.configQuantity.value);
+  if (typedQuantity === null) {
+    showToast("Ingresa una cantidad valida para continuar.");
+    nodes.configQuantity?.focus();
+    return;
+  }
+
+  const quantity = typedQuantity;
   upsertCartItemFromConfig(quantity);
   triggerCartFabFeedback();
   showToast("Configuracion agregada al pedido");
 }
 
 function addBindingToCart() {
-  const calc = getBindingCalc(nodes.bindingPages?.value || 1);
+  const parsed = parseQuantityOrNull(nodes.bindingPages?.value || "");
+  if (parsed === null) {
+    showToast("Ingresa hojas validas para encuadernado.");
+    nodes.bindingPages?.focus();
+    return;
+  }
+
+  const calc = getBindingCalc(parsed);
   upsertBindingItem(calc.blocks);
   triggerCartFabFeedback();
   showToast("Encuadernado agregado al pedido");
@@ -772,16 +807,22 @@ function bindConfiguratorEvents() {
     updateConfigSummary();
   });
 
-  nodes.paperType?.addEventListener("change", () => {
-    configState.paperType = nodes.paperType.value;
+  nodes.paperOptions?.addEventListener("click", (event) => {
+    const button = event.target.closest(".option-btn[data-paper]");
+    if (!button || button.disabled) {
+      return;
+    }
+
+    configState.paperType = button.dataset.paper;
+    setActiveOption(nodes.paperOptions, configState.paperType, "paper");
     showConfigCheer("Perfecto, tipo de papel actualizado.");
     updateConfigSummary();
   });
 
   nodes.configQuantity?.addEventListener("input", () => {
     updateConfigSummary();
-    const qty = sanitizeQuantity(nodes.configQuantity.value);
-    if (qty > BULK_THRESHOLD) {
+    const qty = parseQuantityOrNull(nodes.configQuantity.value);
+    if (qty !== null && qty > BULK_THRESHOLD) {
       showConfigCheer("Activaste precio por mayor. Muy buena jugada.");
     }
   });
