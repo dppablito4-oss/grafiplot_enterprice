@@ -427,26 +427,28 @@ body.light .hero-btn-gold {
 }
 
 .map-cta {
-  margin-top: 10px;
+  margin: 8px auto 0;
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 8px;
-  padding: 6px 10px;
+  padding: 4px 10px;
   border-radius: 10px;
   border: 1px solid var(--border);
   background: color-mix(in srgb, var(--surface) 84%, var(--accent) 16%);
+  min-width: min(220px, 82%);
 }
 
 .map-icon {
-  width: 20px;
-  height: 20px;
+  width: 16px;
+  height: 16px;
   display: block;
 }
 
 .map-btn {
   text-decoration: none;
   color: var(--text);
-  font-size: 0.84rem;
+  font-size: 0.78rem;
   font-weight: 700;
 }
 
