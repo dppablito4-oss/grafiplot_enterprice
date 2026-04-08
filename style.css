@@ -40,6 +40,7 @@ body {
 body {
   font-family: "Segoe UI Variable", "Trebuchet MS", "Gill Sans", "Calibri", sans-serif;
   color: var(--text);
+  overflow-x: hidden;
   background:
     radial-gradient(circle at 12% 0%, rgba(20, 184, 255, 0.18), transparent 38%),
     radial-gradient(circle at 92% 8%, rgba(56, 231, 255, 0.16), transparent 42%),
@@ -2096,8 +2097,9 @@ body.light .add-btn:hover {
 
 .cart-fab {
   position: fixed;
-  bottom: 18px;
-  right: 18px;
+  top: max(88px, calc(env(safe-area-inset-top) + 78px));
+  right: max(14px, env(safe-area-inset-right));
+  bottom: auto;
   z-index: 130;
   backdrop-filter: blur(8px);
   background: color-mix(in srgb, var(--bg) 76%, transparent);
@@ -2172,10 +2174,10 @@ body.light .add-btn:hover {
 
 .mobile-cart-sheet {
   position: fixed;
-  top: 76px;
-  right: 10px;
-  width: min(360px, calc(100vw - 20px));
-  max-height: min(72vh, 560px);
+  top: max(86px, calc(env(safe-area-inset-top) + 76px));
+  right: max(8px, env(safe-area-inset-right));
+  width: min(400px, calc(100vw - 16px));
+  max-height: calc(100dvh - 98px);
   border-radius: 14px;
   border: 1px solid var(--border);
   background: linear-gradient(165deg, var(--surface), color-mix(in srgb, var(--surface-2) 82%, var(--accent) 18%));
@@ -2218,7 +2220,7 @@ body.light .add-btn:hover {
   padding: 0;
   display: grid;
   gap: 8px;
-  max-height: min(44vh, 330px);
+  max-height: calc(100dvh - 290px);
   overflow: auto;
 }
 
@@ -2511,8 +2513,8 @@ body.light .credits-dev span {
 
 .wa-widget {
   position: fixed;
-  right: 18px;
-  bottom: 18px;
+  right: max(12px, env(safe-area-inset-right));
+  bottom: max(12px, env(safe-area-inset-bottom));
   z-index: 120;
   display: grid;
   justify-items: end;
@@ -2671,6 +2673,21 @@ body:not(.in-store) .wa-bubble {
 }
 
 @media (max-width: 991px) {
+  .site-wrap {
+    width: 100%;
+    margin: 0;
+    padding: 10px 10px 94px;
+  }
+
+  .topbar {
+    border-radius: 14px;
+    padding: 10px;
+  }
+
+  .layout {
+    gap: 12px;
+  }
+
   .utility-mobile-strip {
     top: 88px;
   }
@@ -2743,6 +2760,10 @@ body:not(.in-store) .wa-bubble {
 }
 
 @media (max-width: 600px) {
+  .site-wrap {
+    padding: 8px 8px 92px;
+  }
+
   .utility-workspace {
     padding: 10px;
   }
@@ -2845,10 +2866,36 @@ body:not(.in-store) .wa-bubble {
   }
 
   .cart-fab {
-    top: 80px;
-    right: 12px;
-    width: 54px;
-    height: 54px;
+    top: max(82px, calc(env(safe-area-inset-top) + 72px));
+    right: max(10px, env(safe-area-inset-right));
+    width: 50px;
+    height: 50px;
+  }
+
+  .mobile-cart-sheet {
+    top: max(80px, calc(env(safe-area-inset-top) + 70px));
+    right: max(6px, env(safe-area-inset-right));
+    width: calc(100vw - 12px);
+    max-height: calc(100dvh - 92px);
+  }
+
+  .mobile-cart-items {
+    max-height: calc(100dvh - 268px);
+  }
+
+  .wa-widget {
+    right: max(8px, env(safe-area-inset-right));
+    bottom: max(8px, env(safe-area-inset-bottom));
+  }
+
+  .wa-fab {
+    width: 58px;
+    height: 58px;
+  }
+
+  .wa-fab img {
+    width: 34px;
+    height: 34px;
   }
 
   .site-credits {
