@@ -102,6 +102,7 @@ const nodes = {
   mobileCartOrder: document.getElementById("mobile-cart-order"),
   serviceTabButtons: document.querySelectorAll("[data-tab-btn]"),
   serviceTabPanels: document.querySelectorAll("[data-tab-panel]"),
+  supportPanel: document.querySelector('[data-tab-panel="soporte"]'),
   sizeOptions: document.getElementById("size-options"),
   sidesOptions: document.getElementById("sides-options"),
   sidesLockHint: document.getElementById("sides-lock-hint"),
@@ -123,7 +124,8 @@ const nodes = {
   bindingBlocks: document.getElementById("binding-blocks"),
   bindingTotal: document.getElementById("binding-total"),
   addBindingBtn: document.getElementById("add-binding-btn"),
-  techCards: document.querySelectorAll(".tech-card")
+  techCards: document.querySelectorAll(".tech-card"),
+  lazySlideImages: document.querySelectorAll("img.lazy-slide")
 };
 
 let cart = [];
@@ -132,6 +134,7 @@ let cheerTimeoutId = null;
 let isStoreOpen = false;
 let isMobileCartOpen = false;
 let techPulseIntervalId = null;
+let supportPanelVisible = false;
 
 const systemThemeQuery = window.matchMedia("(prefers-color-scheme: light)");
 const mobileCartQuery = window.matchMedia("(max-width: 600px)");
@@ -854,6 +857,10 @@ function startTechCardsPulse() {
     return;
   }
 
+  if (techPulseIntervalId) {
+    return;
+  }
+
   const cards = Array.from(nodes.techCards);
   const triggerPulse = () => {
     cards.forEach((card) => card.classList.remove("pulse"));
@@ -871,6 +878,93 @@ function startTechCardsPulse() {
 
   triggerPulse();
   techPulseIntervalId = setInterval(triggerPulse, 3000);
+}
+
+function stopTechCardsPulse() {
+  if (techPulseIntervalId) {
+    clearInterval(techPulseIntervalId);
+    techPulseIntervalId = null;
+  }
+
+  nodes.techCards?.forEach((card) => card.classList.remove("pulse"));
+}
+
+function syncTechPulseState() {
+  const supportPanelActive = Boolean(
+    nodes.supportPanel &&
+    !nodes.supportPanel.hidden &&
+    nodes.supportPanel.classList.contains("active")
+  );
+
+  if (supportPanelActive && supportPanelVisible && !document.hidden) {
+    startTechCardsPulse();
+    return;
+  }
+
+  stopTechCardsPulse();
+}
+
+function initSupportPanelVisibilityObserver() {
+  if (!nodes.supportPanel) {
+    return;
+  }
+
+  if (!("IntersectionObserver" in window)) {
+    supportPanelVisible = true;
+    syncTechPulseState();
+    return;
+  }
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      supportPanelVisible = entries.some(
+        (entry) => entry.target === nodes.supportPanel && entry.isIntersecting && entry.intersectionRatio > 0.2
+      );
+      syncTechPulseState();
+    },
+    {
+      threshold: [0, 0.2, 0.4],
+      rootMargin: "0px 0px -12% 0px"
+    }
+  );
+
+  observer.observe(nodes.supportPanel);
+}
+
+function initLazySlideImages() {
+  if (!nodes.lazySlideImages || nodes.lazySlideImages.length === 0) {
+    return;
+  }
+
+  nodes.lazySlideImages.forEach((image) => {
+    if (!image.hasAttribute("loading")) {
+      image.loading = "lazy";
+    }
+  });
+
+  if (!("IntersectionObserver" in window)) {
+    nodes.lazySlideImages.forEach((image) => image.classList.add("is-visible"));
+    return;
+  }
+
+  const imageObserver = new IntersectionObserver(
+    (entries, observer) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) {
+          return;
+        }
+
+        entry.target.classList.add("is-visible");
+        observer.unobserve(entry.target);
+      });
+    },
+    {
+      threshold: 0.12,
+      rootMargin: "120px 0px"
+    }
+  );
+
+  nodes.lazySlideImages.forEach((image) => imageObserver.observe(image));
 }
 
 function bindConfiguratorEvents() {
@@ -964,6 +1058,8 @@ function setActiveServiceTab(tabKey) {
     panel.classList.toggle("active", isActive);
     panel.hidden = !isActive;
   });
+
+  syncTechPulseState();
 }
 
 function bindEvents() {
@@ -1054,6 +1150,8 @@ function bindEvents() {
       nodes.waBubble.classList.add("hide");
     });
   }
+
+  document.addEventListener("visibilitychange", syncTechPulseState);
 }
 
 function hydrateCartForNewModel() {
@@ -1096,7 +1194,9 @@ function init() {
   renderCart();
   bindConfiguratorEvents();
   bindEvents();
-  startTechCardsPulse();
+  initLazySlideImages();
+  initSupportPanelVisibilityObserver();
+  syncTechPulseState();
 }
 
 init();
