@@ -122,7 +122,8 @@ const nodes = {
   bindingQuantity: document.getElementById("binding-quantity"),
   bindingBlocks: document.getElementById("binding-blocks"),
   bindingTotal: document.getElementById("binding-total"),
-  addBindingBtn: document.getElementById("add-binding-btn")
+  addBindingBtn: document.getElementById("add-binding-btn"),
+  techCards: document.querySelectorAll(".tech-card")
 };
 
 let cart = [];
@@ -130,6 +131,7 @@ let toastTimeoutId = null;
 let cheerTimeoutId = null;
 let isStoreOpen = false;
 let isMobileCartOpen = false;
+let techPulseIntervalId = null;
 
 const systemThemeQuery = window.matchMedia("(prefers-color-scheme: light)");
 const mobileCartQuery = window.matchMedia("(max-width: 600px)");
@@ -847,6 +849,30 @@ function initSystemTheme() {
   });
 }
 
+function startTechCardsPulse() {
+  if (!nodes.techCards || nodes.techCards.length === 0) {
+    return;
+  }
+
+  const cards = Array.from(nodes.techCards);
+  const triggerPulse = () => {
+    cards.forEach((card) => card.classList.remove("pulse"));
+    const randomIndex = Math.floor(Math.random() * cards.length);
+    const selectedCard = cards[randomIndex];
+    if (!selectedCard) {
+      return;
+    }
+
+    selectedCard.classList.add("pulse");
+    setTimeout(() => {
+      selectedCard.classList.remove("pulse");
+    }, 1100);
+  };
+
+  triggerPulse();
+  techPulseIntervalId = setInterval(triggerPulse, 3000);
+}
+
 function bindConfiguratorEvents() {
   nodes.sizeOptions?.addEventListener("click", (event) => {
     const button = event.target.closest(".option-btn[data-size]");
@@ -1070,6 +1096,7 @@ function init() {
   renderCart();
   bindConfiguratorEvents();
   bindEvents();
+  startTechCardsPulse();
 }
 
 init();
