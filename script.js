@@ -125,6 +125,10 @@ const nodes = {
   qrPreviewImage: document.getElementById("qr-preview-image"),
   serviceTabButtons: document.querySelectorAll("[data-tab-btn]"),
   serviceTabPanels: document.querySelectorAll("[data-tab-panel]"),
+  productionPanel: document.querySelector('[data-tab-panel="produccion"]'),
+  productionCarousel: document.getElementById("production-carousel"),
+  productionCarouselTrack: document.getElementById("production-carousel-track"),
+  productionSlides: document.querySelectorAll(".production-slide[data-prod-slide]"),
   supportPanel: document.querySelector('[data-tab-panel="soporte"]'),
   sizeOptions: document.getElementById("size-options"),
   sidesOptions: document.getElementById("sides-options"),
@@ -162,10 +166,13 @@ let lastPulsedCardIndex = -1;
 let isUtilityOpen = false;
 let isUtilityWorkspaceOpen = false;
 let qrCurrentUrl = "";
+let productionCarouselIntervalId = null;
+let activeProductionSlideIndex = 0;
 
 const systemThemeQuery = window.matchMedia("(prefers-color-scheme: light)");
 const mobileCartQuery = window.matchMedia("(max-width: 600px)");
 const utilityDrawerQuery = window.matchMedia("(max-width: 991px)");
+const reducedMotionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
 
 const configState = {
   size: null,
@@ -1356,7 +1363,91 @@ function setActiveServiceTab(tabKey) {
     panel.hidden = !isActive;
   });
 
+  syncProductionCarouselState();
   syncTechPulseState();
+}
+
+function getProductionSlideStep() {
+  const slides = Array.from(nodes.productionSlides || []);
+  if (slides.length <= 1) {
+    return slides[0]?.offsetWidth || 0;
+  }
+
+  return slides[1].offsetLeft - slides[0].offsetLeft;
+}
+
+function setActiveProductionSlide(index, smooth = true) {
+  const slides = Array.from(nodes.productionSlides || []);
+  if (!slides.length || !nodes.productionCarouselTrack) {
+    return;
+  }
+
+  const safeIndex = ((index % slides.length) + slides.length) % slides.length;
+  activeProductionSlideIndex = safeIndex;
+
+  slides.forEach((slide, slideIndex) => {
+    const isActive = slideIndex === safeIndex;
+    slide.classList.toggle("active", isActive);
+    slide.setAttribute("aria-current", isActive ? "true" : "false");
+  });
+
+  const step = getProductionSlideStep();
+  if (!step) {
+    return;
+  }
+
+  if (!smooth) {
+    const previousTransition = nodes.productionCarouselTrack.style.transition;
+    nodes.productionCarouselTrack.style.transition = "none";
+    nodes.productionCarouselTrack.style.transform = `translateX(${-safeIndex * step}px)`;
+    void nodes.productionCarouselTrack.offsetWidth;
+    nodes.productionCarouselTrack.style.transition = previousTransition;
+    return;
+  }
+
+  nodes.productionCarouselTrack.style.transform = `translateX(${-safeIndex * step}px)`;
+}
+
+function stopProductionCarouselAutoplay() {
+  if (!productionCarouselIntervalId) {
+    return;
+  }
+
+  clearInterval(productionCarouselIntervalId);
+  productionCarouselIntervalId = null;
+}
+
+function startProductionCarouselAutoplay() {
+  const slides = Array.from(nodes.productionSlides || []);
+  if (reducedMotionQuery.matches || slides.length < 2) {
+    return;
+  }
+
+  stopProductionCarouselAutoplay();
+  productionCarouselIntervalId = setInterval(() => {
+    setActiveProductionSlide(activeProductionSlideIndex + 1, true);
+  }, 2800);
+}
+
+function syncProductionCarouselState() {
+  const isProductionOpen = Boolean(nodes.productionPanel && !nodes.productionPanel.hidden);
+  const canRun = isProductionOpen && !document.hidden;
+
+  if (!canRun) {
+    stopProductionCarouselAutoplay();
+    return;
+  }
+
+  startProductionCarouselAutoplay();
+}
+
+function scrollToPrintSizeStep() {
+  const sizeStep = document.getElementById("step-size-title");
+  if (!sizeStep) {
+    return;
+  }
+
+  sizeStep.scrollIntoView({ behavior: "smooth", block: "start" });
 }
 
 function bindEvents() {
@@ -1364,6 +1455,25 @@ function bindEvents() {
     button.addEventListener("click", () => {
       setActiveServiceTab(button.dataset.tabBtn);
     });
+  });
+
+  nodes.productionSlides?.forEach((slide, slideIndex) => {
+    slide.addEventListener("click", () => {
+      setActiveProductionSlide(slideIndex, true);
+      scrollToPrintSizeStep();
+    });
+  });
+
+  nodes.productionCarousel?.addEventListener("mouseenter", () => {
+    stopProductionCarouselAutoplay();
+  });
+
+  nodes.productionCarousel?.addEventListener("mouseleave", () => {
+    syncProductionCarouselState();
+  });
+
+  window.addEventListener("resize", () => {
+    setActiveProductionSlide(activeProductionSlideIndex, false);
   });
 
   nodes.cartFab?.addEventListener("click", () => {
@@ -1517,6 +1627,7 @@ function bindEvents() {
   }
 
   document.addEventListener("visibilitychange", syncTechPulseState);
+  document.addEventListener("visibilitychange", syncProductionCarouselState);
 
   window.addEventListener("hashchange", () => {
     const hashToolKey = getToolKeyFromHash();
@@ -1572,6 +1683,7 @@ function init() {
   updateQrSizeOutput();
   setQrValidation("Completa los datos y genera tu codigo.", false);
   setActiveServiceTab("produccion");
+  setActiveProductionSlide(0, false);
   setMobileCartOpen(false);
   setStoreOpen(false, false);
   updatePaperState();
@@ -1585,6 +1697,7 @@ function init() {
   bindDetailCards();
   initLazySlideImages();
   initSupportPanelVisibilityObserver();
+  syncProductionCarouselState();
   syncTechPulseState();
 }
 
