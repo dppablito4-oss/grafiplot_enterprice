@@ -135,6 +135,7 @@ let isStoreOpen = false;
 let isMobileCartOpen = false;
 let techPulseIntervalId = null;
 let supportPanelVisible = false;
+let lastPulsedCardIndex = -1;
 
 const systemThemeQuery = window.matchMedia("(prefers-color-scheme: light)");
 const mobileCartQuery = window.matchMedia("(max-width: 600px)");
@@ -864,7 +865,13 @@ function startTechCardsPulse() {
   const cards = Array.from(nodes.techCards);
   const triggerPulse = () => {
     cards.forEach((card) => card.classList.remove("pulse"));
-    const randomIndex = Math.floor(Math.random() * cards.length);
+
+    let randomIndex = Math.floor(Math.random() * cards.length);
+    if (cards.length > 1 && randomIndex === lastPulsedCardIndex) {
+      randomIndex = (randomIndex + 1) % cards.length;
+    }
+
+    lastPulsedCardIndex = randomIndex;
     const selectedCard = cards[randomIndex];
     if (!selectedCard) {
       return;
@@ -873,7 +880,7 @@ function startTechCardsPulse() {
     selectedCard.classList.add("pulse");
     setTimeout(() => {
       selectedCard.classList.remove("pulse");
-    }, 1100);
+    }, 3000);
   };
 
   triggerPulse();
@@ -887,6 +894,38 @@ function stopTechCardsPulse() {
   }
 
   nodes.techCards?.forEach((card) => card.classList.remove("pulse"));
+}
+
+function bindDetailCards() {
+  document.addEventListener("click", (event) => {
+    const toggle = event.target.closest(".detail-toggle");
+    if (!toggle) {
+      return;
+    }
+
+    const card = toggle.closest(".service-detail-card");
+    if (!card) {
+      return;
+    }
+
+    const grid = card.closest(".thesis-grid, .tech-grid");
+    const willOpen = !card.classList.contains("open");
+
+    if (grid) {
+      grid.querySelectorAll(".service-detail-card").forEach((item) => {
+        item.classList.remove("open");
+        const itemToggle = item.querySelector(".detail-toggle");
+        if (itemToggle) {
+          itemToggle.setAttribute("aria-expanded", "false");
+        }
+      });
+    }
+
+    if (willOpen) {
+      card.classList.add("open");
+      toggle.setAttribute("aria-expanded", "true");
+    }
+  });
 }
 
 function syncTechPulseState() {
@@ -1194,6 +1233,7 @@ function init() {
   renderCart();
   bindConfiguratorEvents();
   bindEvents();
+  bindDetailCards();
   initLazySlideImages();
   initSupportPanelVisibilityObserver();
   syncTechPulseState();

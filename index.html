@@ -200,11 +200,47 @@
 						</div>
 						<div class="config-step">
 							<p class="config-step-title">Servicios de soporte academico</p>
-							<ul class="service-bullets">
-								<li>Formateo de tesis en APA 7ma edicion</li>
-								<li>Ajuste de margenes, numeracion, indices y tablas</li>
-								<li>Revision visual para sustentacion y entrega final</li>
-							</ul>
+							<div class="thesis-grid" aria-label="Opciones de soporte academico">
+								<article class="service-detail-card thesis-card" data-detail-card="tesis-formato">
+									<button class="detail-toggle" type="button" aria-expanded="false" aria-controls="detail-tesis-formato">
+										<img class="detail-thumb lazy-slide" src="assets/services/mono-formato.svg" alt="Formato academico" loading="lazy" decoding="async" fetchpriority="low">
+										<div class="detail-head">
+											<h4>Formato APA 7ma</h4>
+											<p>Estructura completa y presentacion profesional.</p>
+										</div>
+										<span class="detail-chevron" aria-hidden="true">+</span>
+									</button>
+									<div id="detail-tesis-formato" class="detail-body" role="region" aria-label="Detalle formato APA">
+										<p>Configuramos portada, dedicatoria, indice, numeracion, titulos y subtitulos segun normas APA o reglamento de tu facultad.</p>
+									</div>
+								</article>
+								<article class="service-detail-card thesis-card" data-detail-card="tesis-ajustes">
+									<button class="detail-toggle" type="button" aria-expanded="false" aria-controls="detail-tesis-ajustes">
+										<img class="detail-thumb lazy-slide" src="assets/services/mono-citas.svg" alt="Ajustes academicos" loading="lazy" decoding="async" fetchpriority="low">
+										<div class="detail-head">
+											<h4>Ajustes de margenes e indices</h4>
+											<p>Correccion tecnica de documentos largos.</p>
+										</div>
+										<span class="detail-chevron" aria-hidden="true">+</span>
+									</button>
+									<div id="detail-tesis-ajustes" class="detail-body" role="region" aria-label="Detalle de ajustes academicos">
+										<p>Corregimos interlineado, sangrias, saltos, tablas, figuras y actualizamos indices automaticos para que todo quede limpio y consistente.</p>
+									</div>
+								</article>
+								<article class="service-detail-card thesis-card" data-detail-card="tesis-revision">
+									<button class="detail-toggle" type="button" aria-expanded="false" aria-controls="detail-tesis-revision">
+										<img class="detail-thumb lazy-slide" src="assets/services/mono-diagrama.svg" alt="Revision visual final" loading="lazy" decoding="async" fetchpriority="low">
+										<div class="detail-head">
+											<h4>Revision visual final</h4>
+											<p>Lista para sustentacion y entrega final.</p>
+										</div>
+										<span class="detail-chevron" aria-hidden="true">+</span>
+									</button>
+									<div id="detail-tesis-revision" class="detail-body" role="region" aria-label="Detalle de revision visual">
+										<p>Hacemos control visual completo de tipografia, espaciado, consistencia de capitulos y orden de anexos antes de imprimir o empastar.</p>
+									</div>
+								</article>
+							</div>
 						</div>
 					</div>
 				</section>
@@ -251,29 +287,83 @@
 					<div class="print-configurator tech-panel">
 						<h3>SERVICIO TECNICO &amp; OPTIMIZACION PC</h3>
 						<div class="tech-grid" aria-label="Servicios tecnicos disponibles">
-							<article class="tech-card" data-tech-card="limpieza">
-								<h4>Limpieza Profunda</h4>
-								<p>Eliminacion de polvo y mantenimiento preventivo integral.</p>
+							<article class="tech-card service-detail-card" data-tech-card="limpieza" data-detail-card="pc-limpieza">
+								<button class="detail-toggle" type="button" aria-expanded="false" aria-controls="detail-pc-limpieza">
+									<img class="detail-thumb lazy-slide" src="assets/services/soporte.svg" alt="Limpieza profunda de PC" loading="lazy" decoding="async" fetchpriority="low">
+									<div class="detail-head">
+										<h4>Limpieza Profunda</h4>
+										<p>Mantenimiento preventivo integral.</p>
+									</div>
+									<span class="detail-chevron" aria-hidden="true">+</span>
+								</button>
+								<div id="detail-pc-limpieza" class="detail-body" role="region" aria-label="Detalle limpieza profunda">
+									<p>Desarmado tecnico, limpieza interna antiestatica, ventiladores, disipadores y renovacion de flujo de aire para mayor vida util.</p>
+								</div>
 							</article>
-							<article class="tech-card" data-tech-card="pasta">
-								<h4>Cambio de Pasta Termica</h4>
-								<p>Aplicacion de pasta de alta conductividad para bajar temperaturas.</p>
+							<article class="tech-card service-detail-card" data-tech-card="pasta" data-detail-card="pc-pasta">
+								<button class="detail-toggle" type="button" aria-expanded="false" aria-controls="detail-pc-pasta">
+									<img class="detail-thumb lazy-slide" src="assets/services/soporte.svg" alt="Cambio de pasta termica" loading="lazy" decoding="async" fetchpriority="low">
+									<div class="detail-head">
+										<h4>Cambio de Pasta Termica</h4>
+										<p>Control termico para CPU y GPU.</p>
+									</div>
+									<span class="detail-chevron" aria-hidden="true">+</span>
+								</button>
+								<div id="detail-pc-pasta" class="detail-body" role="region" aria-label="Detalle cambio de pasta termica">
+									<p>Retiro de compuesto antiguo, limpieza profesional y nueva pasta de alta conductividad para reducir picos de temperatura y ruido.</p>
+								</div>
 							</article>
-							<article class="tech-card" data-tech-card="optimizacion">
-								<h4>Optimizacion de Sistema</h4>
-								<p>Limpieza de archivos basura y configuracion para maximo rendimiento.</p>
+							<article class="tech-card service-detail-card" data-tech-card="optimizacion" data-detail-card="pc-optimizacion">
+								<button class="detail-toggle" type="button" aria-expanded="false" aria-controls="detail-pc-optimizacion">
+									<img class="detail-thumb lazy-slide" src="assets/services/soporte.svg" alt="Optimizacion de sistema" loading="lazy" decoding="async" fetchpriority="low">
+									<div class="detail-head">
+										<h4>Optimizacion de Sistema</h4>
+										<p>Rendimiento mas estable en tareas diarias.</p>
+									</div>
+									<span class="detail-chevron" aria-hidden="true">+</span>
+								</button>
+								<div id="detail-pc-optimizacion" class="detail-body" role="region" aria-label="Detalle optimizacion de sistema">
+									<p>Depuramos arranque, procesos en segundo plano, temporales y ajustes de energia para mejorar velocidad sin perder estabilidad.</p>
+								</div>
 							</article>
-							<article class="tech-card" data-tech-card="formateo">
-								<h4>Formateo e Instalacion</h4>
-								<p>Windows limpio con drivers actualizados y paquetes esenciales.</p>
+							<article class="tech-card service-detail-card" data-tech-card="formateo" data-detail-card="pc-formateo">
+								<button class="detail-toggle" type="button" aria-expanded="false" aria-controls="detail-pc-formateo">
+									<img class="detail-thumb lazy-slide" src="assets/services/soporte.svg" alt="Formateo e instalacion" loading="lazy" decoding="async" fetchpriority="low">
+									<div class="detail-head">
+										<h4>Formateo e Instalacion</h4>
+										<p>Sistema limpio y listo para producir.</p>
+									</div>
+									<span class="detail-chevron" aria-hidden="true">+</span>
+								</button>
+								<div id="detail-pc-formateo" class="detail-body" role="region" aria-label="Detalle formateo e instalacion">
+									<p>Instalamos sistema operativo, drivers, actualizaciones y software base para dejar tu equipo operativo y seguro desde el primer arranque.</p>
+								</div>
 							</article>
-							<article class="tech-card" data-tech-card="upgrade">
-								<h4>Upgrade de Hardware</h4>
-								<p>Asesoria en compra e instalacion de SSDs y memorias RAM.</p>
+							<article class="tech-card service-detail-card" data-tech-card="upgrade" data-detail-card="pc-upgrade">
+								<button class="detail-toggle" type="button" aria-expanded="false" aria-controls="detail-pc-upgrade">
+									<img class="detail-thumb lazy-slide" src="assets/services/soporte.svg" alt="Upgrade de hardware" loading="lazy" decoding="async" fetchpriority="low">
+									<div class="detail-head">
+										<h4>Upgrade de Hardware</h4>
+										<p>Asesoria e instalacion de componentes.</p>
+									</div>
+									<span class="detail-chevron" aria-hidden="true">+</span>
+								</button>
+								<div id="detail-pc-upgrade" class="detail-body" role="region" aria-label="Detalle upgrade de hardware">
+									<p>Evaluamos compatibilidad y montamos SSD, RAM u otros componentes para mejorar tiempos de carga, multitarea y respuesta general.</p>
+								</div>
 							</article>
-							<article class="tech-card" data-tech-card="diagnostico">
-								<h4>Diagnostico General</h4>
-								<p>Chequeo rapido de software y hardware para detectar cuellos de botella.</p>
+							<article class="tech-card service-detail-card" data-tech-card="diagnostico" data-detail-card="pc-diagnostico">
+								<button class="detail-toggle" type="button" aria-expanded="false" aria-controls="detail-pc-diagnostico">
+									<img class="detail-thumb lazy-slide" src="assets/services/soporte.svg" alt="Diagnostico general" loading="lazy" decoding="async" fetchpriority="low">
+									<div class="detail-head">
+										<h4>Diagnostico General</h4>
+										<p>Deteccion de fallas y cuellos de botella.</p>
+									</div>
+									<span class="detail-chevron" aria-hidden="true">+</span>
+								</button>
+								<div id="detail-pc-diagnostico" class="detail-body" role="region" aria-label="Detalle diagnostico general">
+									<p>Revisamos estado de disco, memoria, temperatura, procesos y errores de sistema para recomendar la ruta de solucion mas efectiva.</p>
+								</div>
 							</article>
 						</div>
 					</div>
@@ -342,7 +432,3 @@
 	<script src="script.js"></script>
 </body>
 </html>
-
-git add .
-git commit -m "despierta github"
-git push origin main
