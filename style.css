@@ -804,6 +804,7 @@ body.in-store .layout {
   box-shadow: var(--shadow);
   padding: 10px;
   display: grid;
+  align-content: start;
   gap: 10px;
 }
 
@@ -836,7 +837,9 @@ body.in-store .layout {
 
 .utility-list {
   display: grid;
-  gap: 8px;
+  align-content: start;
+  gap: 0;
+  margin-top: 2px;
 }
 
 .utility-item {
@@ -850,7 +853,46 @@ body.in-store .layout {
   font-weight: 700;
 }
 
-.utility-item.active {
+.utility-nav-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 46px;
+  border: 0;
+  border-bottom: 1px solid color-mix(in srgb, var(--border) 70%, rgba(255, 255, 255, 0.2) 30%);
+  border-radius: 0;
+  padding: 10px 2px;
+  background: transparent;
+  color: var(--text);
+  font-size: 0.92rem;
+  font-weight: 700;
+  text-decoration: none;
+  transition: color 0.2s ease, border-color 0.2s ease, padding-left 0.2s ease;
+}
+
+.utility-nav-item::after {
+  content: ">";
+  opacity: 0.58;
+  font-size: 0.88rem;
+}
+
+.utility-nav-item:hover,
+.utility-nav-item:focus-visible {
+  color: color-mix(in srgb, var(--accent) 70%, #ffffff 30%);
+  border-bottom-color: color-mix(in srgb, var(--accent) 80%, #ffffff 20%);
+  padding-left: 6px;
+}
+
+.utility-nav-item.active {
+  color: #ffb8b8;
+  border-bottom-color: rgba(255, 138, 138, 0.75);
+}
+
+.utility-actions .utility-item {
+  text-align: center;
+}
+
+.utility-actions .utility-item.active {
   border-color: rgba(255, 138, 138, 0.75);
   background: linear-gradient(170deg, rgba(255, 78, 78, 0.26), rgba(126, 18, 18, 0.32));
 }
@@ -901,10 +943,6 @@ body.in-store .layout {
   display: grid;
   grid-template-columns: 1fr;
   gap: 7px;
-}
-
-.utility-actions .utility-item {
-  text-align: center;
 }
 
 .utility-qr-preview-wrap {
@@ -982,6 +1020,22 @@ body.light .utility-sidebar,
 body.light .utility-item {
   background: linear-gradient(170deg, #ffffff, #e9f5ff);
   color: #143349;
+}
+
+body.light .utility-nav-item {
+  background: transparent;
+  border-bottom-color: rgba(0, 153, 204, 0.32);
+}
+
+body.light .utility-nav-item:hover,
+body.light .utility-nav-item:focus-visible {
+  color: #006792;
+  border-bottom-color: rgba(0, 153, 204, 0.55);
+}
+
+body.light .utility-nav-item.active {
+  color: #d53e3e;
+  border-bottom-color: rgba(213, 62, 62, 0.55);
 }
 
 body.light .utility-toggle-cta {

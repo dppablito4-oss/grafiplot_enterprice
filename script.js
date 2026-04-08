@@ -847,12 +847,40 @@ function getUtilityToolTitle(toolKey) {
   }
 }
 
+function getUtilityHash(toolKey) {
+  return `tool-${toolKey}`;
+}
+
+function getToolKeyFromHash() {
+  const rawHash = window.location.hash.replace(/^#/, "").trim();
+  if (!rawHash.startsWith("tool-")) {
+    return null;
+  }
+
+  const toolKey = rawHash.slice(5);
+  const isKnown = Array.from(nodes.utilityItems || []).some((item) => item.dataset.tool === toolKey);
+  return isKnown ? toolKey : null;
+}
+
+function syncUtilityHash(toolKey) {
+  const nextHash = `#${getUtilityHash(toolKey)}`;
+  if (window.location.hash === nextHash) {
+    return;
+  }
+
+  history.replaceState(null, "", nextHash);
+}
+
 function setUtilityWorkspaceOpen(nextOpen) {
   isUtilityWorkspaceOpen = nextOpen;
   document.body.classList.toggle("utility-workspace-open", isUtilityWorkspaceOpen);
 
   if (nodes.utilityWorkspace) {
     nodes.utilityWorkspace.setAttribute("aria-hidden", isUtilityWorkspaceOpen ? "false" : "true");
+  }
+
+  if (!isUtilityWorkspaceOpen && window.location.hash.startsWith("#tool-")) {
+    history.replaceState(null, "", window.location.pathname + window.location.search);
   }
 }
 
@@ -900,6 +928,8 @@ function setActiveUtilityTool(toolKey) {
   if (nodes.utilityWorkspaceTitle) {
     nodes.utilityWorkspaceTitle.textContent = getUtilityToolTitle(toolKey);
   }
+
+  syncUtilityHash(toolKey);
 }
 
 function toggleQrFields() {
@@ -1388,7 +1418,8 @@ function bindEvents() {
   });
 
   nodes.utilityItems?.forEach((item) => {
-    item.addEventListener("click", () => {
+    item.addEventListener("click", (event) => {
+      event.preventDefault();
       setActiveUtilityTool(item.dataset.tool);
       setUtilityWorkspaceOpen(true);
       if (utilityDrawerQuery.matches) {
@@ -1486,6 +1517,19 @@ function bindEvents() {
   }
 
   document.addEventListener("visibilitychange", syncTechPulseState);
+
+  window.addEventListener("hashchange", () => {
+    const hashToolKey = getToolKeyFromHash();
+    if (!hashToolKey) {
+      return;
+    }
+
+    setActiveUtilityTool(hashToolKey);
+    setUtilityWorkspaceOpen(true);
+    if (utilityDrawerQuery.matches) {
+      setUtilityOpen(false);
+    }
+  });
 }
 
 function hydrateCartForNewModel() {
@@ -1519,7 +1563,11 @@ function init() {
   loadNote();
   setUtilityOpen(false);
   setUtilityWorkspaceOpen(false);
-  setActiveUtilityTool("qr");
+  const initialHashTool = getToolKeyFromHash();
+  setActiveUtilityTool(initialHashTool || "qr");
+  if (initialHashTool) {
+    setUtilityWorkspaceOpen(true);
+  }
   toggleQrFields();
   updateQrSizeOutput();
   setQrValidation("Completa los datos y genera tu codigo.", false);
