@@ -826,8 +826,7 @@ function setUtilityOpen(nextOpen) {
   }
 
   if (nodes.utilitySidebar) {
-    const isDesktop = !utilityDrawerQuery.matches;
-    nodes.utilitySidebar.setAttribute("aria-hidden", isDesktop ? "false" : (isUtilityOpen ? "false" : "true"));
+    nodes.utilitySidebar.setAttribute("aria-hidden", isUtilityOpen ? "false" : "true");
   }
 }
 
