@@ -88,14 +88,23 @@
 				<h3>Herramientas Extra</h3>
 				<button id="utility-close" class="utility-close" type="button" aria-label="Cerrar utilidades">x</button>
 			</div>
-			<p class="utility-note">Zona de herramientas externas a la web principal. Aqui conectamos tus utilidades nuevas.</p>
+			<p class="utility-note">Selecciona una herramienta para abrirla en pantalla completa.</p>
 			<div class="utility-list" role="list">
-				<button class="utility-item active" type="button" role="listitem" data-tool="qr">Generar codigo QR</button>
+				<button class="utility-item" type="button" role="listitem" data-tool="qr">Generar codigo QR</button>
 				<button class="utility-item" type="button" role="listitem" data-tool="pdf-lock">Encriptar PDF</button>
 				<button class="utility-item" type="button" role="listitem" data-tool="img-to-pdf">Convertir imagen a PDF</button>
 				<button class="utility-item" type="button" role="listitem" data-tool="pdf-compress">Comprimir PDF</button>
 				<button class="utility-item" type="button" role="listitem" data-tool="sign">Firma rapida de documentos</button>
 			</div>
+		</aside>
+		<div id="utility-backdrop" class="utility-backdrop" aria-hidden="true"></div>
+
+		<section id="utility-workspace" class="utility-workspace" aria-label="Workspace de herramientas" aria-hidden="true">
+			<header class="utility-workspace-head">
+				<h3 id="utility-workspace-title">Generador codigo QR</h3>
+				<button id="utility-workspace-close" class="utility-close" type="button" aria-label="Cerrar herramienta">x</button>
+			</header>
+			<div class="utility-workspace-body">
 			<section class="utility-tool-panel active" data-tool-panel="qr" aria-label="Generador QR">
 				<div class="utility-form-grid">
 					<label class="utility-field" for="qr-payload-type">
@@ -140,7 +149,7 @@
 				</div>
 			</section>
 			<section class="utility-tool-panel" data-tool-panel="pdf-lock" hidden>
-				<p class="utility-note">Modulo en preparacion. Cuando me pases tu HTML de encriptado, lo integro aqui con este mismo estilo.</p>
+				<p class="utility-note">Modulo en preparacion. Aqui montaremos el encriptador PDF apenas pases la logica final.</p>
 			</section>
 			<section class="utility-tool-panel" data-tool-panel="img-to-pdf" hidden>
 				<p class="utility-note">Modulo en preparacion. Aqui se conectara el conversor de imagen a PDF.</p>
@@ -151,8 +160,8 @@
 			<section class="utility-tool-panel" data-tool-panel="sign" hidden>
 				<p class="utility-note">Modulo en preparacion. Aqui se conectara la firma rapida de documentos.</p>
 			</section>
-		</aside>
-		<div id="utility-backdrop" class="utility-backdrop" aria-hidden="true"></div>
+			</div>
+		</section>
 
 		<main id="catalogo" class="layout store-shell" aria-hidden="true">
 			<section class="catalog-panel" aria-label="Exploracion del catalogo">

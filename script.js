@@ -104,6 +104,9 @@ const nodes = {
   utilityClose: document.getElementById("utility-close"),
   utilitySidebar: document.getElementById("utility-sidebar"),
   utilityBackdrop: document.getElementById("utility-backdrop"),
+  utilityWorkspace: document.getElementById("utility-workspace"),
+  utilityWorkspaceClose: document.getElementById("utility-workspace-close"),
+  utilityWorkspaceTitle: document.getElementById("utility-workspace-title"),
   utilityItems: document.querySelectorAll(".utility-item[data-tool]"),
   utilityToolPanels: document.querySelectorAll(".utility-tool-panel[data-tool-panel]"),
   qrPayloadType: document.getElementById("qr-payload-type"),
@@ -156,6 +159,7 @@ let techPulseIntervalId = null;
 let supportPanelVisible = false;
 let lastPulsedCardIndex = -1;
 let isUtilityOpen = false;
+let isUtilityWorkspaceOpen = false;
 let qrCurrentUrl = "";
 
 const systemThemeQuery = window.matchMedia("(prefers-color-scheme: light)");
@@ -826,6 +830,32 @@ function setUtilityOpen(nextOpen) {
   }
 }
 
+function getUtilityToolTitle(toolKey) {
+  switch (toolKey) {
+    case "qr":
+      return "Generador codigo QR";
+    case "pdf-lock":
+      return "Encriptar PDF";
+    case "img-to-pdf":
+      return "Convertir imagen a PDF";
+    case "pdf-compress":
+      return "Comprimir PDF";
+    case "sign":
+      return "Firma rapida de documentos";
+    default:
+      return "Herramientas";
+  }
+}
+
+function setUtilityWorkspaceOpen(nextOpen) {
+  isUtilityWorkspaceOpen = nextOpen;
+  document.body.classList.toggle("utility-workspace-open", isUtilityWorkspaceOpen);
+
+  if (nodes.utilityWorkspace) {
+    nodes.utilityWorkspace.setAttribute("aria-hidden", isUtilityWorkspaceOpen ? "false" : "true");
+  }
+}
+
 function sanitizeDigits(value) {
   return `${value || ""}`.replace(/\D/g, "");
 }
@@ -866,6 +896,10 @@ function setActiveUtilityTool(toolKey) {
     panel.classList.toggle("active", isActive);
     panel.hidden = !isActive;
   });
+
+  if (nodes.utilityWorkspaceTitle) {
+    nodes.utilityWorkspaceTitle.textContent = getUtilityToolTitle(toolKey);
+  }
 }
 
 function toggleQrFields() {
@@ -1345,9 +1379,17 @@ function bindEvents() {
     setUtilityOpen(false);
   });
 
+  nodes.utilityWorkspaceClose?.addEventListener("click", () => {
+    setUtilityWorkspaceOpen(false);
+  });
+
   nodes.utilityItems?.forEach((item) => {
     item.addEventListener("click", () => {
       setActiveUtilityTool(item.dataset.tool);
+      setUtilityWorkspaceOpen(true);
+      if (utilityDrawerQuery.matches) {
+        setUtilityOpen(false);
+      }
       if (item.dataset.tool === "qr") {
         setQrValidation("Completa los datos y genera tu codigo.", false);
       }
@@ -1423,16 +1465,19 @@ function bindEvents() {
   document.addEventListener("keydown", (event) => {
     if (event.key === "Escape") {
       setUtilityOpen(false);
+      setUtilityWorkspaceOpen(false);
     }
   });
 
   if (typeof utilityDrawerQuery.addEventListener === "function") {
     utilityDrawerQuery.addEventListener("change", () => {
       setUtilityOpen(false);
+      setUtilityWorkspaceOpen(false);
     });
   } else {
     utilityDrawerQuery.addListener(() => {
       setUtilityOpen(false);
+      setUtilityWorkspaceOpen(false);
     });
   }
 
@@ -1469,6 +1514,7 @@ function init() {
   hydrateCartForNewModel();
   loadNote();
   setUtilityOpen(false);
+  setUtilityWorkspaceOpen(false);
   setActiveUtilityTool("qr");
   toggleQrFields();
   updateQrSizeOutput();
