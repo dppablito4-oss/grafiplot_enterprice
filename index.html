@@ -76,6 +76,84 @@
 			<p class="business-chip">WhatsApp: 952 628 844</p>
 		</section>
 
+		<div class="utility-mobile-strip" aria-label="Accesos de utilidades">
+			<button id="utility-toggle" class="utility-toggle" type="button" aria-expanded="false" aria-controls="utility-sidebar">
+				<span class="utility-toggle-glyph" aria-hidden="true">☰</span>
+				<span>Opciones y Herramientas</span>
+			</button>
+		</div>
+
+		<aside id="utility-sidebar" class="utility-sidebar" aria-label="Barra lateral de utilidades" aria-hidden="true">
+			<div class="utility-head">
+				<h3>Herramientas Extra</h3>
+				<button id="utility-close" class="utility-close" type="button" aria-label="Cerrar utilidades">x</button>
+			</div>
+			<p class="utility-note">Zona de herramientas externas a la web principal. Aqui conectamos tus utilidades nuevas.</p>
+			<div class="utility-list" role="list">
+				<button class="utility-item active" type="button" role="listitem" data-tool="qr">Generar codigo QR</button>
+				<button class="utility-item" type="button" role="listitem" data-tool="pdf-lock">Encriptar PDF</button>
+				<button class="utility-item" type="button" role="listitem" data-tool="img-to-pdf">Convertir imagen a PDF</button>
+				<button class="utility-item" type="button" role="listitem" data-tool="pdf-compress">Comprimir PDF</button>
+				<button class="utility-item" type="button" role="listitem" data-tool="sign">Firma rapida de documentos</button>
+			</div>
+			<section class="utility-tool-panel active" data-tool-panel="qr" aria-label="Generador QR">
+				<div class="utility-form-grid">
+					<label class="utility-field" for="qr-payload-type">
+						<span>Tipo de contenido</span>
+						<select id="qr-payload-type">
+							<option value="text">Texto</option>
+							<option value="url">Link</option>
+							<option value="whatsapp">WhatsApp</option>
+						</select>
+					</label>
+					<label id="qr-text-field" class="utility-field" for="qr-payload-text">
+						<span>Texto o link</span>
+						<textarea id="qr-payload-text" rows="3" placeholder="Escribe aqui tu texto o URL"></textarea>
+					</label>
+					<div id="qr-whatsapp-fields" class="utility-form-grid" hidden>
+						<label class="utility-field" for="qr-wa-number">
+							<span>Numero (solo digitos)</span>
+							<input id="qr-wa-number" type="tel" inputmode="numeric" placeholder="51952628844">
+						</label>
+						<label class="utility-field" for="qr-wa-message">
+							<span>Mensaje</span>
+							<textarea id="qr-wa-message" rows="2" placeholder="Hola, deseo informacion"></textarea>
+						</label>
+					</div>
+					<label class="utility-field" for="qr-size-range">
+						<span>Tamano</span>
+						<input id="qr-size-range" type="range" min="200" max="900" step="10" value="360">
+						<output id="qr-size-output">360 px</output>
+					</label>
+					<label class="utility-field" for="qr-file-name">
+						<span>Nombre de archivo</span>
+						<input id="qr-file-name" type="text" value="qr-grafiplot">
+					</label>
+				</div>
+				<p id="qr-validation" class="utility-note">Listo para generar.</p>
+				<div class="utility-actions">
+					<button id="qr-generate-btn" class="utility-item" type="button">Generar QR</button>
+					<button id="qr-download-btn" class="utility-item" type="button" disabled>Descargar PNG</button>
+				</div>
+				<div class="utility-qr-preview-wrap">
+					<img id="qr-preview-image" class="utility-qr-preview" alt="Vista previa QR" hidden>
+				</div>
+			</section>
+			<section class="utility-tool-panel" data-tool-panel="pdf-lock" hidden>
+				<p class="utility-note">Modulo en preparacion. Cuando me pases tu HTML de encriptado, lo integro aqui con este mismo estilo.</p>
+			</section>
+			<section class="utility-tool-panel" data-tool-panel="img-to-pdf" hidden>
+				<p class="utility-note">Modulo en preparacion. Aqui se conectara el conversor de imagen a PDF.</p>
+			</section>
+			<section class="utility-tool-panel" data-tool-panel="pdf-compress" hidden>
+				<p class="utility-note">Modulo en preparacion. Aqui se conectara compresion de PDFs.</p>
+			</section>
+			<section class="utility-tool-panel" data-tool-panel="sign" hidden>
+				<p class="utility-note">Modulo en preparacion. Aqui se conectara la firma rapida de documentos.</p>
+			</section>
+		</aside>
+		<div id="utility-backdrop" class="utility-backdrop" aria-hidden="true"></div>
+
 		<main id="catalogo" class="layout store-shell" aria-hidden="true">
 			<section class="catalog-panel" aria-label="Exploracion del catalogo">
 				<div class="service-tabs" role="tablist" aria-label="Bloques de servicios">

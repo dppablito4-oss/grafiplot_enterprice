@@ -100,6 +100,25 @@ const nodes = {
   mobileCartItems: document.getElementById("mobile-cart-items"),
   mobileCartTotal: document.getElementById("mobile-cart-total"),
   mobileCartOrder: document.getElementById("mobile-cart-order"),
+  utilityToggle: document.getElementById("utility-toggle"),
+  utilityClose: document.getElementById("utility-close"),
+  utilitySidebar: document.getElementById("utility-sidebar"),
+  utilityBackdrop: document.getElementById("utility-backdrop"),
+  utilityItems: document.querySelectorAll(".utility-item[data-tool]"),
+  utilityToolPanels: document.querySelectorAll(".utility-tool-panel[data-tool-panel]"),
+  qrPayloadType: document.getElementById("qr-payload-type"),
+  qrTextField: document.getElementById("qr-text-field"),
+  qrPayloadText: document.getElementById("qr-payload-text"),
+  qrWhatsappFields: document.getElementById("qr-whatsapp-fields"),
+  qrWaNumber: document.getElementById("qr-wa-number"),
+  qrWaMessage: document.getElementById("qr-wa-message"),
+  qrSizeRange: document.getElementById("qr-size-range"),
+  qrSizeOutput: document.getElementById("qr-size-output"),
+  qrFileName: document.getElementById("qr-file-name"),
+  qrValidation: document.getElementById("qr-validation"),
+  qrGenerateBtn: document.getElementById("qr-generate-btn"),
+  qrDownloadBtn: document.getElementById("qr-download-btn"),
+  qrPreviewImage: document.getElementById("qr-preview-image"),
   serviceTabButtons: document.querySelectorAll("[data-tab-btn]"),
   serviceTabPanels: document.querySelectorAll("[data-tab-panel]"),
   supportPanel: document.querySelector('[data-tab-panel="soporte"]'),
@@ -136,9 +155,12 @@ let isMobileCartOpen = false;
 let techPulseIntervalId = null;
 let supportPanelVisible = false;
 let lastPulsedCardIndex = -1;
+let isUtilityOpen = false;
+let qrCurrentUrl = "";
 
 const systemThemeQuery = window.matchMedia("(prefers-color-scheme: light)");
 const mobileCartQuery = window.matchMedia("(max-width: 600px)");
+const utilityDrawerQuery = window.matchMedia("(max-width: 991px)");
 
 const configState = {
   size: null,
@@ -790,6 +812,178 @@ function setMobileCartOpen(nextOpen) {
   nodes.cartFab.setAttribute("aria-expanded", isMobileCartOpen ? "true" : "false");
 }
 
+function setUtilityOpen(nextOpen) {
+  isUtilityOpen = nextOpen;
+  document.body.classList.toggle("utility-open", isUtilityOpen);
+
+  if (nodes.utilityToggle) {
+    nodes.utilityToggle.setAttribute("aria-expanded", isUtilityOpen ? "true" : "false");
+  }
+
+  if (nodes.utilitySidebar) {
+    const isDesktop = !utilityDrawerQuery.matches;
+    nodes.utilitySidebar.setAttribute("aria-hidden", isDesktop ? "false" : (isUtilityOpen ? "false" : "true"));
+  }
+}
+
+function sanitizeDigits(value) {
+  return `${value || ""}`.replace(/\D/g, "");
+}
+
+function normalizeUrl(value) {
+  const raw = `${value || ""}`.trim();
+  if (!raw) {
+    return "";
+  }
+
+  try {
+    const parsed = new URL(raw);
+    if (parsed.protocol !== "http:" && parsed.protocol !== "https:") {
+      return null;
+    }
+    return parsed.toString();
+  } catch {
+    return null;
+  }
+}
+
+function sanitizeFileName(value) {
+  const trimmed = `${value || ""}`.trim();
+  if (!trimmed) {
+    return "qr-grafiplot";
+  }
+
+  return trimmed.replace(/[\\/:*?"<>|]+/g, "-").slice(0, 80);
+}
+
+function setActiveUtilityTool(toolKey) {
+  nodes.utilityItems?.forEach((item) => {
+    item.classList.toggle("active", item.dataset.tool === toolKey);
+  });
+
+  nodes.utilityToolPanels?.forEach((panel) => {
+    const isActive = panel.dataset.toolPanel === toolKey;
+    panel.classList.toggle("active", isActive);
+    panel.hidden = !isActive;
+  });
+}
+
+function toggleQrFields() {
+  if (!nodes.qrPayloadType || !nodes.qrWhatsappFields || !nodes.qrTextField) {
+    return;
+  }
+
+  const isWhatsapp = nodes.qrPayloadType.value === "whatsapp";
+  const isTextOrUrl = nodes.qrPayloadType.value === "text" || nodes.qrPayloadType.value === "url";
+  nodes.qrWhatsappFields.hidden = !isWhatsapp;
+  nodes.qrTextField.hidden = !isTextOrUrl;
+}
+
+function updateQrSizeOutput() {
+  if (!nodes.qrSizeRange || !nodes.qrSizeOutput) {
+    return;
+  }
+
+  nodes.qrSizeOutput.textContent = `${nodes.qrSizeRange.value} px`;
+}
+
+function getQrPayload() {
+  if (!nodes.qrPayloadType) {
+    return { payload: "", error: "Modulo QR no disponible." };
+  }
+
+  if (nodes.qrPayloadType.value === "whatsapp") {
+    const number = sanitizeDigits(nodes.qrWaNumber?.value || "");
+    if (!number || number.length < 8 || number.length > 15) {
+      return { payload: "", error: "Numero WhatsApp invalido (8 a 15 digitos)." };
+    }
+
+    const message = encodeURIComponent((nodes.qrWaMessage?.value || "").trim());
+    return {
+      payload: message ? `https://wa.me/${number}?text=${message}` : `https://wa.me/${number}`,
+      error: ""
+    };
+  }
+
+  if (nodes.qrPayloadType.value === "url") {
+    const normalized = normalizeUrl(nodes.qrPayloadText?.value || "");
+    if (!normalized) {
+      return { payload: "", error: "El link debe iniciar con http:// o https://" };
+    }
+
+    return { payload: normalized, error: "" };
+  }
+
+  const text = (nodes.qrPayloadText?.value || "").trim();
+  if (!text) {
+    return { payload: "", error: "Escribe un texto para generar el QR." };
+  }
+
+  return { payload: text, error: "" };
+}
+
+function setQrValidation(message, isError = false) {
+  if (!nodes.qrValidation) {
+    return;
+  }
+
+  nodes.qrValidation.textContent = message;
+  nodes.qrValidation.classList.toggle("error", isError);
+}
+
+function buildQrUrl(payload) {
+  const size = Number.parseInt(nodes.qrSizeRange?.value || "360", 10) || 360;
+  return `https://api.qrserver.com/v1/create-qr-code/?size=${size}x${size}&data=${encodeURIComponent(payload)}&format=png`;
+}
+
+function generateQrPreview() {
+  if (!nodes.qrPreviewImage || !nodes.qrDownloadBtn) {
+    return;
+  }
+
+  const { payload, error } = getQrPayload();
+  if (error) {
+    qrCurrentUrl = "";
+    nodes.qrPreviewImage.hidden = true;
+    nodes.qrPreviewImage.removeAttribute("src");
+    nodes.qrDownloadBtn.disabled = true;
+    setQrValidation(error, true);
+    return;
+  }
+
+  qrCurrentUrl = buildQrUrl(payload);
+  nodes.qrPreviewImage.src = qrCurrentUrl;
+  nodes.qrPreviewImage.hidden = false;
+  nodes.qrDownloadBtn.disabled = false;
+  setQrValidation("QR generado. Puedes descargarlo en PNG.", false);
+}
+
+async function downloadQrPng() {
+  if (!qrCurrentUrl) {
+    setQrValidation("Genera primero un QR para descargar.", true);
+    return;
+  }
+
+  try {
+    const response = await fetch(qrCurrentUrl);
+    if (!response.ok) {
+      throw new Error("download_failed");
+    }
+
+    const blob = await response.blob();
+    const blobUrl = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = blobUrl;
+    link.download = `${sanitizeFileName(nodes.qrFileName?.value)}.png`;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    URL.revokeObjectURL(blobUrl);
+  } catch {
+    setQrValidation("No se pudo descargar ahora. Intenta de nuevo.", true);
+  }
+}
+
 function scrollToDetailedCart() {
   if (!isStoreOpen) {
     openStoreWithFlash();
@@ -1139,6 +1333,42 @@ function bindEvents() {
     scrollToDetailedCart();
   });
 
+  nodes.utilityToggle?.addEventListener("click", () => {
+    setUtilityOpen(!isUtilityOpen);
+  });
+
+  nodes.utilityClose?.addEventListener("click", () => {
+    setUtilityOpen(false);
+  });
+
+  nodes.utilityBackdrop?.addEventListener("click", () => {
+    setUtilityOpen(false);
+  });
+
+  nodes.utilityItems?.forEach((item) => {
+    item.addEventListener("click", () => {
+      setActiveUtilityTool(item.dataset.tool);
+      if (item.dataset.tool === "qr") {
+        setQrValidation("Completa los datos y genera tu codigo.", false);
+      }
+    });
+  });
+
+  nodes.qrPayloadType?.addEventListener("change", () => {
+    toggleQrFields();
+  });
+
+  nodes.qrSizeRange?.addEventListener("input", updateQrSizeOutput);
+
+  nodes.qrWaNumber?.addEventListener("input", () => {
+    nodes.qrWaNumber.value = sanitizeDigits(nodes.qrWaNumber.value);
+  });
+
+  nodes.qrGenerateBtn?.addEventListener("click", generateQrPreview);
+  nodes.qrDownloadBtn?.addEventListener("click", () => {
+    downloadQrPng();
+  });
+
   nodes.cartItems.addEventListener("click", (event) => {
     const target = event.target.closest("button[data-action]");
     if (!target) {
@@ -1190,6 +1420,22 @@ function bindEvents() {
     });
   }
 
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") {
+      setUtilityOpen(false);
+    }
+  });
+
+  if (typeof utilityDrawerQuery.addEventListener === "function") {
+    utilityDrawerQuery.addEventListener("change", () => {
+      setUtilityOpen(false);
+    });
+  } else {
+    utilityDrawerQuery.addListener(() => {
+      setUtilityOpen(false);
+    });
+  }
+
   document.addEventListener("visibilitychange", syncTechPulseState);
 }
 
@@ -1222,6 +1468,11 @@ function init() {
   loadCart();
   hydrateCartForNewModel();
   loadNote();
+  setUtilityOpen(false);
+  setActiveUtilityTool("qr");
+  toggleQrFields();
+  updateQrSizeOutput();
+  setQrValidation("Completa los datos y genera tu codigo.", false);
   setActiveServiceTab("produccion");
   setMobileCartOpen(false);
   setStoreOpen(false, false);
