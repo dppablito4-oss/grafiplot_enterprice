@@ -128,7 +128,7 @@ body::after {
 .site-wrap {
   width: min(1280px, 94%);
   margin: 0 auto;
-  padding: 18px 0 110px;
+  padding: 18px 0 56px;
   position: relative;
   z-index: 1;
 }
@@ -2506,36 +2506,62 @@ body.light .mobile-cart-backdrop {
   position: relative;
   z-index: 3;
   width: min(1280px, 94%);
-  margin: 18px auto 14px;
+  margin: 10px auto 12px;
   border: 1px solid var(--border);
   border-radius: 14px;
   background: linear-gradient(160deg, color-mix(in srgb, var(--surface) 72%, var(--accent) 28%), color-mix(in srgb, var(--surface-2) 78%, #ffb66b 22%));
   box-shadow: var(--shadow);
-  padding: 12px 14px;
+  padding: 14px;
   display: grid;
-  gap: 4px;
-  text-align: center;
+  gap: 12px;
 }
 
-.credits-main,
-.credits-dev {
+.credits-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.credits-col {
+  display: grid;
+  align-content: start;
+  gap: 6px;
+  border-right: 1px solid color-mix(in srgb, var(--border) 66%, rgba(255, 255, 255, 0.18) 34%);
+  padding-right: 12px;
+}
+
+.credits-col:last-child {
+  border-right: 0;
+  padding-right: 0;
+}
+
+.credits-col h4 {
   margin: 0;
+  font-size: 0.92rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
 }
 
-.credits-main {
-  font-size: clamp(0.84rem, 0.75rem + 0.34vw, 1rem);
+.credits-col p,
+.credits-col a {
+  margin: 0;
+  font-size: 0.82rem;
   color: color-mix(in srgb, var(--text) 94%, #ffffff 6%);
-  letter-spacing: 0.02em;
+  text-decoration: none;
+  line-height: 1.35;
 }
 
-.credits-main strong {
+.credits-col a {
+  color: color-mix(in srgb, var(--accent) 72%, #ffffff 28%);
+}
+
+.credits-col a:hover,
+.credits-col a:focus-visible {
   color: #ffffff;
-  text-shadow: 0 0 12px rgba(39, 221, 255, 0.28);
 }
 
 .credits-dev {
-  font-size: 0.78rem;
-  color: var(--muted);
+  font-size: 0.84rem;
 }
 
 .credits-dev span {
@@ -2544,25 +2570,62 @@ body.light .mobile-cart-backdrop {
   letter-spacing: 0.04em;
 }
 
+.credits-dev-note {
+  color: var(--muted) !important;
+}
+
+.credits-bottom {
+  border-top: 1px solid color-mix(in srgb, var(--border) 66%, rgba(255, 255, 255, 0.2) 34%);
+  padding-top: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.credits-main,
+.credits-owner {
+  margin: 0;
+  font-size: clamp(0.8rem, 0.74rem + 0.24vw, 0.92rem);
+  color: color-mix(in srgb, var(--text) 94%, #ffffff 6%);
+}
+
+.credits-owner strong {
+  color: #ffffff;
+  text-shadow: 0 0 10px rgba(39, 221, 255, 0.24);
+}
+
 body.light .site-credits {
   background: linear-gradient(160deg, #dff3ff, #fff0d6);
 }
 
-body.light .credits-main {
+body.light .credits-col {
+  border-right-color: rgba(0, 153, 204, 0.24);
+}
+
+body.light .credits-col p,
+body.light .credits-col a,
+body.light .credits-main,
+body.light .credits-owner {
   color: #17384f;
 }
 
-body.light .credits-main strong {
-  color: #0f2b40;
-  text-shadow: none;
-}
-
-body.light .credits-dev {
-  color: #4a6476;
+body.light .credits-col a {
+  color: #006f9f;
 }
 
 body.light .credits-dev span {
   color: #b45c0a;
+}
+
+body.light .credits-owner strong {
+  color: #0f2b40;
+  text-shadow: none;
+}
+
+body.light .credits-bottom {
+  border-top-color: rgba(0, 153, 204, 0.24);
 }
 
 .wa-widget {
@@ -2730,7 +2793,7 @@ body:not(.in-store) .wa-bubble {
   .site-wrap {
     width: 100%;
     margin: 0;
-    padding: 10px 10px 94px;
+    padding: 10px 10px 72px;
   }
 
   .topbar {
@@ -2815,7 +2878,7 @@ body:not(.in-store) .wa-bubble {
 
 @media (max-width: 600px) {
   .site-wrap {
-    padding: 8px 8px 92px;
+    padding: 8px 8px 66px;
   }
 
   .utility-workspace {
@@ -2953,15 +3016,39 @@ body:not(.in-store) .wa-bubble {
   }
 
   .site-credits {
-    margin: 16px auto 12px;
+    margin: 12px auto 8px;
     padding: 10px;
   }
 
-  .credits-main {
-    font-size: 0.78rem;
+  .credits-grid {
+    grid-template-columns: 1fr;
+    gap: 8px;
   }
 
-  .credits-dev {
-    font-size: 0.72rem;
+  .credits-col {
+    border-right: 0;
+    border-bottom: 1px solid color-mix(in srgb, var(--border) 66%, rgba(255, 255, 255, 0.2) 34%);
+    padding-right: 0;
+    padding-bottom: 8px;
+  }
+
+  .credits-col:last-child {
+    border-bottom: 0;
+    padding-bottom: 0;
+  }
+
+  .credits-bottom {
+    padding-top: 8px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+
+  .credits-main,
+  .credits-owner,
+  .credits-dev,
+  .credits-col p,
+  .credits-col a {
+    font-size: 0.76rem;
   }
 }
