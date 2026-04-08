@@ -840,24 +840,16 @@ body.in-store .store-shell {
 }
 
 .utility-workspace {
-  position: fixed;
-  inset: 0;
-  z-index: 140;
-  background: linear-gradient(165deg, rgba(4, 14, 28, 0.96), rgba(6, 21, 38, 0.94));
+  background: linear-gradient(165deg, rgba(4, 14, 28, 0.98), rgba(6, 21, 38, 0.98));
   padding: 14px;
-  display: grid;
+  display: none;
   grid-template-rows: auto 1fr;
   gap: 10px;
-  opacity: 0;
-  pointer-events: none;
-  transform: scale(0.985);
-  transition: opacity 0.25s ease, transform 0.25s ease;
+  min-height: calc(100vh - 32px);
 }
 
 body.utility-workspace-open .utility-workspace {
-  opacity: 1;
-  pointer-events: auto;
-  transform: scale(1);
+  display: grid;
 }
 
 .utility-workspace-head {
@@ -871,9 +863,21 @@ body.utility-workspace-open .utility-workspace {
   gap: 10px;
 }
 
+.utility-back {
+  border: 1px solid color-mix(in srgb, var(--border) 78%, rgba(255, 255, 255, 0.2) 22%);
+  background: linear-gradient(160deg, color-mix(in srgb, var(--surface) 76%, var(--accent) 24%), var(--surface));
+  color: var(--text);
+  border-radius: 10px;
+  padding: 7px 10px;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
 .utility-workspace-head h3 {
   margin: 0;
   font-size: 0.94rem;
+  text-align: center;
+  flex: 1;
 }
 
 .utility-workspace-body {
@@ -895,6 +899,22 @@ body.light .utility-workspace,
 body.light .utility-workspace-body,
 body.light .utility-workspace-head {
   background: linear-gradient(170deg, #f7fbff, #e8f3ff);
+}
+
+body.light .utility-back {
+  color: #143349;
+  background: linear-gradient(170deg, #ffffff, #e9f5ff);
+}
+
+body.utility-workspace-open .site-wrap > :not(.utility-workspace) {
+  display: none !important;
+}
+
+body.utility-workspace-open .wa-widget,
+body.utility-workspace-open .cart-fab,
+body.utility-workspace-open .mobile-cart-sheet,
+body.utility-workspace-open .mobile-cart-backdrop {
+  display: none !important;
 }
 
 body.light .utility-tool-panel {

@@ -106,6 +106,7 @@ const nodes = {
   utilityBackdrop: document.getElementById("utility-backdrop"),
   utilityWorkspace: document.getElementById("utility-workspace"),
   utilityWorkspaceClose: document.getElementById("utility-workspace-close"),
+  utilityWorkspaceBack: document.getElementById("utility-workspace-back"),
   utilityWorkspaceTitle: document.getElementById("utility-workspace-title"),
   utilityItems: document.querySelectorAll(".utility-item[data-tool]"),
   utilityToolPanels: document.querySelectorAll(".utility-tool-panel[data-tool-panel]"),
@@ -1380,6 +1381,10 @@ function bindEvents() {
   });
 
   nodes.utilityWorkspaceClose?.addEventListener("click", () => {
+    setUtilityWorkspaceOpen(false);
+  });
+
+  nodes.utilityWorkspaceBack?.addEventListener("click", () => {
     setUtilityWorkspaceOpen(false);
   });
 
