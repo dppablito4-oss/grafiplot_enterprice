@@ -4623,6 +4623,41 @@ body.light #cart-panel .whatsapp-btn {
   color: #1b4f33 !important;
 }
 
+/* Light mode contrast corrections for gallery and cart */
+body.light .production-slide {
+  background: linear-gradient(165deg, #edf8ff, #dff0ff) !important;
+}
+
+body.light .production-slide-label {
+  background: linear-gradient(170deg, rgba(255, 255, 255, 0.92), rgba(234, 245, 255, 0.94)) !important;
+  color: #1a3b53 !important;
+  text-shadow: none;
+}
+
+body.light .production-showcase-head p,
+body.light .quick-products-head p {
+  color: #425c72 !important;
+}
+
+body.light #cart-panel .cart-summary > span {
+  color: #21374a;
+}
+
+body.light #cart-panel #cart-total {
+  color: #16364d !important;
+  text-shadow: none;
+}
+
+body.light #cart-panel .quick-summary p,
+body.light #cart-panel .note-wrap,
+body.light #cart-panel #customer-note {
+  color: #304a5e;
+}
+
+body.light #cart-panel #customer-note::placeholder {
+  color: #72899c;
+}
+
 @media (max-width: 991px) {
   #cart-panel {
     padding: 12px;
@@ -4630,5 +4665,32 @@ body.light #cart-panel .whatsapp-btn {
 
   #cart-panel #cart-total {
     font-size: 1.7rem;
+  }
+}
+
+@media (max-width: 640px) {
+  #cart-panel {
+    padding: 10px;
+  }
+
+  #cart-panel .cart-summary {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+
+  #cart-panel #cart-total {
+    font-size: 1.45rem;
+    line-height: 1.08;
+  }
+
+  #cart-items {
+    max-height: 156px;
+  }
+
+  #cart-panel .btn-soft,
+  #cart-panel .whatsapp-btn {
+    min-height: 38px;
+    font-size: 0.9rem;
   }
 }
