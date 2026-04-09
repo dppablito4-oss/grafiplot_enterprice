@@ -158,7 +158,8 @@ const nodes = {
   bindingTotal: document.getElementById("binding-total"),
   addBindingBtn: document.getElementById("add-binding-btn"),
   techCards: document.querySelectorAll(".tech-card"),
-  lazySlideImages: document.querySelectorAll("img.lazy-slide")
+  lazySlideImages: document.querySelectorAll("img.lazy-slide"),
+  scrollRevealTitles: document.querySelectorAll(".scroll-reveal-title")
 };
 
 let cart = [];
@@ -1419,6 +1420,36 @@ function initLazySlideImages() {
   nodes.lazySlideImages.forEach((image) => imageObserver.observe(image));
 }
 
+function initScrollRevealTitles() {
+  if (!nodes.scrollRevealTitles || nodes.scrollRevealTitles.length === 0) {
+    return;
+  }
+
+  if (!("IntersectionObserver" in window)) {
+    nodes.scrollRevealTitles.forEach((title) => title.classList.add("is-visible"));
+    return;
+  }
+
+  const titleObserver = new IntersectionObserver(
+    (entries, observer) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) {
+          return;
+        }
+
+        entry.target.classList.add("is-visible");
+        observer.unobserve(entry.target);
+      });
+    },
+    {
+      threshold: 0.18,
+      rootMargin: "0px 0px -12% 0px"
+    }
+  );
+
+  nodes.scrollRevealTitles.forEach((title) => titleObserver.observe(title));
+}
+
 function bindConfiguratorEvents() {
   nodes.sizeOptions?.addEventListener("click", (event) => {
     const button = event.target.closest(".option-btn[data-size]");
@@ -1968,6 +1999,7 @@ function init() {
   bindPcOffersCarousel();
   initPcHeroRevealObserver();
   initLazySlideImages();
+  initScrollRevealTitles();
   initSupportPanelVisibilityObserver();
   syncProductionCarouselState();
   syncTechPulseState();

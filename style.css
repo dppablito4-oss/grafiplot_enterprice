@@ -1767,12 +1767,23 @@ body.light .qr-mode-chip.active {
 .config-policy-note {
   margin: 2px 0 0;
   padding: 8px 10px;
-  border: 1px solid color-mix(in srgb, var(--border) 70%, rgb(173, 56, 56) 30%);
+  border: 1px solid color-mix(in srgb, var(--border) 70%, rgba(255, 255, 255, 0.18) 30%);
   border-radius: 9px;
   background: color-mix(in srgb, var(--surface) 90%, var(--accent) 10%);
   font-size: 0.76rem;
   line-height: 1.4;
   color: var(--muted);
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.config-policy-note::before {
+  content: "⚠";
+  color: #ff8f8f;
+  font-size: 0.92rem;
+  line-height: 1;
+  margin-top: 0.08rem;
 }
 
 .config-add-btn:disabled {
@@ -4220,4 +4231,65 @@ body.light .production-configurator .config-summary {
 body.light .config-policy-note {
   background: #ffffff;
   border-color: rgba(18, 27, 34, 0.14);
+}
+
+body.light .config-policy-note::before {
+  color: #cb3a3a;
+}
+
+/* Large formal section titles outside cards with separator and scroll reveal */
+.scroll-reveal-title {
+  position: relative;
+  margin: -26px 0 10px;
+  padding-top: 12px;
+  font-size: clamp(1.75rem, 1.15rem + 2.8vw, 3rem);
+  line-height: 1.05;
+  text-transform: uppercase;
+  letter-spacing: 0.035em;
+  font-weight: 900;
+  color: color-mix(in srgb, var(--text) 96%, #ffffff 4%);
+  text-wrap: balance;
+  opacity: 0;
+  transform: translateY(14px);
+  filter: blur(3px);
+  transition: opacity 0.55s ease, transform 0.55s ease, filter 0.55s ease, letter-spacing 0.45s ease;
+}
+
+.scroll-reveal-title::before {
+  content: "";
+  position: absolute;
+  left: -16px;
+  right: -16px;
+  top: 0;
+  height: 1px;
+  background: color-mix(in srgb, var(--border) 72%, rgba(255, 255, 255, 0.28) 28%);
+}
+
+.scroll-reveal-title.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+  filter: blur(0);
+  letter-spacing: 0.05em;
+}
+
+.production-showcase-head .scroll-reveal-title,
+.quick-products-head .scroll-reveal-title {
+  margin-top: -14px;
+}
+
+@media (max-width: 900px) {
+  .scroll-reveal-title {
+    font-size: clamp(1.24rem, 0.98rem + 2.5vw, 1.85rem);
+    margin-top: -14px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scroll-reveal-title,
+  .scroll-reveal-title.is-visible {
+    opacity: 1;
+    transform: none;
+    filter: none;
+    transition: none;
+  }
 }
