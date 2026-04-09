@@ -4268,18 +4268,24 @@ body.light .config-policy-note::before {
   color: #cb3a3a;
 }
 
-/* Large formal section titles outside cards with separator and scroll reveal */
+/* Centered outside-block titles with side rules and scroll reveal */
 .scroll-reveal-title {
-  position: relative;
   --title-ink: color-mix(in srgb, var(--text) 96%, #ffffff 4%);
   --title-rule: color-mix(in srgb, var(--border) 72%, rgba(255, 255, 255, 0.28) 28%);
-  margin: -26px 0 10px;
-  padding-top: 12px;
-  font-size: clamp(1.75rem, 1.15rem + 2.8vw, 3rem);
+  --title-bleed: 0px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(10px, 1.8vw, 24px);
+  width: calc(100% + var(--title-bleed));
+  margin: -34px calc(var(--title-bleed) / -2) 10px;
+  font-size: clamp(1.7rem, 1.08rem + 2.6vw, 2.86rem);
   line-height: 1.05;
   text-transform: uppercase;
-  letter-spacing: 0.035em;
+  letter-spacing: 0.03em;
   font-weight: 900;
+  text-align: center;
   color: var(--title-ink);
   text-wrap: balance;
   opacity: 0;
@@ -4288,12 +4294,11 @@ body.light .config-policy-note::before {
   transition: opacity 0.55s ease, transform 0.55s ease, filter 0.55s ease, letter-spacing 0.45s ease;
 }
 
-.scroll-reveal-title::before {
+.scroll-reveal-title::before,
+.scroll-reveal-title::after {
   content: "";
-  position: absolute;
-  left: -16px;
-  right: -16px;
-  top: 0;
+  flex: 1 1 0;
+  min-width: 24px;
   height: 1px;
   background: var(--title-rule);
 }
@@ -4302,12 +4307,26 @@ body.light .config-policy-note::before {
   opacity: 1;
   transform: translateY(0);
   filter: blur(0);
-  letter-spacing: 0.05em;
+  letter-spacing: 0.045em;
+}
+
+.print-configurator > .scroll-reveal-title {
+  --title-bleed: 28px;
 }
 
 .production-showcase-head .scroll-reveal-title,
 .quick-products-head .scroll-reveal-title {
-  margin-top: -14px;
+  --title-bleed: 24px;
+}
+
+.production-showcase-head,
+.quick-products-head {
+  gap: 6px;
+}
+
+.production-showcase-head p,
+.quick-products-head p {
+  text-align: center;
 }
 
 .production-showcase-head .scroll-reveal-title {
@@ -4387,8 +4406,20 @@ body.light .tech-panel > .scroll-reveal-title {
 
 @media (max-width: 900px) {
   .scroll-reveal-title {
-    font-size: clamp(1.24rem, 0.98rem + 2.5vw, 1.85rem);
-    margin-top: -14px;
+    font-size: clamp(1.18rem, 0.92rem + 2.2vw, 1.64rem);
+    gap: 10px;
+    margin-top: -24px;
+  }
+
+  .print-configurator > .scroll-reveal-title,
+  .production-showcase-head .scroll-reveal-title,
+  .quick-products-head .scroll-reveal-title {
+    --title-bleed: 16px;
+  }
+
+  .scroll-reveal-title::before,
+  .scroll-reveal-title::after {
+    min-width: 14px;
   }
 }
 
