@@ -102,46 +102,65 @@
 			</header>
 			<div class="utility-workspace-body">
 			<section class="utility-tool-panel active" data-tool-panel="qr" aria-label="Generador QR">
-				<div class="utility-form-grid">
-					<label class="utility-field" for="qr-payload-type">
-						<span>Tipo de contenido</span>
-						<select id="qr-payload-type">
-							<option value="text">Texto</option>
-							<option value="url">Link</option>
-							<option value="whatsapp">WhatsApp</option>
-						</select>
-					</label>
-					<label id="qr-text-field" class="utility-field" for="qr-payload-text">
-						<span>Texto o link</span>
-						<textarea id="qr-payload-text" rows="3" placeholder="Escribe aqui tu texto o URL"></textarea>
-					</label>
-					<div id="qr-whatsapp-fields" class="utility-form-grid" hidden>
-						<label class="utility-field" for="qr-wa-number">
-							<span>Numero (solo digitos)</span>
-							<input id="qr-wa-number" type="tel" inputmode="numeric" placeholder="51952628844">
-						</label>
-						<label class="utility-field" for="qr-wa-message">
-							<span>Mensaje</span>
-							<textarea id="qr-wa-message" rows="2" placeholder="Hola, deseo informacion"></textarea>
-						</label>
+				<div class="qr-workbench">
+					<div class="qr-workbench-config">
+						<div class="qr-mode-strip" aria-hidden="true">
+							<span class="qr-mode-chip active">URL</span>
+							<span class="qr-mode-chip">TEXTO</span>
+							<span class="qr-mode-chip">EMAIL</span>
+							<span class="qr-mode-chip">TELEFONO</span>
+							<span class="qr-mode-chip">WIFI</span>
+						</div>
+						<div class="utility-form-grid qr-form-panel">
+							<label class="utility-field" for="qr-payload-type">
+								<span>Tipo de contenido</span>
+								<select id="qr-payload-type">
+									<option value="text">Texto</option>
+									<option value="url">Link</option>
+									<option value="whatsapp">WhatsApp</option>
+								</select>
+							</label>
+							<label id="qr-text-field" class="utility-field" for="qr-payload-text">
+								<span>Texto o link</span>
+								<textarea id="qr-payload-text" rows="3" placeholder="Escribe aqui tu texto o URL"></textarea>
+							</label>
+							<div id="qr-whatsapp-fields" class="utility-form-grid qr-whatsapp-fields" hidden>
+								<label class="utility-field" for="qr-wa-number">
+									<span>Numero (solo digitos)</span>
+									<input id="qr-wa-number" type="tel" inputmode="numeric" placeholder="51952628844">
+								</label>
+								<label class="utility-field" for="qr-wa-message">
+									<span>Mensaje</span>
+									<textarea id="qr-wa-message" rows="2" placeholder="Hola, deseo informacion"></textarea>
+								</label>
+							</div>
+							<label class="utility-field" for="qr-size-range">
+								<span>Tamano</span>
+								<input id="qr-size-range" type="range" min="200" max="900" step="10" value="360">
+								<output id="qr-size-output">360 px</output>
+							</label>
+							<label class="utility-field" for="qr-file-name">
+								<span>Nombre de archivo</span>
+								<input id="qr-file-name" type="text" value="qr-grafiplot">
+							</label>
+						</div>
+						<div class="qr-settings-stack" aria-hidden="true">
+							<div class="qr-setting-item">Escoger colores <span>+</span></div>
+							<div class="qr-setting-item">Anadir imagen del logo <span>+</span></div>
+							<div class="qr-setting-item">Personalizar diseno <span>+</span></div>
+						</div>
+						<p id="qr-validation" class="utility-note">Listo para generar.</p>
+						<div class="utility-actions qr-actions-row">
+							<button id="qr-generate-btn" class="utility-item" type="button">Generar QR</button>
+							<button id="qr-download-btn" class="utility-item" type="button" disabled>Descargar PNG</button>
+						</div>
 					</div>
-					<label class="utility-field" for="qr-size-range">
-						<span>Tamano</span>
-						<input id="qr-size-range" type="range" min="200" max="900" step="10" value="360">
-						<output id="qr-size-output">360 px</output>
-					</label>
-					<label class="utility-field" for="qr-file-name">
-						<span>Nombre de archivo</span>
-						<input id="qr-file-name" type="text" value="qr-grafiplot">
-					</label>
-				</div>
-				<p id="qr-validation" class="utility-note">Listo para generar.</p>
-				<div class="utility-actions">
-					<button id="qr-generate-btn" class="utility-item" type="button">Generar QR</button>
-					<button id="qr-download-btn" class="utility-item" type="button" disabled>Descargar PNG</button>
-				</div>
-				<div class="utility-qr-preview-wrap">
-					<img id="qr-preview-image" class="utility-qr-preview" alt="Vista previa QR" hidden>
+					<aside class="qr-workbench-preview" aria-label="Vista previa QR">
+						<div class="utility-qr-preview-wrap qr-preview-frame">
+							<img id="qr-preview-image" class="utility-qr-preview" alt="Vista previa QR" hidden>
+						</div>
+						<p class="qr-preview-hint">Ajusta el tamano y genera para ver el codigo en tiempo real.</p>
+					</aside>
 				</div>
 			</section>
 			<section class="utility-tool-panel" data-tool-panel="pdf-lock" hidden>
