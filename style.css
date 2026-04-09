@@ -133,7 +133,7 @@ body::after {
 }
 
 .site-wrap {
-  width: min(1280px, 94%);
+  width: min(1280px, calc(100% - 24px));
   margin: 0 auto;
   padding: 18px 0 56px;
   position: relative;
@@ -575,6 +575,10 @@ body.light .nav-link:hover {
   margin-top: 18px;
   display: grid;
   gap: 16px;
+}
+
+.layout > * {
+  min-width: 0;
 }
 
 .business-strip {
@@ -3025,7 +3029,7 @@ body.light .mobile-cart-backdrop {
 .site-credits {
   position: relative;
   z-index: 3;
-  width: min(1280px, 94%);
+  width: min(1280px, calc(100% - 24px));
   margin: 30px auto 12px;
   border: 0;
   border-radius: 0;
@@ -3276,7 +3280,7 @@ body:not(.in-store) .wa-bubble {
   }
 
   .layout {
-    grid-template-columns: minmax(0, 1fr) minmax(280px, 320px);
+    grid-template-columns: minmax(0, 1fr) minmax(260px, 320px);
     align-items: start;
   }
 
@@ -3327,12 +3331,12 @@ body:not(.in-store) .wa-bubble {
 
 @media (min-width: 992px) {
   .site-wrap {
-    width: 90vw;
+    width: min(1280px, calc(100% - 32px));
     margin: 0 auto;
   }
 
   .site-credits {
-    width: 90vw;
+    width: min(1280px, calc(100% - 32px));
   }
 }
 
