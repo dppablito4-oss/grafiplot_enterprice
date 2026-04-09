@@ -31,6 +31,13 @@ body.light {
   box-sizing: border-box;
 }
 
+img,
+video,
+canvas,
+svg {
+  max-width: 100%;
+}
+
 html,
 body {
   margin: 0;
@@ -484,9 +491,9 @@ body.light .hero-btn-gold {
   border: 1px solid color-mix(in srgb, var(--border) 78%, rgba(255, 255, 255, 0.16) 22%);
   box-shadow: var(--shadow);
   border-radius: 0;
-  width: 100vw;
-  margin-left: calc(50% - 50vw);
-  margin-right: calc(50% - 50vw);
+  width: 100%;
+  margin-left: 0;
+  margin-right: 0;
   padding: 12px clamp(14px, 3.2vw, 34px);
   display: flex;
   align-items: center;
@@ -3152,7 +3159,7 @@ body:not(.in-store) .wa-bubble {
   }
 
   .layout {
-    grid-template-columns: 1fr 320px;
+    grid-template-columns: minmax(0, 1fr) minmax(280px, 320px);
     align-items: start;
   }
 
@@ -3225,7 +3232,13 @@ body:not(.in-store) .wa-bubble {
   }
 
   .layout {
+    grid-template-columns: 1fr;
     gap: 12px;
+  }
+
+  .cart-panel {
+    position: static;
+    top: auto;
   }
 
   .utility-mobile-strip {
@@ -3262,6 +3275,17 @@ body:not(.in-store) .wa-bubble {
   body.utility-open .utility-backdrop {
     opacity: 1;
     pointer-events: auto;
+  }
+}
+
+@media (max-width: 1200px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+
+  .cart-panel {
+    position: static;
+    top: auto;
   }
 }
 
