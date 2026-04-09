@@ -2947,8 +2947,12 @@ body:not(.in-store) .wa-bubble {
 
 @media (min-width: 992px) {
   .site-wrap {
-    width: min(1280px, 94%);
+    width: 90vw;
     margin: 0 auto;
+  }
+
+  .site-credits {
+    width: 90vw;
   }
 }
 
