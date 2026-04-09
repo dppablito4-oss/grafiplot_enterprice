@@ -1739,33 +1739,65 @@ body.light .utility-note {
 .pc-hero-content {
   position: relative;
   z-index: 1;
-  padding: 16px;
+  padding: 22px;
   display: grid;
-  gap: 7px;
+  gap: 9px;
 }
 
 .pc-hero-kicker {
   margin: 0;
-  font-size: 0.74rem;
+  font-size: 0.88rem;
   text-transform: uppercase;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.12em;
   color: #8de6ff;
   font-weight: 800;
 }
 
 .pc-hero-content h4 {
   margin: 0;
-  font-size: clamp(1.08rem, 0.9rem + 0.7vw, 1.5rem);
+  font-size: clamp(1.55rem, 1.02rem + 1.4vw, 2.55rem);
   color: #f3fbff;
-  max-width: 26ch;
+  max-width: 20ch;
+  line-height: 1.14;
+  text-wrap: balance;
 }
 
 .pc-hero-content p {
   margin: 0;
   color: color-mix(in srgb, #f3fbff 84%, #8de6ff 16%);
-  font-size: 0.86rem;
-  max-width: 62ch;
+  font-size: clamp(0.98rem, 0.88rem + 0.28vw, 1.16rem);
+  max-width: 56ch;
   line-height: 1.45;
+}
+
+.pc-hero.reveal-ready .pc-hero-kicker,
+.pc-hero.reveal-ready .pc-hero-content h4,
+.pc-hero.reveal-ready .pc-hero-content p {
+  opacity: 0;
+  filter: blur(5px);
+  transform: translateY(18px);
+}
+
+.pc-hero.reveal-ready.pc-hero-visible .pc-hero-kicker,
+.pc-hero.reveal-ready.pc-hero-visible .pc-hero-content h4,
+.pc-hero.reveal-ready.pc-hero-visible .pc-hero-content p {
+  opacity: 1;
+  filter: blur(0);
+  transform: translateY(0);
+}
+
+.pc-hero.reveal-ready.pc-hero-visible .pc-hero-kicker {
+  transition: opacity 0.55s ease, transform 0.55s ease, filter 0.55s ease;
+}
+
+.pc-hero.reveal-ready.pc-hero-visible .pc-hero-content h4 {
+  transition: opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1), transform 0.8s cubic-bezier(0.22, 1, 0.36, 1), filter 0.8s ease;
+  transition-delay: 90ms;
+}
+
+.pc-hero.reveal-ready.pc-hero-visible .pc-hero-content p {
+  transition: opacity 0.72s ease, transform 0.72s ease, filter 0.72s ease;
+  transition-delay: 180ms;
 }
 
 .pc-offers-grid {
@@ -3312,11 +3344,11 @@ body:not(.in-store) .wa-bubble {
   }
 
   .pc-hero-content {
-    padding: 12px;
+    padding: 14px;
   }
 
   .pc-hero-content h4 {
-    font-size: 1rem;
+    font-size: clamp(1.2rem, 1.02rem + 1.2vw, 1.6rem);
   }
 
   .pc-offers-grid {

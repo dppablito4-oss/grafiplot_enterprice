@@ -132,6 +132,7 @@ const nodes = {
   productionDots: document.querySelectorAll(".production-dot[data-prod-dot]"),
   pcOffersTrack: document.getElementById("pc-offers-track"),
   pcOffersNext: document.getElementById("pc-offers-next"),
+  pcHero: document.querySelector(".pc-hero"),
   supportPanel: document.querySelector('[data-tab-panel="soporte"]'),
   sizeOptions: document.getElementById("size-options"),
   sidesOptions: document.getElementById("sides-options"),
@@ -1243,6 +1244,38 @@ function bindPcOffersCarousel() {
   });
 }
 
+function initPcHeroRevealObserver() {
+  if (!nodes.pcHero) {
+    return;
+  }
+
+  nodes.pcHero.classList.add("reveal-ready");
+
+  if (!("IntersectionObserver" in window)) {
+    nodes.pcHero.classList.add("pc-hero-visible");
+    return;
+  }
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) {
+          return;
+        }
+
+        nodes.pcHero.classList.add("pc-hero-visible");
+        observer.disconnect();
+      });
+    },
+    {
+      threshold: 0.28,
+      rootMargin: "0px 0px -8% 0px"
+    }
+  );
+
+  observer.observe(nodes.pcHero);
+}
+
 function syncTechPulseState() {
   const supportPanelActive = Boolean(
     nodes.supportPanel &&
@@ -1835,6 +1868,7 @@ function init() {
   bindDetailCards();
   bindPcOfferCards();
   bindPcOffersCarousel();
+  initPcHeroRevealObserver();
   initLazySlideImages();
   initSupportPanelVisibilityObserver();
   syncProductionCarouselState();
