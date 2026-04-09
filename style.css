@@ -3687,6 +3687,147 @@ body:not(.in-store) .wa-bubble {
     gap: 4px;
   }
 
+
+/* Clean UI pass: keep structure, reduce visual noise and competing effects */
+:root {
+  --shadow: 0 4px 14px rgba(2, 12, 22, 0.16);
+}
+
+body {
+  background: linear-gradient(180deg, #06182a 0%, #072035 52%, #06182a 100%);
+}
+
+body::before {
+  opacity: 0.02;
+  filter: none;
+  animation: none;
+}
+
+body::after {
+  display: none;
+}
+
+.topbar,
+.hero,
+.promo-ribbon,
+.dev-notice,
+.business-strip,
+.utility-sidebar,
+.utility-workspace,
+.utility-workspace-head,
+.utility-workspace-body,
+.utility-tool-panel,
+.production-showcase,
+.print-configurator,
+.config-step,
+.service-detail-card,
+.mono-card,
+.pc-offer-card,
+.cart-panel,
+.site-credits,
+.mobile-cart-sheet {
+  background: color-mix(in srgb, var(--surface) 96%, #000000 4%);
+  box-shadow: none;
+  border-color: color-mix(in srgb, var(--border) 72%, rgba(255, 255, 255, 0.12) 28%);
+}
+
+.topbar,
+.hero,
+.production-showcase,
+.print-configurator,
+.cart-panel,
+.utility-sidebar,
+.utility-workspace-body {
+  border-radius: 12px;
+}
+
+.nav-link,
+.service-tab-btn,
+.option-btn,
+.utility-item,
+.btn,
+.pc-offers-next {
+  background: color-mix(in srgb, var(--surface) 92%, #ffffff 8%);
+  box-shadow: none;
+}
+
+.nav-link:hover,
+.service-tab-btn:hover,
+.option-btn:hover,
+.utility-item:hover,
+.btn:hover,
+.pc-offers-next:hover {
+  transform: none;
+}
+
+.hero-overlay {
+  background: linear-gradient(180deg, rgba(3, 11, 20, 0.26), rgba(3, 11, 20, 0.78));
+}
+
+.hero-info,
+.quick-summary,
+.config-summary,
+.utility-qr-preview-wrap {
+  background: color-mix(in srgb, var(--surface) 94%, #000000 6%);
+}
+
+.production-slide-label {
+  background: rgba(4, 14, 25, 0.76);
+}
+
+.business-chip {
+  background: color-mix(in srgb, var(--surface) 92%, #ffffff 8%);
+}
+
+.business-chip:nth-child(1),
+.business-chip:nth-child(2),
+.business-chip:nth-child(3),
+.business-chip:nth-child(4) {
+  background: color-mix(in srgb, var(--surface) 92%, #ffffff 8%);
+}
+
+.utility-toggle-cta::after {
+  display: none;
+}
+
+body.light {
+  background: linear-gradient(180deg, #edf4fb 0%, #e8f1f9 55%, #edf4fb 100%);
+}
+
+body.light .topbar,
+body.light .hero,
+body.light .promo-ribbon,
+body.light .dev-notice,
+body.light .business-strip,
+body.light .utility-sidebar,
+body.light .utility-workspace,
+body.light .utility-workspace-head,
+body.light .utility-workspace-body,
+body.light .utility-tool-panel,
+body.light .production-showcase,
+body.light .print-configurator,
+body.light .config-step,
+body.light .service-detail-card,
+body.light .mono-card,
+body.light .pc-offer-card,
+body.light .cart-panel,
+body.light .site-credits,
+body.light .mobile-cart-sheet {
+  background: #f8fbff;
+  border-color: rgba(18, 73, 110, 0.2);
+  box-shadow: none;
+}
+
+body.light .nav-link,
+body.light .service-tab-btn,
+body.light .option-btn,
+body.light .utility-item,
+body.light .btn,
+body.light .pc-offers-next,
+body.light .business-chip {
+  background: #ffffff;
+  box-shadow: none;
+}
   .credits-main,
   .credits-owner,
   .credits-dev,
