@@ -3686,23 +3686,33 @@ body:not(.in-store) .wa-bubble {
     align-items: flex-start;
     gap: 4px;
   }
+  .credits-main,
+  .credits-owner,
+  .credits-dev,
+  .credits-col p,
+  .credits-col a {
+    font-size: 0.76rem;
+  }
+}
 
-
-/* Clean UI pass: keep structure, reduce visual noise and competing effects */
+/* Minimal matte pass: cleaner dark mode, fewer nested frames, modern neutral look */
 :root {
-  --shadow: 0 4px 14px rgba(2, 12, 22, 0.16);
+  --bg: #0b0b0b;
+  --surface: #131313;
+  --surface-2: #1a1a1a;
+  --text: #eceff1;
+  --muted: #9aa0a6;
+  --accent: #8ea4bb;
+  --accent-strong: #b8c7d5;
+  --border: rgba(255, 255, 255, 0.12);
+  --shadow: none;
 }
 
 body {
-  background: linear-gradient(180deg, #06182a 0%, #072035 52%, #06182a 100%);
+  background: linear-gradient(180deg, #080808 0%, #0d0d0d 52%, #080808 100%);
 }
 
-body::before {
-  opacity: 0.02;
-  filter: none;
-  animation: none;
-}
-
+body::before,
 body::after {
   display: none;
 }
@@ -3725,10 +3735,16 @@ body::after {
 .pc-offer-card,
 .cart-panel,
 .site-credits,
-.mobile-cart-sheet {
-  background: color-mix(in srgb, var(--surface) 96%, #000000 4%);
-  box-shadow: none;
-  border-color: color-mix(in srgb, var(--border) 72%, rgba(255, 255, 255, 0.12) 28%);
+.mobile-cart-sheet,
+.pc-hero,
+.service-media,
+.tech-table-wrap,
+.quick-summary,
+.config-summary,
+.hero-info {
+  background: #131313 !important;
+  border-color: rgba(255, 255, 255, 0.12) !important;
+  box-shadow: none !important;
 }
 
 .topbar,
@@ -3736,9 +3752,32 @@ body::after {
 .production-showcase,
 .print-configurator,
 .cart-panel,
-.utility-sidebar,
-.utility-workspace-body {
-  border-radius: 12px;
+.pc-hero,
+.utility-workspace-body,
+.site-credits {
+  border-radius: 10px;
+}
+
+.production-slide,
+.config-step,
+.service-detail-card,
+.mono-card,
+.pc-offer-card,
+.utility-tool-panel,
+.service-media,
+.pc-offer-card img,
+.detail-thumb,
+.tab-thumb {
+  border: 0 !important;
+  box-shadow: none !important;
+}
+
+.production-slide {
+  background: #161616 !important;
+}
+
+.production-slide-label {
+  background: rgba(10, 10, 10, 0.68) !important;
 }
 
 .nav-link,
@@ -3746,9 +3785,15 @@ body::after {
 .option-btn,
 .utility-item,
 .btn,
-.pc-offers-next {
-  background: color-mix(in srgb, var(--surface) 92%, #ffffff 8%);
-  box-shadow: none;
+.pc-offers-next,
+.business-chip,
+.utility-back,
+.mobile-cart-close,
+.cart-action {
+  background: #1b1b1b !important;
+  border-color: rgba(255, 255, 255, 0.16) !important;
+  color: #e7eaec !important;
+  box-shadow: none !important;
 }
 
 .nav-link:hover,
@@ -3758,32 +3803,44 @@ body::after {
 .btn:hover,
 .pc-offers-next:hover {
   transform: none;
+  background: #222222 !important;
 }
 
-.hero-overlay {
-  background: linear-gradient(180deg, rgba(3, 11, 20, 0.26), rgba(3, 11, 20, 0.78));
+.option-btn.active,
+.service-tab-btn.active,
+.production-dot.active,
+.utility-actions .utility-item.active {
+  background: #2b2b2b !important;
+  border-color: rgba(255, 255, 255, 0.26) !important;
+  box-shadow: none !important;
+  color: #ffffff !important;
 }
 
-.hero-info,
-.quick-summary,
-.config-summary,
-.utility-qr-preview-wrap {
-  background: color-mix(in srgb, var(--surface) 94%, #000000 6%);
-}
-
-.production-slide-label {
-  background: rgba(4, 14, 25, 0.76);
-}
-
-.business-chip {
-  background: color-mix(in srgb, var(--surface) 92%, #ffffff 8%);
+.production-dot {
+  background: #2a2a2a !important;
+  border-color: rgba(255, 255, 255, 0.22) !important;
 }
 
 .business-chip:nth-child(1),
 .business-chip:nth-child(2),
 .business-chip:nth-child(3),
 .business-chip:nth-child(4) {
-  background: color-mix(in srgb, var(--surface) 92%, #ffffff 8%);
+  background: #1b1b1b !important;
+}
+
+.pc-order-btn,
+.whatsapp-btn,
+.btn.hero-btn-alt {
+  background: #1f3a2b !important;
+  border-color: rgba(101, 176, 134, 0.52) !important;
+  color: #eaf6ee !important;
+}
+
+.hero-btn-gold,
+.utility-toggle-cta {
+  background: #8f2323 !important;
+  border-color: rgba(255, 140, 140, 0.48) !important;
+  box-shadow: none !important;
 }
 
 .utility-toggle-cta::after {
@@ -3791,7 +3848,7 @@ body::after {
 }
 
 body.light {
-  background: linear-gradient(180deg, #edf4fb 0%, #e8f1f9 55%, #edf4fb 100%);
+  background: linear-gradient(180deg, #eef2f6 0%, #e9edf2 55%, #eef2f6 100%);
 }
 
 body.light .topbar,
@@ -3812,10 +3869,15 @@ body.light .mono-card,
 body.light .pc-offer-card,
 body.light .cart-panel,
 body.light .site-credits,
-body.light .mobile-cart-sheet {
-  background: #f8fbff;
-  border-color: rgba(18, 73, 110, 0.2);
-  box-shadow: none;
+body.light .mobile-cart-sheet,
+body.light .pc-hero,
+body.light .service-media,
+body.light .tech-table-wrap,
+body.light .quick-summary,
+body.light .config-summary,
+body.light .hero-info {
+  background: #f8fafc !important;
+  border-color: rgba(18, 27, 34, 0.12) !important;
 }
 
 body.light .nav-link,
@@ -3824,15 +3886,11 @@ body.light .option-btn,
 body.light .utility-item,
 body.light .btn,
 body.light .pc-offers-next,
-body.light .business-chip {
-  background: #ffffff;
-  box-shadow: none;
-}
-  .credits-main,
-  .credits-owner,
-  .credits-dev,
-  .credits-col p,
-  .credits-col a {
-    font-size: 0.76rem;
-  }
+body.light .business-chip,
+body.light .utility-back,
+body.light .mobile-cart-close,
+body.light .cart-action {
+  background: #ffffff !important;
+  border-color: rgba(18, 27, 34, 0.14) !important;
+  color: #1f2b36 !important;
 }
