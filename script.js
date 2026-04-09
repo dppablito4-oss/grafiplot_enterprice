@@ -291,14 +291,14 @@ function getAutoBindingForConfig(quantity) {
 }
 
 function setStoreOpen(nextOpen, shouldScroll = false) {
-  isStoreOpen = nextOpen;
-  nodes.storeShell.classList.toggle("is-open", isStoreOpen);
-  nodes.storeShell.setAttribute("aria-hidden", isStoreOpen ? "false" : "true");
-  nodes.body.classList.toggle("in-store", isStoreOpen);
-  syncWhatsAppBubble(isStoreOpen);
+  isStoreOpen = true;
+  nodes.storeShell.classList.add("is-open");
+  nodes.storeShell.setAttribute("aria-hidden", "false");
+  nodes.body.classList.remove("in-store");
+  syncWhatsAppBubble(true);
 
   if (nodes.toggleStoreBtn) {
-    nodes.toggleStoreBtn.setAttribute("aria-expanded", isStoreOpen ? "true" : "false");
+    nodes.toggleStoreBtn.setAttribute("aria-expanded", "true");
   }
 
   if (!shouldScroll) {
@@ -327,15 +327,7 @@ function syncWhatsAppBubble(inStore) {
 }
 
 function openStoreWithFlash() {
-  if (nodes.screenFlash) {
-    nodes.screenFlash.classList.remove("run");
-    void nodes.screenFlash.offsetWidth;
-    nodes.screenFlash.classList.add("run");
-  }
-
-  setTimeout(() => {
-    setStoreOpen(true, true);
-  }, 170);
+  setStoreOpen(true, true);
 }
 
 function saveCart() {
@@ -1355,6 +1347,8 @@ function bindConfiguratorEvents() {
 }
 
 function setActiveServiceTab(tabKey) {
+  const targetPanel = Array.from(nodes.serviceTabPanels || []).find((panel) => panel.dataset.tabPanel === tabKey);
+
   nodes.serviceTabButtons.forEach((button) => {
     const isActive = button.dataset.tabBtn === tabKey;
     button.classList.toggle("active", isActive);
@@ -1362,10 +1356,11 @@ function setActiveServiceTab(tabKey) {
   });
 
   nodes.serviceTabPanels.forEach((panel) => {
-    const isActive = panel.dataset.tabPanel === tabKey;
-    panel.classList.toggle("active", isActive);
-    panel.hidden = !isActive;
+    panel.classList.add("active");
+    panel.hidden = false;
   });
+
+  targetPanel?.scrollIntoView({ behavior: "smooth", block: "start" });
 
   syncProductionCarouselState();
   syncTechPulseState();
@@ -1670,31 +1665,20 @@ function bindEvents() {
 
   if (nodes.toggleStoreBtn) {
     nodes.toggleStoreBtn.addEventListener("click", () => {
-      if (isStoreOpen) {
-        nodes.storeShell.scrollIntoView({ behavior: "smooth", block: "start" });
-        return;
-      }
-
-      openStoreWithFlash();
+      nodes.storeShell.scrollIntoView({ behavior: "smooth", block: "start" });
     });
   }
 
   nodes.openStoreLinks.forEach((link) => {
     link.addEventListener("click", (event) => {
       event.preventDefault();
-      if (isStoreOpen) {
-        nodes.storeShell.scrollIntoView({ behavior: "smooth", block: "start" });
-        return;
-      }
-
-      openStoreWithFlash();
+      nodes.storeShell.scrollIntoView({ behavior: "smooth", block: "start" });
     });
   });
 
   nodes.homeLinks.forEach((link) => {
     link.addEventListener("click", (event) => {
       event.preventDefault();
-      setStoreOpen(false, true);
       const hero = document.getElementById("inicio");
       hero?.scrollIntoView({ behavior: "smooth", block: "start" });
     });
@@ -1781,11 +1765,11 @@ function init() {
   toggleQrFields();
   updateQrSizeOutput();
   setQrValidation("Completa los datos y genera tu codigo.", false);
+  setStoreOpen(true, false);
   setActiveServiceTab("produccion");
   setupProductionCarouselLoop();
   setProductionTrackIndex(0, false);
   setMobileCartOpen(false);
-  setStoreOpen(false, false);
   updatePaperState();
   updateBindingState();
   updateSidesStepState();

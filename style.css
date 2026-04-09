@@ -669,18 +669,18 @@ body.light .business-chip:nth-child(4) {
 }
 
 .store-shell {
-  max-height: 0;
-  opacity: 0;
-  overflow: hidden;
-  transform: translateY(-14px);
-  pointer-events: none;
-  transition: max-height 0.55s ease, opacity 0.35s ease, transform 0.45s ease;
+  max-height: none;
+  opacity: 1;
+  overflow: visible;
+  transform: none;
+  pointer-events: auto;
+  transition: none;
 }
 
 .store-shell.is-open {
-  max-height: 20000px;
+  max-height: none;
   opacity: 1;
-  transform: translateY(0);
+  transform: none;
   pointer-events: auto;
 }
 
@@ -689,13 +689,13 @@ body.in-store .store-shell {
 }
 
 body.in-store .hero {
-  display: none;
+  display: block;
 }
 
 body.in-store .dev-notice,
 body.in-store .promo-ribbon,
 body.in-store .business-strip {
-  display: none;
+  display: block;
 }
 
 body.in-store .layout {
@@ -1139,9 +1139,7 @@ body.light .utility-note {
 }
 
 .service-tabs {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 8px;
+  display: none;
 }
 
 .service-tab-btn {
@@ -1194,13 +1192,18 @@ body.light .utility-note {
 }
 
 .service-tab-panel {
-  display: none;
+  display: block;
+  margin-top: 18px;
   content-visibility: auto;
   contain-intrinsic-size: 760px;
 }
 
 .service-tab-panel.active {
   display: block;
+}
+
+.service-tab-panel:first-of-type {
+  margin-top: 0;
 }
 
 .service-tab-panel[data-tab-panel="produccion"].active {
