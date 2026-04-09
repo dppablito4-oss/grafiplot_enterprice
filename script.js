@@ -130,6 +130,8 @@ const nodes = {
   productionCarouselTrack: document.getElementById("production-carousel-track"),
   productionSlides: document.querySelectorAll(".production-slide[data-prod-slide]"),
   productionDots: document.querySelectorAll(".production-dot[data-prod-dot]"),
+  quickProductAddButtons: document.querySelectorAll(".quick-product-add[data-quick-id][data-quick-name][data-quick-price]"),
+  quickProductJumpCards: document.querySelectorAll(".quick-product-jump[data-jump-config='true']"),
   pcOffersTrack: document.getElementById("pc-offers-track"),
   pcOffersNext: document.getElementById("pc-offers-next"),
   pcHero: document.querySelector(".pc-hero"),
@@ -551,6 +553,33 @@ function upsertCartItemFromConfig(quantity) {
       includeBinding: configState.includeBinding,
       unitPrice,
       subtotal: unitPrice * quantity
+    });
+  }
+
+  saveCart();
+  renderCart();
+}
+
+function upsertQuickServiceItem(productId, name, unitPrice) {
+  const key = `quick-${productId}`;
+  const existing = cart.find((item) => item.id === key);
+
+  if (existing) {
+    existing.quantity += 1;
+    recomputeCartItem(existing);
+  } else {
+    cart.push({
+      id: key,
+      name,
+      quantity: 1,
+      baseUnitPrice: unitPrice,
+      bulkUnitPrice: null,
+      paperType: "bond-75",
+      paperLabel: "No aplica",
+      paperPriceOverride: null,
+      includeBinding: false,
+      unitPrice,
+      subtotal: unitPrice
     });
   }
 
@@ -1643,6 +1672,39 @@ function bindEvents() {
       }
 
       setProductionTrackIndex(targetIndex, true);
+    });
+  });
+
+  nodes.quickProductAddButtons?.forEach((button) => {
+    button.addEventListener("click", () => {
+      const productId = (button.dataset.quickId || "").trim();
+      const productName = (button.dataset.quickName || "").trim();
+      const productPrice = Number.parseFloat(button.dataset.quickPrice || "");
+
+      if (!productId || !productName || Number.isNaN(productPrice) || productPrice < 0) {
+        return;
+      }
+
+      upsertQuickServiceItem(productId, productName, productPrice);
+      triggerCartFabFeedback();
+      showToast(`${productName} agregado al pedido`);
+    });
+  });
+
+  nodes.quickProductJumpCards?.forEach((card) => {
+    const openConfig = () => {
+      scrollToPrintSizeStep();
+      showToast("Selecciona los parametros de impresion para continuar");
+    };
+
+    card.addEventListener("click", openConfig);
+    card.addEventListener("keydown", (event) => {
+      if (event.key !== "Enter" && event.key !== " ") {
+        return;
+      }
+
+      event.preventDefault();
+      openConfig();
     });
   });
 
