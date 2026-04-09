@@ -355,9 +355,9 @@ function syncWhatsAppBubble(inStore) {
 
   nodes.waBubble.classList.remove("hide");
   if (inStore) {
-    nodes.waAgent.textContent = "Roy Vasquez";
+    nodes.waAgent.textContent = "ROY VASQUEZ";
     nodes.waOnline.textContent = "venta online";
-    nodes.waMsg.textContent = "Bienvenido, indicanos que producto desea consultar.";
+    nodes.waMsg.textContent = "Bienvenido, le saluda ROY VASQUEZ, indicanos que producto desea consultar estimado.";
     return;
   }
 
