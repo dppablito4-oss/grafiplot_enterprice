@@ -130,6 +130,8 @@ const nodes = {
   productionCarouselTrack: document.getElementById("production-carousel-track"),
   productionSlides: document.querySelectorAll(".production-slide[data-prod-slide]"),
   productionDots: document.querySelectorAll(".production-dot[data-prod-dot]"),
+  pcOffersTrack: document.getElementById("pc-offers-track"),
+  pcOffersNext: document.getElementById("pc-offers-next"),
   supportPanel: document.querySelector('[data-tab-panel="soporte"]'),
   sizeOptions: document.getElementById("size-options"),
   sidesOptions: document.getElementById("sides-options"),
@@ -1213,6 +1215,34 @@ function bindPcOfferCards() {
   });
 }
 
+function bindPcOffersCarousel() {
+  if (!nodes.pcOffersTrack || !nodes.pcOffersNext) {
+    return;
+  }
+
+  nodes.pcOffersNext.addEventListener("click", () => {
+    const cards = Array.from(nodes.pcOffersTrack.querySelectorAll(".pc-offer-card"));
+    if (!cards.length) {
+      return;
+    }
+
+    const firstCard = cards[0];
+    const cardWidth = firstCard.getBoundingClientRect().width;
+    const trackStyles = window.getComputedStyle(nodes.pcOffersTrack);
+    const gapValue = Number.parseFloat(trackStyles.columnGap || trackStyles.gap || "0") || 0;
+    const step = cardWidth + gapValue;
+    const maxScrollLeft = Math.max(0, nodes.pcOffersTrack.scrollWidth - nodes.pcOffersTrack.clientWidth);
+    const nextScrollLeft = nodes.pcOffersTrack.scrollLeft + step;
+
+    if (nextScrollLeft >= maxScrollLeft - 2) {
+      nodes.pcOffersTrack.scrollTo({ left: 0, behavior: "smooth" });
+      return;
+    }
+
+    nodes.pcOffersTrack.scrollTo({ left: nextScrollLeft, behavior: "smooth" });
+  });
+}
+
 function syncTechPulseState() {
   const supportPanelActive = Boolean(
     nodes.supportPanel &&
@@ -1804,6 +1834,7 @@ function init() {
   bindEvents();
   bindDetailCards();
   bindPcOfferCards();
+  bindPcOffersCarousel();
   initLazySlideImages();
   initSupportPanelVisibilityObserver();
   syncProductionCarouselState();

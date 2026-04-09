@@ -1712,7 +1712,8 @@ body.light .utility-note {
   border: 1px solid color-mix(in srgb, var(--border) 74%, rgba(255, 255, 255, 0.24) 26%);
   border-radius: 14px;
   overflow: hidden;
-  min-height: 280px;
+  aspect-ratio: 5 / 3;
+  min-height: 320px;
   display: grid;
   align-items: end;
   box-shadow: var(--shadow);
@@ -1768,12 +1769,51 @@ body.light .utility-note {
 }
 
 .pc-offers-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  display: flex;
   gap: 12px;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.pc-offers-grid::-webkit-scrollbar {
+  display: none;
+}
+
+.pc-offers-carousel {
+  position: relative;
+  padding-right: 50px;
+}
+
+.pc-offers-next {
+  position: absolute;
+  right: 4px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 40px;
+  height: 40px;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--border) 78%, rgba(255, 255, 255, 0.22) 22%);
+  background: linear-gradient(165deg, rgba(58, 186, 255, 0.24), rgba(6, 42, 70, 0.9));
+  color: #e8f8ff;
+  font-size: 1.5rem;
+  line-height: 1;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  z-index: 3;
+  box-shadow: 0 8px 18px rgba(2, 14, 26, 0.38);
+}
+
+.pc-offers-next:hover,
+.pc-offers-next:focus-visible {
+  border-color: color-mix(in srgb, #39d8ff 75%, #ffffff 25%);
+  transform: translateY(-50%) scale(1.05);
 }
 
 .pc-offer-card {
+  flex: 0 0 clamp(220px, 21vw, 270px);
   border: 1px solid color-mix(in srgb, var(--border) 72%, rgba(255, 255, 255, 0.24) 28%);
   border-radius: 12px;
   background: linear-gradient(165deg, color-mix(in srgb, var(--surface) 84%, var(--accent) 16%), var(--surface));
@@ -2067,6 +2107,12 @@ body.light .pc-hero-content p {
 
 body.light .pc-offer-card {
   background: linear-gradient(170deg, #ffffff, #edf7ff);
+}
+
+body.light .pc-offers-next {
+  color: #0e354c;
+  border-color: rgba(0, 153, 204, 0.46);
+  background: linear-gradient(165deg, rgba(180, 233, 255, 0.85), rgba(229, 245, 255, 0.95));
 }
 
 body.light .pc-offer-price {
@@ -3261,7 +3307,8 @@ body:not(.in-store) .wa-bubble {
   }
 
   .pc-hero {
-    min-height: 220px;
+    aspect-ratio: 4 / 3;
+    min-height: 240px;
   }
 
   .pc-hero-content {
@@ -3273,7 +3320,21 @@ body:not(.in-store) .wa-bubble {
   }
 
   .pc-offers-grid {
-    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .pc-offers-carousel {
+    padding-right: 0;
+  }
+
+  .pc-offers-next {
+    width: 36px;
+    height: 36px;
+    right: 2px;
+  }
+
+  .pc-offer-card {
+    flex-basis: 82%;
   }
 
   .service-tab-btn {
