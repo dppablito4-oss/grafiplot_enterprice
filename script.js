@@ -1232,15 +1232,16 @@ function bindPcOffersCarousel() {
     const trackStyles = window.getComputedStyle(nodes.pcOffersTrack);
     const gapValue = Number.parseFloat(trackStyles.columnGap || trackStyles.gap || "0") || 0;
     const step = cardWidth + gapValue;
+    const currentScrollLeft = nodes.pcOffersTrack.scrollLeft;
     const maxScrollLeft = Math.max(0, nodes.pcOffersTrack.scrollWidth - nodes.pcOffersTrack.clientWidth);
-    const nextScrollLeft = nodes.pcOffersTrack.scrollLeft + step;
+    const nextScrollLeft = currentScrollLeft + step;
 
-    if (nextScrollLeft >= maxScrollLeft - 2) {
+    if (currentScrollLeft >= maxScrollLeft - 2) {
       nodes.pcOffersTrack.scrollTo({ left: 0, behavior: "smooth" });
       return;
     }
 
-    nodes.pcOffersTrack.scrollTo({ left: nextScrollLeft, behavior: "smooth" });
+    nodes.pcOffersTrack.scrollTo({ left: Math.min(nextScrollLeft, maxScrollLeft), behavior: "smooth" });
   });
 }
 
