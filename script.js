@@ -407,8 +407,8 @@ function getAttentionStatusText(now = new Date()) {
 
   const today = schedules[day];
   return minuteOfDay >= today.open && minuteOfDay < today.close
-    ? `Estado: atendiendo ahora (${today.label})`
-    : "Estado: fuera de horario en este momento";
+    ? `Estado: ATENDIENDO AHORA MISMO (${today.label})`
+    : "Estado: FUERA DE HORARIO, ATENDEMOS DESDE LAS 07:00 DE MAÑANA";
 }
 
 function renderQuickSummary() {
@@ -1451,7 +1451,7 @@ function bindConfiguratorEvents() {
 
     configState.side = button.dataset.side;
     setActiveOption(nodes.sidesOptions, configState.side, "side");
-    showConfigCheer("Buena eleccion de caras. Vamos firme con tu pedido.");
+    showConfigCheer("Buena eleccion de caras. ¡ya queda poco!.");
     updateConfigSummary();
   });
 
