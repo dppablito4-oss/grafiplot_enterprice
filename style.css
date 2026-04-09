@@ -1764,6 +1764,17 @@ body.light .qr-mode-chip.active {
   width: 100%;
 }
 
+.config-policy-note {
+  margin: 2px 0 0;
+  padding: 8px 10px;
+  border: 1px solid color-mix(in srgb, var(--border) 70%, rgba(255, 255, 255, 0.18) 30%);
+  border-radius: 9px;
+  background: color-mix(in srgb, var(--surface) 90%, var(--accent) 10%);
+  font-size: 0.76rem;
+  line-height: 1.4;
+  color: var(--muted);
+}
+
 .config-add-btn:disabled {
   opacity: 0.56;
   cursor: not-allowed;
@@ -4204,4 +4215,9 @@ body.light .production-configurator .option-btn.active {
 body.light .production-configurator .config-quantity,
 body.light .production-configurator .config-summary {
   background: #ffffff !important;
+}
+
+body.light .config-policy-note {
+  background: #ffffff;
+  border-color: rgba(18, 27, 34, 0.14);
 }
