@@ -129,6 +129,7 @@ const nodes = {
   productionCarousel: document.getElementById("production-carousel"),
   productionCarouselTrack: document.getElementById("production-carousel-track"),
   productionSlides: document.querySelectorAll(".production-slide[data-prod-slide]"),
+  productionDots: document.querySelectorAll(".production-dot[data-prod-dot]"),
   supportPanel: document.querySelector('[data-tab-panel="soporte"]'),
   sizeOptions: document.getElementById("size-options"),
   sidesOptions: document.getElementById("sides-options"),
@@ -1393,6 +1394,12 @@ function setActiveProductionSlide(index) {
     slide.classList.toggle("active", isActive);
     slide.setAttribute("aria-current", isActive ? "true" : "false");
   });
+
+  nodes.productionDots?.forEach((dot, dotIndex) => {
+    const isActive = dotIndex === safeIndex;
+    dot.classList.toggle("active", isActive);
+    dot.setAttribute("aria-current", isActive ? "true" : "false");
+  });
 }
 
 function resetProductionCarouselLoop() {
@@ -1542,6 +1549,17 @@ function bindEvents() {
     slide.addEventListener("click", () => {
       setProductionTrackIndex(slideIndex, true);
       scrollToPrintSizeStep();
+    });
+  });
+
+  nodes.productionDots?.forEach((dot) => {
+    dot.addEventListener("click", () => {
+      const targetIndex = Number.parseInt(dot.dataset.prodDot || "0", 10);
+      if (Number.isNaN(targetIndex)) {
+        return;
+      }
+
+      setProductionTrackIndex(targetIndex, true);
     });
   });
 

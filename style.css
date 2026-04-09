@@ -1252,7 +1252,7 @@ body.light .utility-note {
   background: linear-gradient(165deg, color-mix(in srgb, var(--surface) 80%, var(--accent) 20%), var(--surface));
   overflow: hidden;
   padding: 0;
-  min-width: calc((100% - 20px) / 3);
+  min-width: calc((100% - 10px) / 2);
   position: relative;
   cursor: pointer;
 }
@@ -1286,6 +1286,36 @@ body.light .utility-note {
 
 .production-slide:hover {
   border-color: color-mix(in srgb, var(--accent) 74%, #ffffff 26%);
+}
+
+.production-carousel-dots {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+}
+
+.production-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--border) 76%, rgba(255, 255, 255, 0.2) 24%);
+  background: color-mix(in srgb, var(--surface) 84%, var(--accent) 16%);
+  cursor: pointer;
+  transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+}
+
+.production-dot.active {
+  width: 23px;
+  border-radius: 999px;
+  background: linear-gradient(170deg, rgba(255, 82, 82, 0.9), rgba(185, 11, 11, 0.9));
+  border-color: rgba(255, 146, 146, 0.72);
+}
+
+.production-dot:hover,
+.production-dot:focus-visible {
+  transform: scale(1.08);
+  border-color: color-mix(in srgb, var(--accent) 76%, #ffffff 24%);
 }
 
 .print-configurator {
@@ -1733,6 +1763,16 @@ body.light .production-showcase {
 
 body.light .production-slide {
   background: linear-gradient(165deg, #edf8ff, #dff0ff);
+}
+
+body.light .production-dot {
+  background: linear-gradient(165deg, #edf8ff, #dff0ff);
+  border-color: rgba(0, 153, 204, 0.42);
+}
+
+body.light .production-dot.active {
+  background: linear-gradient(170deg, rgba(255, 82, 82, 0.86), rgba(192, 20, 20, 0.86));
+  border-color: rgba(214, 68, 68, 0.64);
 }
 
 body.light .production-slide-label {
@@ -3030,7 +3070,7 @@ body:not(.in-store) .wa-bubble {
   }
 
   .production-slide {
-    min-width: calc((100% - 10px) / 2);
+    min-width: 100%;
   }
 
   .production-showcase {
@@ -3184,11 +3224,5 @@ body:not(.in-store) .wa-bubble {
   .credits-col p,
   .credits-col a {
     font-size: 0.76rem;
-  }
-}
-
-@media (max-width: 460px) {
-  .production-slide {
-    min-width: 100%;
   }
 }
