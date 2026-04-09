@@ -168,6 +168,9 @@ let isUtilityWorkspaceOpen = false;
 let qrCurrentUrl = "";
 let productionCarouselIntervalId = null;
 let activeProductionSlideIndex = 0;
+let productionCarouselTrackIndex = 0;
+let productionBaseSlideCount = 0;
+let productionLoopCloneCount = 0;
 
 const systemThemeQuery = window.matchMedia("(prefers-color-scheme: light)");
 const mobileCartQuery = window.matchMedia("(max-width: 600px)");
@@ -1376,20 +1379,83 @@ function getProductionSlideStep() {
   return slides[1].offsetLeft - slides[0].offsetLeft;
 }
 
-function setActiveProductionSlide(index, smooth = true) {
-  const slides = Array.from(nodes.productionSlides || []);
-  if (!slides.length || !nodes.productionCarouselTrack) {
+function setActiveProductionSlide(index) {
+  const baseSlides = Array.from(nodes.productionSlides || []);
+  if (!baseSlides.length) {
     return;
   }
 
-  const safeIndex = ((index % slides.length) + slides.length) % slides.length;
+  const safeIndex = ((index % baseSlides.length) + baseSlides.length) % baseSlides.length;
   activeProductionSlideIndex = safeIndex;
 
-  slides.forEach((slide, slideIndex) => {
+  baseSlides.forEach((slide, slideIndex) => {
     const isActive = slideIndex === safeIndex;
     slide.classList.toggle("active", isActive);
     slide.setAttribute("aria-current", isActive ? "true" : "false");
   });
+}
+
+function resetProductionCarouselLoop() {
+  if (!nodes.productionCarouselTrack) {
+    return;
+  }
+
+  nodes.productionCarouselTrack.querySelectorAll("[data-prod-clone='true']").forEach((node) => node.remove());
+  nodes.productionCarouselTrack.dataset.loopReady = "false";
+  productionCarouselTrackIndex = 0;
+  productionBaseSlideCount = 0;
+  productionLoopCloneCount = 0;
+}
+
+function setupProductionCarouselLoop() {
+  if (!nodes.productionCarouselTrack || nodes.productionCarouselTrack.dataset.loopReady === "true") {
+    return;
+  }
+
+  const baseSlides = Array.from(nodes.productionSlides || []);
+  if (baseSlides.length < 2) {
+    productionBaseSlideCount = baseSlides.length;
+    productionLoopCloneCount = 0;
+    nodes.productionCarouselTrack.dataset.loopReady = "true";
+    return;
+  }
+
+  const step = getProductionSlideStep();
+  const viewportWidth = nodes.productionCarousel?.offsetWidth || step;
+  const visibleCount = Math.max(1, Math.min(baseSlides.length, Math.round(viewportWidth / Math.max(step, 1))));
+
+  productionBaseSlideCount = baseSlides.length;
+  productionLoopCloneCount = visibleCount;
+
+  baseSlides.forEach((slide, slideIndex) => {
+    slide.dataset.prodSource = "base";
+    slide.dataset.prodBaseIndex = `${slideIndex}`;
+  });
+
+  for (let cloneIndex = 0; cloneIndex < visibleCount; cloneIndex += 1) {
+    const clone = baseSlides[cloneIndex].cloneNode(true);
+    clone.classList.remove("active");
+    clone.dataset.prodSource = "clone";
+    clone.dataset.prodClone = "true";
+    clone.setAttribute("aria-hidden", "true");
+    clone.tabIndex = -1;
+    nodes.productionCarouselTrack.appendChild(clone);
+  }
+
+  nodes.productionCarouselTrack.dataset.loopReady = "true";
+}
+
+function setProductionTrackIndex(index, smooth = true) {
+  if (!nodes.productionCarouselTrack || productionBaseSlideCount === 0) {
+    return;
+  }
+
+  const maxTrackIndex = productionBaseSlideCount + productionLoopCloneCount - 1;
+  const safeTrackIndex = Math.max(0, Math.min(index, maxTrackIndex));
+  productionCarouselTrackIndex = safeTrackIndex;
+
+  const baseIndex = safeTrackIndex % productionBaseSlideCount;
+  setActiveProductionSlide(baseIndex);
 
   const step = getProductionSlideStep();
   if (!step) {
@@ -1399,13 +1465,20 @@ function setActiveProductionSlide(index, smooth = true) {
   if (!smooth) {
     const previousTransition = nodes.productionCarouselTrack.style.transition;
     nodes.productionCarouselTrack.style.transition = "none";
-    nodes.productionCarouselTrack.style.transform = `translateX(${-safeIndex * step}px)`;
+    nodes.productionCarouselTrack.style.transform = `translateX(${-safeTrackIndex * step}px)`;
     void nodes.productionCarouselTrack.offsetWidth;
     nodes.productionCarouselTrack.style.transition = previousTransition;
     return;
   }
 
-  nodes.productionCarouselTrack.style.transform = `translateX(${-safeIndex * step}px)`;
+  nodes.productionCarouselTrack.style.transform = `translateX(${-safeTrackIndex * step}px)`;
+}
+
+function rebuildProductionCarouselLoop() {
+  const nextBaseIndex = productionBaseSlideCount > 0 ? productionCarouselTrackIndex % productionBaseSlideCount : 0;
+  resetProductionCarouselLoop();
+  setupProductionCarouselLoop();
+  setProductionTrackIndex(nextBaseIndex, false);
 }
 
 function stopProductionCarouselAutoplay() {
@@ -1418,14 +1491,22 @@ function stopProductionCarouselAutoplay() {
 }
 
 function startProductionCarouselAutoplay() {
-  const slides = Array.from(nodes.productionSlides || []);
-  if (reducedMotionQuery.matches || slides.length < 2) {
+  if (reducedMotionQuery.matches || productionBaseSlideCount < 2) {
     return;
   }
 
   stopProductionCarouselAutoplay();
   productionCarouselIntervalId = setInterval(() => {
-    setActiveProductionSlide(activeProductionSlideIndex + 1, true);
+    const nextTrackIndex = productionCarouselTrackIndex + 1;
+    setProductionTrackIndex(nextTrackIndex, true);
+
+    if (nextTrackIndex >= productionBaseSlideCount) {
+      window.setTimeout(() => {
+        if (productionCarouselTrackIndex === nextTrackIndex) {
+          setProductionTrackIndex(0, false);
+        }
+      }, 700);
+    }
   }, 2800);
 }
 
@@ -1459,7 +1540,7 @@ function bindEvents() {
 
   nodes.productionSlides?.forEach((slide, slideIndex) => {
     slide.addEventListener("click", () => {
-      setActiveProductionSlide(slideIndex, true);
+      setProductionTrackIndex(slideIndex, true);
       scrollToPrintSizeStep();
     });
   });
@@ -1473,7 +1554,7 @@ function bindEvents() {
   });
 
   window.addEventListener("resize", () => {
-    setActiveProductionSlide(activeProductionSlideIndex, false);
+    rebuildProductionCarouselLoop();
   });
 
   nodes.cartFab?.addEventListener("click", () => {
@@ -1683,7 +1764,8 @@ function init() {
   updateQrSizeOutput();
   setQrValidation("Completa los datos y genera tu codigo.", false);
   setActiveServiceTab("produccion");
-  setActiveProductionSlide(0, false);
+  setupProductionCarouselLoop();
+  setProductionTrackIndex(0, false);
   setMobileCartOpen(false);
   setStoreOpen(false, false);
   updatePaperState();
