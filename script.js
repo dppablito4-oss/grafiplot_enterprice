@@ -1968,16 +1968,25 @@ function hydrateCartForNewModel() {
 
 function init() {
   initSystemTheme();
+
+  if ("scrollRestoration" in history) {
+    history.scrollRestoration = "manual";
+  }
+
   loadCart();
   hydrateCartForNewModel();
   loadNote();
   setUtilityOpen(false);
   setUtilityWorkspaceOpen(false);
   const initialHashTool = getToolKeyFromHash();
-  setActiveUtilityTool(initialHashTool || "qr");
-  if (initialHashTool) {
-    setUtilityWorkspaceOpen(true);
+  setActiveUtilityTool("qr");
+
+  if (initialHashTool || window.location.hash === "#catalogo") {
+    history.replaceState(null, "", window.location.pathname + window.location.search);
   }
+
+  window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+
   toggleQrFields();
   updateQrSizeOutput();
   setQrValidation("Completa los datos y genera tu codigo.", false);
