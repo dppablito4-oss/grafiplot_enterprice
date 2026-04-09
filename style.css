@@ -2007,6 +2007,7 @@ body.light .qr-mode-chip.active {
   box-shadow: var(--shadow);
   width: 100%;
   max-width: 100%;
+  isolation: isolate;
 }
 
 .pc-hero-bg {
@@ -2015,49 +2016,79 @@ body.light .qr-mode-chip.active {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  filter: saturate(1.08) contrast(1.05) brightness(0.72);
+  filter: saturate(1.06) contrast(1.04) brightness(0.82);
 }
 
 .pc-hero-overlay {
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(circle at 24% 28%, rgba(48, 186, 255, 0.22), transparent 50%),
-    linear-gradient(180deg, rgba(3, 13, 24, 0.16), rgba(3, 13, 24, 0.86));
+    linear-gradient(180deg, rgba(1, 6, 12, 0.03) 0%, rgba(1, 6, 12, 0.06) 38%, rgba(1, 8, 18, 0.32) 66%, rgba(1, 8, 18, 0.82) 100%),
+    linear-gradient(0deg, rgba(2, 10, 22, 0.72) 0%, rgba(2, 10, 22, 0.42) 28%, rgba(2, 10, 22, 0) 58%);
 }
 
 .pc-hero-content {
   position: relative;
   z-index: 1;
-  padding: 22px;
+  padding: clamp(18px, 2.2vw, 28px);
   display: grid;
-  gap: 9px;
+  gap: 8px;
+  justify-items: center;
+  text-align: center;
 }
 
 .pc-hero-kicker {
   margin: 0;
-  font-size: 0.88rem;
+  order: 2;
+  font-size: clamp(0.78rem, 0.72rem + 0.22vw, 0.92rem);
   text-transform: uppercase;
-  letter-spacing: 0.12em;
-  color: #8de6ff;
-  font-weight: 800;
+  letter-spacing: 0.08em;
+  color: color-mix(in srgb, #f6fbff 90%, #8ed7ff 10%);
+  font-weight: 700;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.36);
 }
 
 .pc-hero-content h4 {
   margin: 0;
-  font-size: clamp(1.55rem, 1.02rem + 1.4vw, 2.55rem);
-  color: #f3fbff;
-  max-width: 20ch;
-  line-height: 1.14;
+  order: 1;
+  font-family: "Segoe UI Variable", "Franklin Gothic Medium", "Arial Narrow", "Trebuchet MS", sans-serif;
+  font-size: clamp(1.95rem, 1.2rem + 2.1vw, 3.15rem);
+  font-weight: 900;
+  color: #ffffff;
+  max-width: 22ch;
+  line-height: 1.02;
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
   text-wrap: balance;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6), 0 0 1px rgba(0, 0, 0, 0.7);
 }
 
 .pc-hero-content p {
   margin: 0;
-  color: color-mix(in srgb, #f3fbff 84%, #8de6ff 16%);
-  font-size: clamp(0.98rem, 0.88rem + 0.28vw, 1.16rem);
-  max-width: 56ch;
-  line-height: 1.45;
+  order: 3;
+  color: color-mix(in srgb, #f3fbff 94%, #8de6ff 6%);
+  font-size: clamp(1rem, 0.88rem + 0.34vw, 1.2rem);
+  max-width: 58ch;
+  line-height: 1.34;
+  text-shadow: 0 1px 5px rgba(0, 0, 0, 0.45);
+}
+
+@media (max-width: 900px) {
+  .pc-hero {
+    aspect-ratio: 4 / 3;
+    min-height: 300px;
+  }
+
+  .pc-hero-content h4 {
+    font-size: clamp(1.5rem, 1.14rem + 2.35vw, 2.3rem);
+    line-height: 1.05;
+    max-width: 18ch;
+  }
+
+  .pc-hero-content p {
+    font-size: clamp(0.95rem, 0.9rem + 0.45vw, 1.06rem);
+    max-width: 34ch;
+  }
 }
 
 .pc-hero.reveal-ready .pc-hero-kicker,
@@ -4240,6 +4271,8 @@ body.light .config-policy-note::before {
 /* Large formal section titles outside cards with separator and scroll reveal */
 .scroll-reveal-title {
   position: relative;
+  --title-ink: color-mix(in srgb, var(--text) 96%, #ffffff 4%);
+  --title-rule: color-mix(in srgb, var(--border) 72%, rgba(255, 255, 255, 0.28) 28%);
   margin: -26px 0 10px;
   padding-top: 12px;
   font-size: clamp(1.75rem, 1.15rem + 2.8vw, 3rem);
@@ -4247,7 +4280,7 @@ body.light .config-policy-note::before {
   text-transform: uppercase;
   letter-spacing: 0.035em;
   font-weight: 900;
-  color: color-mix(in srgb, var(--text) 96%, #ffffff 4%);
+  color: var(--title-ink);
   text-wrap: balance;
   opacity: 0;
   transform: translateY(14px);
@@ -4262,7 +4295,7 @@ body.light .config-policy-note::before {
   right: -16px;
   top: 0;
   height: 1px;
-  background: color-mix(in srgb, var(--border) 72%, rgba(255, 255, 255, 0.28) 28%);
+  background: var(--title-rule);
 }
 
 .scroll-reveal-title.is-visible {
@@ -4275,6 +4308,81 @@ body.light .config-policy-note::before {
 .production-showcase-head .scroll-reveal-title,
 .quick-products-head .scroll-reveal-title {
   margin-top: -14px;
+}
+
+.production-showcase-head .scroll-reveal-title {
+  --title-ink: color-mix(in srgb, var(--text) 90%, #98c9ff 10%);
+  --title-rule: color-mix(in srgb, var(--border) 70%, #8dbbe8 30%);
+}
+
+.quick-products-head .scroll-reveal-title {
+  --title-ink: color-mix(in srgb, var(--text) 91%, #8ad7c0 9%);
+  --title-rule: color-mix(in srgb, var(--border) 72%, #77cbb4 28%);
+}
+
+.production-configurator > .scroll-reveal-title {
+  --title-ink: color-mix(in srgb, var(--text) 92%, #b2baf6 8%);
+  --title-rule: color-mix(in srgb, var(--border) 74%, #9ea8e6 26%);
+}
+
+.binding-configurator > .scroll-reveal-title {
+  --title-ink: color-mix(in srgb, var(--text) 92%, #d8b58d 8%);
+  --title-rule: color-mix(in srgb, var(--border) 75%, #c9a77f 25%);
+}
+
+.thesis-panel > .scroll-reveal-title {
+  --title-ink: color-mix(in srgb, var(--text) 91%, #98b7f1 9%);
+  --title-rule: color-mix(in srgb, var(--border) 73%, #89a9e2 27%);
+}
+
+.monographs-panel > .scroll-reveal-title {
+  --title-ink: color-mix(in srgb, var(--text) 91%, #b4d299 9%);
+  --title-rule: color-mix(in srgb, var(--border) 74%, #a2c187 26%);
+}
+
+.tech-panel > .scroll-reveal-title {
+  --title-ink: color-mix(in srgb, var(--text) 90%, #8fc7d1 10%);
+  --title-rule: color-mix(in srgb, var(--border) 72%, #82b7c1 28%);
+}
+
+body.light .scroll-reveal-title {
+  --title-ink: color-mix(in srgb, #1f2b36 92%, #0f1720 8%);
+  --title-rule: color-mix(in srgb, rgba(31, 43, 54, 0.22) 75%, rgba(31, 43, 54, 0.34) 25%);
+}
+
+body.light .production-showcase-head .scroll-reveal-title {
+  --title-ink: color-mix(in srgb, #1f2b36 90%, #5c89b5 10%);
+  --title-rule: color-mix(in srgb, rgba(92, 137, 181, 0.34) 64%, rgba(31, 43, 54, 0.16) 36%);
+}
+
+body.light .quick-products-head .scroll-reveal-title {
+  --title-ink: color-mix(in srgb, #1f2b36 90%, #4c907e 10%);
+  --title-rule: color-mix(in srgb, rgba(76, 144, 126, 0.35) 64%, rgba(31, 43, 54, 0.16) 36%);
+}
+
+body.light .production-configurator > .scroll-reveal-title {
+  --title-ink: color-mix(in srgb, #1f2b36 90%, #6b74ba 10%);
+  --title-rule: color-mix(in srgb, rgba(107, 116, 186, 0.34) 64%, rgba(31, 43, 54, 0.16) 36%);
+}
+
+body.light .binding-configurator > .scroll-reveal-title {
+  --title-ink: color-mix(in srgb, #1f2b36 90%, #997049 10%);
+  --title-rule: color-mix(in srgb, rgba(153, 112, 73, 0.34) 64%, rgba(31, 43, 54, 0.16) 36%);
+}
+
+body.light .thesis-panel > .scroll-reveal-title {
+  --title-ink: color-mix(in srgb, #1f2b36 90%, #5f79b0 10%);
+  --title-rule: color-mix(in srgb, rgba(95, 121, 176, 0.34) 64%, rgba(31, 43, 54, 0.16) 36%);
+}
+
+body.light .monographs-panel > .scroll-reveal-title {
+  --title-ink: color-mix(in srgb, #1f2b36 90%, #6f8f58 10%);
+  --title-rule: color-mix(in srgb, rgba(111, 143, 88, 0.34) 64%, rgba(31, 43, 54, 0.16) 36%);
+}
+
+body.light .tech-panel > .scroll-reveal-title {
+  --title-ink: color-mix(in srgb, #1f2b36 90%, #4f8792 10%);
+  --title-rule: color-mix(in srgb, rgba(79, 135, 146, 0.34) 64%, rgba(31, 43, 54, 0.16) 36%);
 }
 
 @media (max-width: 900px) {
