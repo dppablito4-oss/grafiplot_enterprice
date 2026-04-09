@@ -1264,6 +1264,9 @@ body.light .qr-mode-chip.active {
 .catalog-panel {
   display: grid;
   gap: 14px;
+  min-width: 0;
+  width: 100%;
+  max-width: 100%;
 }
 
 .service-tabs {
@@ -1324,6 +1327,10 @@ body.light .qr-mode-chip.active {
   margin-top: 18px;
   content-visibility: auto;
   contain-intrinsic-size: 760px;
+  min-width: 0;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: clip;
 }
 
 .service-tab-panel.active {
@@ -1460,6 +1467,9 @@ body.light .qr-mode-chip.active {
   gap: 12px;
   content-visibility: auto;
   contain-intrinsic-size: 420px;
+  min-width: 0;
+  width: 100%;
+  max-width: 100%;
 }
 
 .lazy-slide {
@@ -1845,6 +1855,8 @@ body.light .qr-mode-chip.active {
   display: grid;
   align-items: end;
   box-shadow: var(--shadow);
+  width: 100%;
+  max-width: 100%;
 }
 
 .pc-hero-bg {
@@ -1935,6 +1947,7 @@ body.light .qr-mode-chip.active {
   scroll-behavior: smooth;
   scrollbar-width: none;
   -ms-overflow-style: none;
+  max-width: 100%;
 }
 
 .pc-offers-grid::-webkit-scrollbar {
@@ -1944,6 +1957,10 @@ body.light .qr-mode-chip.active {
 .pc-offers-carousel {
   position: relative;
   padding-right: 50px;
+  min-width: 0;
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden;
 }
 
 .pc-offers-next {
@@ -2863,6 +2880,8 @@ body.light .mobile-cart-backdrop {
   border-radius: 16px;
   box-shadow: var(--shadow);
   padding: 12px;
+  width: 100%;
+  max-width: 100%;
 }
 
 .cart-panel h3 {
@@ -3337,17 +3356,6 @@ body:not(.in-store) .wa-bubble {
 
   .site-credits {
     width: min(1280px, calc(100% - 32px));
-  }
-}
-
-@media (min-width: 1360px) {
-  .layout {
-    grid-template-columns: minmax(0, 1fr) minmax(260px, 320px);
-  }
-
-  .cart-panel {
-    position: sticky;
-    top: 96px;
   }
 }
 
