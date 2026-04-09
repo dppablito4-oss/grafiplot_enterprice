@@ -1189,6 +1189,30 @@ function bindDetailCards() {
   });
 }
 
+function bindPcOfferCards() {
+  document.addEventListener("click", (event) => {
+    const toggle = event.target.closest("[data-pc-card-toggle]");
+    if (!toggle) {
+      return;
+    }
+
+    const targetId = toggle.getAttribute("aria-controls");
+    if (!targetId) {
+      return;
+    }
+
+    const detail = document.getElementById(targetId);
+    if (!detail) {
+      return;
+    }
+
+    const willOpen = detail.hidden;
+    detail.hidden = !willOpen;
+    toggle.setAttribute("aria-expanded", willOpen ? "true" : "false");
+    toggle.textContent = willOpen ? "Ocultar detalle" : "Ver detalle";
+  });
+}
+
 function syncTechPulseState() {
   const supportPanelActive = Boolean(
     nodes.supportPanel &&
@@ -1779,6 +1803,7 @@ function init() {
   bindConfiguratorEvents();
   bindEvents();
   bindDetailCards();
+  bindPcOfferCards();
   initLazySlideImages();
   initSupportPanelVisibilityObserver();
   syncProductionCarouselState();

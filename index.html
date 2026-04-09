@@ -413,84 +413,81 @@
 				<section class="service-tab-panel active" data-tab-panel="soporte" role="tabpanel" aria-label="Soporte Tecnico y Hardware">
 					<div class="print-configurator tech-panel">
 						<h3>SERVICIO TECNICO &amp; OPTIMIZACION PC</h3>
-						<div class="tech-grid" aria-label="Servicios tecnicos disponibles">
-							<article class="tech-card service-detail-card" data-tech-card="limpieza" data-detail-card="pc-limpieza">
-								<button class="detail-toggle" type="button" aria-expanded="false" aria-controls="detail-pc-limpieza">
-									<img class="detail-thumb lazy-slide" src="assets/services/soporte.svg" alt="Limpieza profunda de PC" loading="lazy" decoding="async" fetchpriority="low">
-									<div class="detail-head">
-										<h4>Limpieza Profunda</h4>
-										<p>Mantenimiento preventivo integral.</p>
-									</div>
-									<span class="detail-chevron" aria-hidden="true">+</span>
-								</button>
-								<div id="detail-pc-limpieza" class="detail-body" role="region" aria-label="Detalle limpieza profunda">
-									<p>Desarmado tecnico, limpieza interna antiestatica, ventiladores, disipadores y renovacion de flujo de aire para mayor vida util.</p>
+						<section class="pc-hero" aria-label="Presentacion de mantenimiento de PCs">
+							<img class="pc-hero-bg" src="assets/computo/computo-hero.webp" alt="Tecnico realizando mantenimiento de laptop" loading="lazy" decoding="async" fetchpriority="low">
+							<div class="pc-hero-overlay" aria-hidden="true"></div>
+							<div class="pc-hero-content">
+								<p class="pc-hero-kicker">Mantenimiento y Reparacion</p>
+								<h4>Tu compu al 100% para estudiar, trabajar y jugar sin trabas</h4>
+								<p>Atendemos laptops y PCs con enfoque real: limpieza, diagnostico, optimizacion y repotenciacion segun tu uso.</p>
+							</div>
+						</section>
+						<div class="pc-offers-grid" aria-label="Servicios tecnicos disponibles con precio referencial">
+							<article class="pc-offer-card" data-tech-card="limpieza">
+								<img src="assets/computo/pc-limpieza.webp" alt="Limpieza profunda de PC" loading="lazy" decoding="async" fetchpriority="low">
+								<h4>Limpieza Profunda</h4>
+								<p>Mantenimiento preventivo integral para prolongar vida util.</p>
+								<p class="pc-offer-price">Desde S/.89</p>
+								<div class="pc-offer-actions">
+									<button class="btn pc-detail-btn" type="button" data-pc-card-toggle aria-expanded="false" aria-controls="pc-detail-limpieza">Ver detalle</button>
+									<a class="btn pc-order-btn" href="https://wa.me/952628844?text=Hola%20Grafiplot%2C%20quiero%20pedir%20Limpieza%20Profunda%20de%20PC%20(desde%20S%2F.89)" target="_blank" rel="noopener noreferrer">Quiero pedirlo</a>
 								</div>
+								<p id="pc-detail-limpieza" class="pc-offer-detail" hidden>Desarmado tecnico, limpieza interna antiestatica, ventiladores y disipadores para mejorar temperaturas y estabilidad.</p>
 							</article>
-							<article class="tech-card service-detail-card" data-tech-card="pasta" data-detail-card="pc-pasta">
-								<button class="detail-toggle" type="button" aria-expanded="false" aria-controls="detail-pc-pasta">
-									<img class="detail-thumb lazy-slide" src="assets/services/soporte.svg" alt="Cambio de pasta termica" loading="lazy" decoding="async" fetchpriority="low">
-									<div class="detail-head">
-										<h4>Cambio de Pasta Termica</h4>
-										<p>Control termico para CPU y GPU.</p>
-									</div>
-									<span class="detail-chevron" aria-hidden="true">+</span>
-								</button>
-								<div id="detail-pc-pasta" class="detail-body" role="region" aria-label="Detalle cambio de pasta termica">
-									<p>Retiro de compuesto antiguo, limpieza profesional y nueva pasta de alta conductividad para reducir picos de temperatura y ruido.</p>
+							<article class="pc-offer-card" data-tech-card="pasta">
+								<img src="assets/computo/pc-pasta.webp" alt="Cambio de pasta termica" loading="lazy" decoding="async" fetchpriority="low">
+								<h4>Cambio de Pasta Termica</h4>
+								<p>Control termico para CPU y GPU, menos calor y mejor rendimiento.</p>
+								<p class="pc-offer-price">Desde S/.69</p>
+								<div class="pc-offer-actions">
+									<button class="btn pc-detail-btn" type="button" data-pc-card-toggle aria-expanded="false" aria-controls="pc-detail-pasta">Ver detalle</button>
+									<a class="btn pc-order-btn" href="https://wa.me/952628844?text=Hola%20Grafiplot%2C%20quiero%20pedir%20Cambio%20de%20Pasta%20Termica%20(desde%20S%2F.69)" target="_blank" rel="noopener noreferrer">Quiero pedirlo</a>
 								</div>
+								<p id="pc-detail-pasta" class="pc-offer-detail" hidden>Retiro de compuesto antiguo y aplicacion de pasta termica de alta conductividad para reducir picos de temperatura.</p>
 							</article>
-							<article class="tech-card service-detail-card" data-tech-card="optimizacion" data-detail-card="pc-optimizacion">
-								<button class="detail-toggle" type="button" aria-expanded="false" aria-controls="detail-pc-optimizacion">
-									<img class="detail-thumb lazy-slide" src="assets/services/soporte.svg" alt="Optimizacion de sistema" loading="lazy" decoding="async" fetchpriority="low">
-									<div class="detail-head">
-										<h4>Optimizacion de Sistema</h4>
-										<p>Rendimiento mas estable en tareas diarias.</p>
-									</div>
-									<span class="detail-chevron" aria-hidden="true">+</span>
-								</button>
-								<div id="detail-pc-optimizacion" class="detail-body" role="region" aria-label="Detalle optimizacion de sistema">
-									<p>Depuramos arranque, procesos en segundo plano, temporales y ajustes de energia para mejorar velocidad sin perder estabilidad.</p>
+							<article class="pc-offer-card" data-tech-card="optimizacion">
+								<img src="assets/computo/pc-optimizacion.webp" alt="Optimizacion de sistema" loading="lazy" decoding="async" fetchpriority="low">
+								<h4>Optimizacion de Sistema</h4>
+								<p>Ajustes para que tu equipo responda mas rapido en tareas diarias.</p>
+								<p class="pc-offer-price">Desde S/.59</p>
+								<div class="pc-offer-actions">
+									<button class="btn pc-detail-btn" type="button" data-pc-card-toggle aria-expanded="false" aria-controls="pc-detail-optimizacion">Ver detalle</button>
+									<a class="btn pc-order-btn" href="https://wa.me/952628844?text=Hola%20Grafiplot%2C%20quiero%20pedir%20Optimizacion%20de%20Sistema%20(desde%20S%2F.59)" target="_blank" rel="noopener noreferrer">Quiero pedirlo</a>
 								</div>
+								<p id="pc-detail-optimizacion" class="pc-offer-detail" hidden>Depuracion de arranque, procesos y servicios para mejorar velocidad sin sacrificar estabilidad.</p>
 							</article>
-							<article class="tech-card service-detail-card" data-tech-card="formateo" data-detail-card="pc-formateo">
-								<button class="detail-toggle" type="button" aria-expanded="false" aria-controls="detail-pc-formateo">
-									<img class="detail-thumb lazy-slide" src="assets/services/soporte.svg" alt="Formateo e instalacion" loading="lazy" decoding="async" fetchpriority="low">
-									<div class="detail-head">
-										<h4>Formateo e Instalacion</h4>
-										<p>Sistema limpio y listo para producir.</p>
-									</div>
-									<span class="detail-chevron" aria-hidden="true">+</span>
-								</button>
-								<div id="detail-pc-formateo" class="detail-body" role="region" aria-label="Detalle formateo e instalacion">
-									<p>Instalamos sistema operativo, drivers, actualizaciones y software base para dejar tu equipo operativo y seguro desde el primer arranque.</p>
+							<article class="pc-offer-card" data-tech-card="formateo">
+								<img src="assets/computo/pc-formateo.webp" alt="Formateo e instalacion" loading="lazy" decoding="async" fetchpriority="low">
+								<h4>Formateo e Instalacion</h4>
+								<p>Sistema limpio, drivers y apps base listos para producir.</p>
+								<p class="pc-offer-price">Desde S/.109</p>
+								<div class="pc-offer-actions">
+									<button class="btn pc-detail-btn" type="button" data-pc-card-toggle aria-expanded="false" aria-controls="pc-detail-formateo">Ver detalle</button>
+									<a class="btn pc-order-btn" href="https://wa.me/952628844?text=Hola%20Grafiplot%2C%20quiero%20pedir%20Formateo%20e%20Instalacion%20(desde%20S%2F.109)" target="_blank" rel="noopener noreferrer">Quiero pedirlo</a>
 								</div>
+								<p id="pc-detail-formateo" class="pc-offer-detail" hidden>Instalacion de sistema operativo, drivers, actualizaciones y configuracion inicial segura.</p>
 							</article>
-							<article class="tech-card service-detail-card" data-tech-card="upgrade" data-detail-card="pc-upgrade">
-								<button class="detail-toggle" type="button" aria-expanded="false" aria-controls="detail-pc-upgrade">
-									<img class="detail-thumb lazy-slide" src="assets/services/soporte.svg" alt="Upgrade de hardware" loading="lazy" decoding="async" fetchpriority="low">
-									<div class="detail-head">
-										<h4>Upgrade de Hardware</h4>
-										<p>Asesoria e instalacion de componentes.</p>
-									</div>
-									<span class="detail-chevron" aria-hidden="true">+</span>
-								</button>
-								<div id="detail-pc-upgrade" class="detail-body" role="region" aria-label="Detalle upgrade de hardware">
-									<p>Evaluamos compatibilidad y montamos SSD, RAM u otros componentes para mejorar tiempos de carga, multitarea y respuesta general.</p>
+							<article class="pc-offer-card" data-tech-card="upgrade">
+								<img src="assets/computo/pc-upgrade.webp" alt="Upgrade de hardware" loading="lazy" decoding="async" fetchpriority="low">
+								<h4>Upgrade de Hardware</h4>
+								<p>Mejoras reales con SSD, RAM y componentes compatibles.</p>
+								<p class="pc-offer-price">Desde S/.129</p>
+								<div class="pc-offer-actions">
+									<button class="btn pc-detail-btn" type="button" data-pc-card-toggle aria-expanded="false" aria-controls="pc-detail-upgrade">Ver detalle</button>
+									<a class="btn pc-order-btn" href="https://wa.me/952628844?text=Hola%20Grafiplot%2C%20quiero%20pedir%20Upgrade%20de%20Hardware%20(desde%20S%2F.129)" target="_blank" rel="noopener noreferrer">Quiero pedirlo</a>
 								</div>
+								<p id="pc-detail-upgrade" class="pc-offer-detail" hidden>Evaluacion de compatibilidad y montaje profesional para mejorar carga, multitarea y respuesta.</p>
 							</article>
-							<article class="tech-card service-detail-card" data-tech-card="diagnostico" data-detail-card="pc-diagnostico">
-								<button class="detail-toggle" type="button" aria-expanded="false" aria-controls="detail-pc-diagnostico">
-									<img class="detail-thumb lazy-slide" src="assets/services/soporte.svg" alt="Diagnostico general" loading="lazy" decoding="async" fetchpriority="low">
-									<div class="detail-head">
-										<h4>Diagnostico General</h4>
-										<p>Deteccion de fallas y cuellos de botella.</p>
-									</div>
-									<span class="detail-chevron" aria-hidden="true">+</span>
-								</button>
-								<div id="detail-pc-diagnostico" class="detail-body" role="region" aria-label="Detalle diagnostico general">
-									<p>Revisamos estado de disco, memoria, temperatura, procesos y errores de sistema para recomendar la ruta de solucion mas efectiva.</p>
+							<article class="pc-offer-card" data-tech-card="diagnostico">
+								<img src="assets/computo/pc-diagnostico.webp" alt="Diagnostico general" loading="lazy" decoding="async" fetchpriority="low">
+								<h4>Diagnostico General</h4>
+								<p>Deteccion de fallas para definir la solucion exacta.</p>
+								<p class="pc-offer-price">Desde S/.49</p>
+								<div class="pc-offer-actions">
+									<button class="btn pc-detail-btn" type="button" data-pc-card-toggle aria-expanded="false" aria-controls="pc-detail-diagnostico">Ver detalle</button>
+									<a class="btn pc-order-btn" href="https://wa.me/952628844?text=Hola%20Grafiplot%2C%20quiero%20pedir%20Diagnostico%20General%20(desde%20S%2F.49)" target="_blank" rel="noopener noreferrer">Quiero pedirlo</a>
 								</div>
+								<p id="pc-detail-diagnostico" class="pc-offer-detail" hidden>Revision de disco, memoria, temperaturas y eventos del sistema para identificar la causa real del problema.</p>
 							</article>
 						</div>
 					</div>
