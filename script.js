@@ -33,8 +33,8 @@ const PAPER_OPTIONS = {
 const PRICE_MATRIX = {
   a4: {
     single: {
-      color: { unit: 0.1, bulk: 0.1, name: "A4 una cara - Color" },
-      bn: { unit: 0.1, bulk: 0.07, name: "A4 una cara - Blanco y Negro" }
+      color: { unit: 0.1, bulk: 0.09, name: "A4 una cara - Color" },
+      bn: { unit: 0.1, bulk: 0.08, name: "A4 una cara - Blanco y Negro" }
     },
     duplex: {
       color: { unit: 0.15, bulk: 0.12, name: "A4 ambas caras (duplex) - Color" },
@@ -287,12 +287,47 @@ function getBindingCalc(pages) {
   };
 }
 
+function getAutoBindingCalc(pages) {
+  const safePages = sanitizeQuantity(pages);
+
+  if (safePages <= 100) {
+    return {
+      pages: safePages,
+      blocks: 0,
+      total: 1.5
+    };
+  }
+
+  if (safePages <= 200) {
+    return {
+      pages: safePages,
+      blocks: 0,
+      total: 2
+    };
+  }
+
+  if (safePages <= 499) {
+    return {
+      pages: safePages,
+      blocks: 0,
+      total: 3
+    };
+  }
+
+  const blocks = Math.ceil(safePages / 250);
+  return {
+    pages: safePages,
+    blocks,
+    total: blocks * 3
+  };
+}
+
 function getAutoBindingForConfig(quantity) {
   if (!configState.includeBinding || !allowsBinding(configState.size)) {
     return null;
   }
 
-  return getBindingCalc(quantity);
+  return getAutoBindingCalc(quantity);
 }
 
 function setStoreOpen(nextOpen, shouldScroll = false) {
@@ -478,7 +513,7 @@ function recomputeCartItem(item) {
   const baseUnit = item.bulkUnitPrice && item.quantity > BULK_THRESHOLD ? item.bulkUnitPrice : item.baseUnitPrice;
   const override = typeof item.paperPriceOverride === "number" ? item.paperPriceOverride : null;
   const unit = override ?? baseUnit;
-  const bindingCalc = item.includeBinding ? getBindingCalc(item.quantity) : null;
+  const bindingCalc = item.includeBinding ? getAutoBindingCalc(item.quantity) : null;
   item.unitPrice = unit;
   item.bindingBlocks = bindingCalc ? bindingCalc.blocks : 0;
   item.bindingTotal = bindingCalc ? bindingCalc.total : 0;
@@ -505,7 +540,7 @@ function renderCart() {
           <strong>${formatMoney(item.subtotal)}</strong>
         </div>
         <div class="cart-item-meta">${secondary}</div>
-        ${item.bindingTotal ? `<div class="cart-item-meta">Anillado auto (${item.bindingBlocks} bloque${item.bindingBlocks === 1 ? "" : "s"}): ${formatMoney(item.bindingTotal)}</div>` : ""}
+        ${item.bindingTotal ? `<div class="cart-item-meta">${item.bindingBlocks > 0 ? `Anillado auto (${item.bindingBlocks} bloque${item.bindingBlocks === 1 ? "" : "s"})` : "Anillado auto"}: ${formatMoney(item.bindingTotal)}</div>` : ""}
         <div class="cart-item-actions">
           <button class="cart-action" type="button" data-action="decrease" data-id="${item.id}" aria-label="Quitar una unidad">-</button>
           <button class="cart-action" type="button" data-action="increase" data-id="${item.id}" aria-label="Agregar una unidad">+</button>
