@@ -103,16 +103,20 @@ export function ServicesSection() {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8 max-w-6xl mx-auto">
-          {services.map((service) => {
+          {services.map((service, index) => {
             const isExpanded = expandedId === service.id;
 
             return (
               <motion.div
                 layout
+                initial={{ opacity: 0, y: 40 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-50px" }}
+                transition={{ duration: 0.6, delay: index * 0.1, ease: "easeOut" }}
                 key={service.id}
                 onClick={() => toggleExpand(service.id)}
-                className={`premium-card cursor-pointer overflow-hidden transition-all duration-500 ${
-                  isExpanded ? 'border-2 ' + service.borderColor : 'hover:border-slate-300 dark:hover:border-white/20'
+                className={`premium-card cursor-pointer overflow-hidden transition-all duration-500 shadow-sm hover:shadow-xl dark:shadow-none ${
+                  isExpanded ? 'border-2 ' + service.borderColor : 'hover:border-slate-300 dark:hover:border-white/20 hover:-translate-y-1'
                 }`}
               >
                 <motion.div layout className="p-6 md:p-8 flex items-center justify-between gap-4">
