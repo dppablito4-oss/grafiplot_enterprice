@@ -16,7 +16,7 @@ export function HeroSection() {
           style={{ backgroundImage: `url(${portada})` }}
         />
         {/* Mobile Gradient (Bottom to top) and Desktop Gradient (Left to right) */}
-        <div className="absolute inset-0 bg-gradient-to-t md:bg-gradient-to-r from-slate-50 via-slate-50/90 md:via-slate-50/50 to-transparent dark:from-zinc-950 dark:via-zinc-950/90 dark:md:via-zinc-950/10 dark:to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-slate-50 via-slate-50/90 to-transparent dark:from-zinc-950 dark:via-zinc-950/90 dark:to-transparent md:bg-gradient-to-r md:from-slate-50 md:from-[30%] md:via-slate-50/90 md:via-[50%] md:to-slate-50/10 dark:md:from-zinc-950 dark:md:from-[30%] dark:md:via-zinc-950/90 dark:md:via-[50%] dark:md:to-zinc-950/10" />
       </div>
 
       <div className="container mx-auto px-6 lg:px-8 relative z-10 pt-4 md:pt-24">
