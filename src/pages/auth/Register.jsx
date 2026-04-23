@@ -25,7 +25,7 @@ export function Register({ hasSupabaseEnv }) {
 
     setSubmitting(true);
 
-    const fakeEmail = `${phone}@grafiplot.temp`;
+    const fakeEmail = `${phone}@grafiplot.com`;
     const { data, error } = await supabase.auth.signUp({
       email: fakeEmail,
       password,

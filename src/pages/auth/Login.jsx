@@ -23,7 +23,7 @@ export function Login({ hasSupabaseEnv }) {
 
     setSubmitting(true);
 
-    const fakeEmail = `${phone}@grafiplot.temp`;
+    const fakeEmail = `${phone}@grafiplot.com`;
     const { error } = await supabase.auth.signInWithPassword({
       email: fakeEmail,
       password,
