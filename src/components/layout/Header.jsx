@@ -1,7 +1,16 @@
-import { Bell, Menu } from 'lucide-react';
+import { Bell, LogOut, Menu } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import { Button } from '../ui/Button';
+import { supabase } from '../../lib/supabaseClient';
 
 export function Header({ toggleSidebar }) {
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    navigate('/login', { replace: true });
+  };
+
   return (
     <header className="h-16 bg-white dark:bg-[#1a1a1a] border-b border-gray-200 dark:border-gray-800 flex items-center justify-between px-4 lg:px-8 z-10 sticky top-0">
       <div className="flex items-center gap-4">
@@ -23,6 +32,10 @@ export function Header({ toggleSidebar }) {
         </Button>
         
         <div className="h-6 w-px bg-gray-200 dark:bg-gray-700 hidden sm:block mx-2"></div>
+
+        <Button variant="ghost" className="p-2" onClick={handleLogout} title="Cerrar sesion">
+          <LogOut className="w-5 h-5" />
+        </Button>
         
         <div className="flex items-center gap-3">
           <div className="hidden sm:block text-right">

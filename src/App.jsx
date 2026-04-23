@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { HashRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { DashboardLayout } from './components/layout/DashboardLayout';
 import { Home } from './pages/Home';
@@ -6,18 +7,67 @@ import { Historial } from './pages/Historial';
 import { LandingPage } from './pages/public/LandingPage';
 import { Login } from './pages/auth/Login';
 import { Register } from './pages/auth/Register';
+import { supabase } from './lib/supabaseClient';
+
+function ProtectedRoute({ session, children }) {
+  if (!session) {
+    return <Navigate to="/login" replace />;
+  }
+
+  return children;
+}
 
 function App() {
+  const [session, setSession] = useState(null);
+  const [loadingAuth, setLoadingAuth] = useState(true);
+
+  useEffect(() => {
+    let mounted = true;
+
+    supabase.auth.getSession().then(({ data }) => {
+      if (!mounted) {
+        return;
+      }
+      setSession(data.session);
+      setLoadingAuth(false);
+    });
+
+    const { data } = supabase.auth.onAuthStateChange((_event, nextSession) => {
+      setSession(nextSession);
+      setLoadingAuth(false);
+    });
+
+    return () => {
+      mounted = false;
+      data.subscription.unsubscribe();
+    };
+  }, []);
+
+  if (loadingAuth) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-slate-50">
+        <p className="text-sm font-medium text-slate-600">Cargando sesion...</p>
+      </div>
+    );
+  }
+
   return (
     <HashRouter>
       <Routes>
         {/* Rutas Públicas */}
         <Route path="/" element={<LandingPage />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
+        <Route path="/login" element={session ? <Navigate to="/dashboard" replace /> : <Login />} />
+        <Route path="/register" element={session ? <Navigate to="/dashboard" replace /> : <Register />} />
 
         {/* Rutas Privadas (Dashboard) */}
-        <Route path="/dashboard" element={<DashboardLayout />}>
+        <Route
+          path="/dashboard"
+          element={(
+            <ProtectedRoute session={session}>
+              <DashboardLayout />
+            </ProtectedRoute>
+          )}
+        >
           <Route index element={<Home />} />
           <Route path="nuevo-pedido" element={<NuevoPedido />} />
           <Route path="historial" element={<Historial />} />
