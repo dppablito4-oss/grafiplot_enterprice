@@ -2,13 +2,13 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Printer, Scissors, Scan, Maximize2, FileText, Cpu, ChevronDown } from 'lucide-react';
 
-// Imágenes de servicios (ilustraciones grandes)
-import imgImpresion from '../../assets/services/mono-impresion.svg';
-import imgPloteo from '../../assets/services/mono-diagrama.svg';
-import imgAcabados from '../../assets/services/produccion.svg';
-import imgDigitalizacion from '../../assets/services/mono-formato.svg';
+// Imágenes de servicios (ilustraciones detalladas)
+import imgImpresion from '../../assets/services_2/servi-foto-papel-fotografico.svg';
+import imgPloteo from '../../assets/services/monografico.svg';
+import imgAcabados from '../../assets/services_2/servi-enmicado-a3.svg';
+import imgDigitalizacion from '../../assets/services_2/servi-escaneo-a3.svg';
 import imgAPA from '../../assets/services/tesis.svg';
-import imgSoporte from '../../assets/services/soporte.svg';
+import imgSoporte from '../../assets/computo/pc-diagnostico.webp';
 
 const services = [
   {
