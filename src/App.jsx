@@ -9,6 +9,7 @@ import { Login } from './pages/auth/Login';
 import { Register } from './pages/auth/Register';
 import { hasSupabaseEnv, supabase } from './lib/supabaseClient';
 import { CartProvider } from './lib/cartStore';
+import { WhatsAppWidget } from './components/common/WhatsAppWidget';
 
 function ProtectedRoute({ session, children }) {
   if (!session) {
@@ -94,6 +95,7 @@ function App() {
         {/* Catch-all para redirigir a inicio si no existe la ruta */}
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
+      <WhatsAppWidget />
     </HashRouter>
   );
 }
