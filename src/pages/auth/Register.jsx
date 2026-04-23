@@ -54,36 +54,36 @@ export function Register({ hasSupabaseEnv }) {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 flex flex-col justify-center py-12 px-4 sm:px-6 lg:px-8 transition-colors duration-300">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         <div className="flex justify-center">
           <div className="flex flex-col items-center gap-3">
-            <div className="w-20 h-20 bg-white rounded-2xl shadow-sm p-2 border border-gray-100">
+            <div className="w-20 h-20 bg-white dark:bg-slate-900 rounded-2xl shadow-sm p-2 border border-slate-200 dark:border-slate-800">
               <img src={logo} alt="Grafiplot" className="w-full h-full object-contain" />
             </div>
             <div className="text-center mt-2">
-              <h1 className="text-3xl font-black text-gray-900 tracking-tighter italic">
+              <h1 className="text-3xl font-black text-slate-900 dark:text-white tracking-tighter italic">
                 GRAFIPLOT <span className="text-brand-red">VASQUEZ</span>
               </h1>
             </div>
           </div>
         </div>
-        <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
+        <h2 className="mt-6 text-center text-2xl md:text-3xl font-extrabold text-slate-900 dark:text-white">
           Crear una cuenta
         </h2>
-        <p className="mt-2 text-center text-sm text-gray-600">
+        <p className="mt-2 text-center text-sm text-slate-600 dark:text-slate-400">
           ¿Ya tienes una cuenta?{' '}
-          <Link to="/login" className="font-medium text-blue-600 hover:text-blue-500">
+          <Link to="/login" className="font-bold text-brand-red hover:text-red-600 dark:text-red-500 dark:hover:text-red-400 transition-colors">
             Inicia sesión aquí
           </Link>
         </p>
       </div>
 
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-        <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
+        <div className="bg-white dark:bg-slate-900 py-8 px-4 shadow-xl shadow-slate-200/50 dark:shadow-none sm:rounded-[2rem] sm:px-10 border border-slate-100 dark:border-slate-800 transition-colors duration-300">
           <form className="space-y-6" onSubmit={handleRegister}>
             <div>
-              <label htmlFor="name" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="name" className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-1">
                 Nombre completo
               </label>
               <div className="mt-1">
@@ -94,14 +94,14 @@ export function Register({ hasSupabaseEnv }) {
                   value={name}
                   onChange={(event) => setName(event.target.value)}
                   required
-                  className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                  className="appearance-none block w-full px-4 py-3 border border-slate-300 dark:border-slate-700 rounded-xl shadow-sm placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-brand-red focus:border-brand-red sm:text-sm bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white transition-colors"
                   placeholder="Tu nombre"
                 />
               </div>
             </div>
 
             <div>
-              <label htmlFor="phone" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="phone" className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-1">
                 Número de celular
               </label>
               <div className="mt-1">
@@ -113,14 +113,14 @@ export function Register({ hasSupabaseEnv }) {
                   onChange={(event) => setPhone(event.target.value)}
                   autoComplete="tel"
                   required
-                  className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                  className="appearance-none block w-full px-4 py-3 border border-slate-300 dark:border-slate-700 rounded-xl shadow-sm placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-brand-red focus:border-brand-red sm:text-sm bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white transition-colors"
                   placeholder="Ej. 999888777"
                 />
               </div>
             </div>
 
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="password" className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-1">
                 Contraseña
               </label>
               <div className="mt-1">
@@ -132,7 +132,7 @@ export function Register({ hasSupabaseEnv }) {
                   onChange={(event) => setPassword(event.target.value)}
                   autoComplete="new-password"
                   required
-                  className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-brand-red focus:border-brand-red sm:text-sm"
+                  className="appearance-none block w-full px-4 py-3 border border-slate-300 dark:border-slate-700 rounded-xl shadow-sm placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-brand-red focus:border-brand-red sm:text-sm bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white transition-colors"
                   placeholder="••••••••"
                 />
               </div>
@@ -154,7 +154,7 @@ export function Register({ hasSupabaseEnv }) {
               <button
                 type="submit"
                 disabled={submitting}
-                className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-brand-red hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition-colors"
+                className="w-full flex justify-center items-center py-3 px-4 border border-transparent rounded-xl shadow-md shadow-brand-red/20 text-sm font-bold text-white bg-brand-red hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-red transition-all disabled:opacity-50 disabled:cursor-not-allowed dark:focus:ring-offset-slate-900"
               >
                 {submitting ? 'Creando cuenta...' : 'Crear cuenta'}
               </button>
