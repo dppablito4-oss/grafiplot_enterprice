@@ -38,8 +38,19 @@ export function PublicFooter() {
             <Link to="/register" className="hover:text-white">
               Crear cuenta
             </Link>
+            <a
+              href="https://wa.me/952628844?text=Hola%20Grafiplot%2C%20quiero%20consultar%20un%20producto"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-white"
+            >
+              WhatsApp
+            </a>
           </div>
         </div>
+      </div>
+      <div className="mx-auto mt-10 w-full max-w-7xl border-t border-slate-800 px-4 pt-6 text-xs text-slate-500 sm:px-6 lg:px-8">
+        <p>© 2026 Grafiplot Vasquez. Todos los derechos reservados.</p>
       </div>
     </footer>
   );
