@@ -4,11 +4,11 @@ import logo from '../../assets/brand/grafiplot-logo.webp';
 
 export function PublicFooter() {
   return (
-    <footer id="contacto" className="bg-slate-100 dark:bg-slate-900/50 border-t border-slate-200 dark:border-white/5 pt-32 pb-16 transition-colors duration-500">
+    <footer id="contacto" className="bg-slate-100 dark:bg-slate-900/50 border-t border-slate-200 dark:border-white/5 pt-12 pb-8 transition-colors duration-500">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-12 mb-24">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 mb-10">
           {/* Brand Info */}
-          <div className="lg:col-span-5 space-y-10">
+          <div className="lg:col-span-5 space-y-6">
             <div className="flex items-center gap-4">
               <div className="w-14 h-14 bg-white rounded-2xl p-2 flex items-center justify-center shadow-xl shadow-slate-200 dark:shadow-none border border-slate-100 dark:border-white/10">
                 <img src={logo} alt="Grafiplot Logo" className="w-full h-full object-contain" />
@@ -25,8 +25,8 @@ export function PublicFooter() {
 
           {/* Quick Links */}
           <div className="lg:col-span-3">
-            <h4 className="text-slate-900 dark:text-white font-black text-xs tracking-[0.3em] uppercase mb-10">Plataforma</h4>
-            <ul className="space-y-5">
+            <h4 className="text-slate-900 dark:text-white font-black text-xs tracking-[0.3em] uppercase mb-6">Plataforma</h4>
+            <ul className="space-y-3">
               <li><Link to="/login" className="text-slate-500 dark:text-slate-400 hover:text-brand-red dark:hover:text-brand-yellow transition-colors text-sm font-bold tracking-tight uppercase">Acceso Clientes</Link></li>
               <li><Link to="/register" className="text-slate-500 dark:text-slate-400 hover:text-brand-red dark:hover:text-brand-yellow transition-colors text-sm font-bold tracking-tight uppercase">Registrarse</Link></li>
               <li><a href="#" className="text-slate-500 dark:text-slate-400 hover:text-brand-red dark:hover:text-brand-yellow transition-colors text-sm font-bold tracking-tight uppercase">Soporte</a></li>
@@ -34,9 +34,9 @@ export function PublicFooter() {
           </div>
 
           {/* Contact Data */}
-          <div className="lg:col-span-4 space-y-10">
-            <h4 className="text-slate-900 dark:text-white font-black text-xs tracking-[0.3em] uppercase mb-10">Atención Directa</h4>
-            <div className="space-y-8">
+          <div className="lg:col-span-4 space-y-6">
+            <h4 className="text-slate-900 dark:text-white font-black text-xs tracking-[0.3em] uppercase mb-6">Atención Directa</h4>
+            <div className="space-y-4">
               <div className="flex items-start gap-5 group">
                 <MapPin className="w-6 h-6 text-brand-red dark:text-brand-yellow shrink-0 group-hover:scale-110 transition-transform" />
                 <p className="text-sm text-slate-600 dark:text-slate-400 font-medium group-hover:text-slate-900 dark:group-hover:text-white transition-colors leading-relaxed tracking-tight">
@@ -54,7 +54,7 @@ export function PublicFooter() {
         </div>
 
         {/* Bottom Bar */}
-        <div className="pt-16 border-t border-slate-200 dark:border-white/5 flex flex-col md:flex-row justify-between items-center gap-10">
+        <div className="pt-8 border-t border-slate-200 dark:border-white/5 flex flex-col md:flex-row justify-between items-center gap-6">
           <div className="text-[10px] text-slate-400 dark:text-slate-600 font-bold uppercase tracking-[0.4em]">
             © 2026 GRAFIPLOT VASQUEZ.
           </div>
