@@ -28,13 +28,25 @@ CREATE POLICY "Users can update own profile."
 -- 4. Create a trigger to automatically create a profile record when a new user signs up
 CREATE OR REPLACE FUNCTION public.handle_new_user()
 RETURNS trigger AS $$
+DECLARE
+  assigned_role TEXT;
+  assigned_phone TEXT;
 BEGIN
+  -- Si no trae teléfono en los metadatos, fue creado manualmente desde Supabase UI
+  IF new.raw_user_meta_data->>'phone_number' IS NULL THEN
+    assigned_role := 'admin';
+    assigned_phone := 'ADMIN-' || substr(new.id::text, 1, 6);
+  ELSE
+    assigned_role := 'cliente';
+    assigned_phone := new.raw_user_meta_data->>'phone_number';
+  END IF;
+
   INSERT INTO public.profiles (id, full_name, phone_number, role)
   VALUES (
     new.id,
-    new.raw_user_meta_data->>'full_name',
-    new.raw_user_meta_data->>'phone_number',
-    'cliente'
+    COALESCE(new.raw_user_meta_data->>'full_name', split_part(new.email, '@', 1)),
+    assigned_phone,
+    assigned_role
   );
   RETURN new;
 END;

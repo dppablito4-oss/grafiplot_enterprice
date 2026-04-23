@@ -26,10 +26,12 @@ export function PublicNavbar({ onNavigateSection, profile }) {
     <nav 
       className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${
         isScrolled 
-          ? 'py-3 bg-white/95 dark:bg-slate-950/95 backdrop-blur-xl border-b border-slate-200 dark:border-white/5 shadow-sm' 
+          ? 'py-3 bg-white/95 dark:bg-zinc-950/95 backdrop-blur-xl shadow-sm' 
           : 'py-5 bg-transparent'
       }`}
     >
+      {/* Brand Accent Line */}
+      <div className={`absolute bottom-0 left-0 w-full h-[2px] bg-gradient-to-r from-brand-red via-brand-red to-brand-yellow transition-opacity duration-300 ${isScrolled ? 'opacity-100' : 'opacity-0 md:opacity-100'}`} />
       <div className="container mx-auto px-6 flex items-center justify-between">
         <div className="flex items-center cursor-pointer hover:opacity-80 transition-opacity" onClick={() => onNavigateSection('inicio')}>
           <div className="h-10 md:h-12 flex items-center justify-center">
