@@ -25,7 +25,8 @@ export function Register() {
 
     setSubmitting(true);
 
-    const fakeEmail = `${phone}@grafiplot.com`;
+    const cleanPhone = phone.replace(/\D/g, '');
+    const fakeEmail = `${cleanPhone}@grafiplot.com`;
     const { data, error } = await supabase.auth.signUp({
       email: fakeEmail,
       password,

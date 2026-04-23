@@ -23,7 +23,7 @@ export function WhatsAppWidget() {
             initial={{ opacity: 0, y: 20, scale: 0.9 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, scale: 0.8 }}
-            className="w-[260px] md:w-[280px] p-5 rounded-3xl bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl pointer-events-auto relative shadow-2xl shadow-slate-300 dark:shadow-none border border-slate-100 dark:border-white/10"
+            className="w-[220px] p-4 rounded-2xl bg-white dark:bg-slate-900 shadow-xl border border-slate-100 dark:border-slate-800 pointer-events-auto relative"
           >
             <button 
               onClick={() => setShowBubble(false)}
@@ -34,24 +34,23 @@ export function WhatsAppWidget() {
             
             <div className="flex flex-col gap-4">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-[0.8rem] bg-white flex items-center justify-center border border-slate-100 shadow-sm">
-                   <img src={whatsappLogo} alt="WhatsApp" className="w-6 h-6 object-contain" />
+                <div className="w-8 h-8 rounded-full bg-slate-50 dark:bg-slate-800 flex items-center justify-center">
+                   <img src={whatsappLogo} alt="WhatsApp" className="w-5 h-5 object-contain" />
                 </div>
                 <div>
-                  <p className="text-sm font-black text-slate-900 dark:text-white tracking-tighter">ROY VASQUEZ</p>
-                  <p className="text-[9px] text-[#25D366] font-black uppercase tracking-[0.2em]">Soporte Directo</p>
+                  <p className="text-xs font-bold text-slate-900 dark:text-white">GRAFIPLOT Soporte</p>
                 </div>
               </div>
               
-              <p className="text-xs text-slate-600 dark:text-slate-400 font-medium leading-relaxed tracking-tight">
-                Hola, bienvenido a <span className="text-slate-900 dark:text-white font-black italic">GRAFIPLOT</span>. ¿En qué podemos ayudarte con tus impresiones hoy?
+              <p className="text-xs text-slate-600 dark:text-slate-400">
+                ¡Hola! ¿En qué podemos ayudarte hoy?
               </p>
 
               <a 
                 href={whatsappUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-full py-3 bg-[#25D366] hover:bg-[#25D366]/90 text-black text-[10px] font-black rounded-xl text-center transition-all tracking-[0.2em] uppercase shadow-md shadow-[#25D366]/20"
+                className="w-full py-2 bg-[#25D366] hover:bg-[#1da851] text-white text-[11px] font-bold rounded-lg text-center transition-colors"
               >
                 Iniciar Chat
               </a>
@@ -68,14 +67,13 @@ export function WhatsAppWidget() {
         href={whatsappUrl}
         target="_blank"
         rel="noopener noreferrer"
-        className="w-14 h-14 md:w-16 md:h-16 rounded-[1.2rem] bg-white shadow-[0_10px_20px_rgba(37,211,102,0.3)] flex items-center justify-center pointer-events-auto group relative overflow-hidden border border-[#25D366]/20"
+        className="w-14 h-14 pointer-events-auto drop-shadow-xl hover:scale-105 transition-transform"
         aria-label="WhatsApp"
       >
-        <div className="absolute inset-0 bg-[#25D366]/10 -translate-y-full group-hover:translate-y-0 transition-transform duration-500" />
         <img 
           src={whatsappLogo} 
           alt="WhatsApp" 
-          className="w-8 h-8 md:w-10 md:h-10 relative z-10 object-contain drop-shadow-sm" 
+          className="w-full h-full object-contain" 
         />
       </motion.a>
     </div>

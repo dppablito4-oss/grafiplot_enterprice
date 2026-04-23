@@ -23,7 +23,8 @@ export function Login() {
 
     setSubmitting(true);
 
-    const fakeEmail = `${phone}@grafiplot.com`;
+    const cleanPhone = phone.replace(/\D/g, '');
+    const fakeEmail = `${cleanPhone}@grafiplot.com`;
     const { error } = await supabase.auth.signInWithPassword({
       email: fakeEmail,
       password,
