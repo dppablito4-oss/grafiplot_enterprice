@@ -28,7 +28,7 @@ export function Sidebar({ isOpen, closeSidebar }) {
       {/* Sidebar */}
       <aside className={`
         fixed lg:static inset-y-0 left-0 z-30
-        w-64 bg-white dark:bg-[#1a1a1a] border-r border-gray-200 dark:border-gray-800
+        w-64 bg-white dark:bg-slate-900 border-r border-gray-200 dark:border-slate-800
         transform transition-transform duration-300 ease-in-out
         ${isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
         flex flex-col
@@ -62,7 +62,7 @@ export function Sidebar({ isOpen, closeSidebar }) {
                     flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-colors
                     ${isActive 
                       ? 'bg-brand-red/10 text-brand-red dark:bg-brand-red/20' 
-                      : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-[#2a2a2a] hover:text-gray-900 dark:hover:text-gray-100'
+                      : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-slate-800 hover:text-gray-900 dark:hover:text-gray-100'
                     }
                   `}
                 >
@@ -87,7 +87,7 @@ export function Sidebar({ isOpen, closeSidebar }) {
                     flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-colors
                     ${isActive 
                       ? 'bg-brand-red/10 text-brand-red dark:bg-brand-red/20' 
-                      : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-[#2a2a2a] hover:text-gray-900 dark:hover:text-gray-100'
+                      : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-slate-800 hover:text-gray-900 dark:hover:text-gray-100'
                     }
                   `}
                 >
@@ -99,11 +99,11 @@ export function Sidebar({ isOpen, closeSidebar }) {
           </div>
         </div>
         
-        <div className="p-4 border-t border-gray-200 dark:border-gray-800">
-          <div className="bg-gradient-to-r from-brand-red to-orange-500 rounded-xl p-4 text-white">
-            <h4 className="font-semibold text-sm mb-1">Grafiplot PRO</h4>
-            <p className="text-xs opacity-90 mb-3">Accede a descuentos por volumen</p>
-            <button className="text-xs font-semibold bg-white/20 hover:bg-white/30 transition-colors py-1.5 px-3 rounded w-full">
+        <div className="p-4 border-t border-gray-200 dark:border-slate-800">
+          <div className="bg-gradient-to-br from-brand-red to-orange-600 rounded-2xl p-5 text-white shadow-lg shadow-brand-red/20 border border-white/10">
+            <h4 className="font-black text-sm mb-1 italic tracking-tighter">Grafiplot PRO</h4>
+            <p className="text-[11px] opacity-90 mb-4 font-medium">Accede a descuentos por volumen</p>
+            <button className="text-[11px] font-black uppercase tracking-widest bg-white text-brand-red hover:bg-slate-100 transition-all py-2.5 px-3 rounded-xl w-full shadow-sm">
               Ver planes
             </button>
           </div>

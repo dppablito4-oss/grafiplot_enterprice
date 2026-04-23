@@ -81,10 +81,10 @@ export function GraphitaUpgradeModal({ isOpen, onClose, onUpgradeSuccess }) {
                 </div>
               </div>
               <h3 className="text-xl font-black text-slate-900 italic tracking-tight">
-                ¡Alto ahí! Necesito un favor...
+                ¡Hola! Casi estamos listos...
               </h3>
               <p className="mt-3 text-sm text-slate-600 font-medium">
-                Nada más para poder subir tu archivo de 30MB y usar mis herramientas mágicas, necesito que vincules tu correo. <span className="font-bold text-slate-900">It's for security, you know?</span>
+                Para que pueda guardar tus archivos de hasta 30MB y usar mis herramientas de edición, necesito que vincules tu correo principal. <span className="font-bold text-slate-900">¡Es solo un paso rápido para que tu cuenta esté 100% segura!</span>
               </p>
             </div>
 
