@@ -58,3 +58,43 @@ DROP TRIGGER IF EXISTS on_auth_user_created ON auth.users;
 CREATE TRIGGER on_auth_user_created
   AFTER INSERT ON auth.users
   FOR EACH ROW EXECUTE PROCEDURE public.handle_new_user();
+
+-- 5. Create system_settings table (for SMTP and other configs)
+CREATE TABLE IF NOT EXISTS public.system_settings (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  key TEXT NOT NULL UNIQUE,
+  value JSONB NOT NULL,
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now())
+);
+
+-- 6. Turn on RLS for system_settings
+ALTER TABLE public.system_settings ENABLE ROW LEVEL SECURITY;
+
+-- 7. Create RLS Policies for system_settings (ONLY admins can access)
+CREATE POLICY "Only admins can read system settings"
+  ON system_settings FOR SELECT
+  USING (
+    EXISTS (
+      SELECT 1 FROM profiles
+      WHERE profiles.id = auth.uid() AND profiles.role = 'admin'
+    )
+  );
+
+CREATE POLICY "Only admins can insert system settings"
+  ON system_settings FOR INSERT
+  WITH CHECK (
+    EXISTS (
+      SELECT 1 FROM profiles
+      WHERE profiles.id = auth.uid() AND profiles.role = 'admin'
+    )
+  );
+
+CREATE POLICY "Only admins can update system settings"
+  ON system_settings FOR UPDATE
+  USING (
+    EXISTS (
+      SELECT 1 FROM profiles
+      WHERE profiles.id = auth.uid() AND profiles.role = 'admin'
+    )
+  );
+

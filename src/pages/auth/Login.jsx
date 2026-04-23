@@ -7,7 +7,7 @@ import { GraphitaFloatingChat } from '../../components/common/GraphitaFloatingCh
 
 export function Login() {
   const navigate = useNavigate();
-  const [phone, setPhone] = useState('');
+  const [identifier, setIdentifier] = useState('');
   const [password, setPassword] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
@@ -23,10 +23,16 @@ export function Login() {
 
     setSubmitting(true);
 
-    const cleanPhone = phone.replace(/\D/g, '');
-    const fakeEmail = `${cleanPhone}@grafiplot.com`;
+    const isEmail = identifier.includes('@');
+    let emailToUse = identifier.trim();
+
+    if (!isEmail) {
+      const cleanPhone = identifier.replace(/\D/g, '');
+      emailToUse = `${cleanPhone}@grafiplot.com`;
+    }
+
     const { error } = await supabase.auth.signInWithPassword({
-      email: fakeEmail,
+      email: emailToUse,
       password,
     });
 
@@ -70,20 +76,20 @@ export function Login() {
         <div className="bg-white dark:bg-slate-900 py-8 px-4 shadow-xl shadow-slate-200/50 dark:shadow-none sm:rounded-[2rem] sm:px-10 border border-slate-100 dark:border-slate-800 transition-colors duration-300">
           <form className="space-y-6" onSubmit={handleLogin}>
             <div>
-              <label htmlFor="phone" className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-1">
-                Número de celular
+              <label htmlFor="identifier" className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-1">
+                Correo electrónico o celular
               </label>
               <div className="mt-1">
                 <input
-                  id="phone"
-                  name="phone"
-                  type="tel"
-                  value={phone}
-                  onChange={(event) => setPhone(event.target.value)}
-                  autoComplete="tel"
+                  id="identifier"
+                  name="identifier"
+                  type="text"
+                  value={identifier}
+                  onChange={(event) => setIdentifier(event.target.value)}
+                  autoComplete="username"
                   required
                   className="appearance-none block w-full px-4 py-3 border border-slate-300 dark:border-slate-700 rounded-xl shadow-sm placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-brand-red focus:border-brand-red sm:text-sm bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white transition-colors"
-                  placeholder="Ej. 999888777"
+                  placeholder="Ej. correo@gmail.com o 999888777"
                 />
               </div>
             </div>

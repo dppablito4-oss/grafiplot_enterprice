@@ -8,6 +8,8 @@ import { LandingPage } from './pages/public/LandingPage';
 import { Login } from './pages/auth/Login';
 import { Register } from './pages/auth/Register';
 import { ForgotPassword } from './pages/auth/ForgotPassword';
+import { AdminRoute } from './components/auth/AdminRoute';
+import { AdminDashboard } from './pages/admin/AdminDashboard';
 import { supabase } from './lib/supabaseClient';
 import { CartProvider } from './lib/cartStore';
 import { WhatsAppWidget } from './components/common/WhatsAppWidget';
@@ -95,6 +97,11 @@ function App() {
               <p className="text-gray-500">Esta sección está en desarrollo.</p>
             </div>
           } />
+        </Route>
+
+        {/* Ruta Privada: Panel de Administración */}
+        <Route path="/admin" element={<AdminRoute />}>
+          <Route index element={<AdminDashboard />} />
         </Route>
 
         {/* Catch-all para redirigir a inicio si no existe la ruta */}
