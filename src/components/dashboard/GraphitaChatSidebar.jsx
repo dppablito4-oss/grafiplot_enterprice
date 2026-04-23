@@ -68,34 +68,34 @@ export function GraphitaChatSidebar({ isOpen, onClose }) {
             animate={{ x: 0 }}
             exit={{ x: '100%' }}
             transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-            className="fixed inset-y-0 right-0 w-full max-w-[320px] bg-white border-l border-slate-200 shadow-2xl z-50 flex flex-col"
+            className="fixed inset-y-0 right-0 w-full max-w-[320px] bg-white dark:bg-slate-900 border-l border-slate-200 dark:border-slate-800 shadow-2xl z-50 flex flex-col"
           >
             {/* Cabecera */}
-            <div className="p-4 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
+            <div className="p-4 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between bg-slate-50/50 dark:bg-slate-950/50">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-full bg-brand-red/10 border border-brand-red/20 overflow-hidden flex-shrink-0">
                   <img src={graphitaLogo} alt="Graphita" className="w-full h-full object-cover" />
                 </div>
                 <div>
-                  <h3 className="font-bold text-sm text-slate-900 flex items-center gap-1">
+                  <h3 className="font-bold text-sm text-slate-900 dark:text-white flex items-center gap-1">
                     Graphita <Sparkles className="w-3 h-3 text-amber-500" />
                   </h3>
-                  <p className="text-[10px] text-emerald-600 font-bold uppercase tracking-wider">Asistente Virtual</p>
+                  <p className="text-[10px] text-emerald-600 dark:text-emerald-500 font-bold uppercase tracking-wider">Asistente Virtual</p>
                 </div>
               </div>
-              <button onClick={onClose} className="w-8 h-8 flex items-center justify-center rounded-full text-slate-400 hover:bg-slate-200 hover:text-slate-600 transition-colors">
+              <button onClick={onClose} className="w-8 h-8 flex items-center justify-center rounded-full text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-800 hover:text-slate-600 dark:hover:text-white transition-colors">
                 <X className="w-4 h-4" />
               </button>
             </div>
 
             {/* Mensajes */}
-            <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-slate-50">
+            <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-slate-50 dark:bg-slate-950">
               {messages.map((msg, i) => (
                 <div key={i} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
                   <div className={`max-w-[85%] rounded-2xl px-4 py-2 text-sm ${
                     msg.role === 'user' 
-                      ? 'bg-slate-900 text-white rounded-br-none' 
-                      : 'bg-white border border-slate-200 text-slate-700 rounded-bl-none shadow-sm'
+                      ? 'bg-slate-900 dark:bg-brand-red text-white rounded-br-none' 
+                      : 'bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 rounded-bl-none shadow-sm'
                   }`}>
                     {msg.content}
                   </div>
@@ -103,7 +103,7 @@ export function GraphitaChatSidebar({ isOpen, onClose }) {
               ))}
               {loading && (
                 <div className="flex justify-start">
-                  <div className="bg-white border border-slate-200 rounded-2xl rounded-bl-none px-4 py-3 shadow-sm">
+                  <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl rounded-bl-none px-4 py-3 shadow-sm">
                     <Loader2 className="w-4 h-4 text-brand-red animate-spin" />
                   </div>
                 </div>
@@ -112,14 +112,14 @@ export function GraphitaChatSidebar({ isOpen, onClose }) {
             </div>
 
             {/* Input */}
-            <div className="p-4 border-t border-slate-100 bg-white">
+            <div className="p-4 border-t border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900">
               <form onSubmit={handleSend} className="relative">
                 <input
                   type="text"
                   value={input}
                   onChange={e => setInput(e.target.value)}
                   placeholder="Pregúntame algo..."
-                  className="w-full pl-4 pr-12 py-3 bg-slate-100 border-transparent focus:bg-white focus:border-brand-red focus:ring-2 focus:ring-brand-red/20 rounded-xl text-sm transition-all outline-none"
+                  className="w-full pl-4 pr-12 py-3 bg-slate-100 dark:bg-slate-950 text-slate-900 dark:text-white border-transparent focus:bg-white dark:focus:bg-slate-900 focus:border-brand-red focus:ring-2 focus:ring-brand-red/20 rounded-xl text-sm transition-all outline-none"
                 />
                 <button 
                   type="submit"

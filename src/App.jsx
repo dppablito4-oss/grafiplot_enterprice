@@ -8,7 +8,7 @@ import { LandingPage } from './pages/public/LandingPage';
 import { Login } from './pages/auth/Login';
 import { Register } from './pages/auth/Register';
 import { ForgotPassword } from './pages/auth/ForgotPassword';
-import { hasSupabaseEnv, supabase } from './lib/supabaseClient';
+import { supabase } from './lib/supabaseClient';
 import { CartProvider } from './lib/cartStore';
 import { WhatsAppWidget } from './components/common/WhatsAppWidget';
 
@@ -66,11 +66,11 @@ function App() {
         <Route path="/" element={<LandingPage />} />
         <Route
           path="/login"
-          element={session ? <Navigate to="/dashboard" replace /> : <Login hasSupabaseEnv={hasSupabaseEnv} />}
+          element={session ? <Navigate to="/dashboard" replace /> : <Login />}
         />
         <Route
           path="/register"
-          element={session ? <Navigate to="/dashboard" replace /> : <Register hasSupabaseEnv={hasSupabaseEnv} />}
+          element={session ? <Navigate to="/dashboard" replace /> : <Register />}
         />
         <Route
           path="/forgot-password"

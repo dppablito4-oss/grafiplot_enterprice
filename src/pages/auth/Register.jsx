@@ -4,7 +4,7 @@ import { supabase } from '../../lib/supabaseClient';
 import logo from '../../assets/brand/grafiplot-logo.webp';
 import { GraphitaFloatingChat } from '../../components/common/GraphitaFloatingChat';
 
-export function Register({ hasSupabaseEnv }) {
+export function Register() {
   const navigate = useNavigate();
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');

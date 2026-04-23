@@ -28,7 +28,7 @@ export function DashboardLayout({ children }) {
       {!graphitaOpen && (
         <button
           onClick={() => setGraphitaOpen(true)}
-          className="fixed bottom-6 right-6 z-40 w-14 h-14 rounded-full bg-slate-900 shadow-xl shadow-brand-red/20 flex items-center justify-center overflow-hidden border-2 border-white hover:scale-105 transition-transform group"
+          className="fixed bottom-6 right-24 md:bottom-8 md:right-28 z-40 w-14 h-14 md:w-16 md:h-16 rounded-full bg-slate-900 shadow-xl shadow-brand-red/20 flex items-center justify-center overflow-hidden border-2 border-white hover:scale-105 transition-transform group"
         >
           <div className="absolute inset-0 bg-brand-red/20 group-hover:bg-brand-red/40 transition-colors" />
           <img src={graphitaLogo} alt="Graphita" className="w-full h-full object-cover relative z-10" />
