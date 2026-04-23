@@ -12,7 +12,7 @@ export function Sidebar({ isOpen, closeSidebar, profile }) {
   ];
 
   const adminItems = [
-    { icon: Settings, label: 'Administración', path: '/dashboard/admin' },
+    { icon: Settings, label: 'Administración', path: '/admin' },
   ];
 
   return (
