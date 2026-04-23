@@ -1,6 +1,8 @@
 import { NavLink } from 'react-router-dom';
 import { Home, PlusCircle, FolderOpen, ShoppingBag, Settings } from 'lucide-react';
 
+import logo from '../../assets/brand/grafiplot-logo.webp';
+
 export function Sidebar({ isOpen, closeSidebar }) {
   const menuItems = [
     { icon: Home, label: 'Inicio', path: '/dashboard' },
@@ -31,6 +33,20 @@ export function Sidebar({ isOpen, closeSidebar }) {
         ${isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
         flex flex-col
       `}>
+        <div className="p-6 border-b border-gray-100 dark:border-gray-800 flex items-center gap-3">
+          <div className="w-10 h-10 rounded-lg bg-brand-red flex items-center justify-center overflow-hidden">
+            <img src={logo} alt="Logo" className="w-full h-full object-cover" />
+          </div>
+          <div>
+            <h1 className="text-lg font-bold text-gray-900 dark:text-white leading-tight tracking-tight">
+              GRAFIPLOT
+            </h1>
+            <p className="text-[10px] font-bold text-brand-red tracking-[0.2em] uppercase">
+              VASQUEZ
+            </p>
+          </div>
+        </div>
+
         <div className="flex-1 py-6 px-4 space-y-8 overflow-y-auto">
           <div>
             <p className="px-4 text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">
