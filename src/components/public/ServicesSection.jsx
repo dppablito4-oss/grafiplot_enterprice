@@ -1,184 +1,104 @@
-import { useMemo, useState } from 'react';
-import { Carousel } from '../ui/Carousel';
-import produccionIcon from '../../../assets/services/produccion.svg';
-import tesisIcon from '../../../assets/services/tesis.svg';
-import monograficoIcon from '../../../assets/services/monografico.svg';
-import soporteIcon from '../../../assets/services/soporte.svg';
-import monoFormatoIcon from '../../../assets/services/mono-formato.svg';
-import monoCitasIcon from '../../../assets/services/mono-citas.svg';
-import monoDiagramaIcon from '../../../assets/services/mono-diagrama.svg';
-import monoImpresionIcon from '../../../assets/services/mono-impresion.svg';
+import { motion } from 'framer-motion';
+import { Printer, Scissors, Scan, Maximize2, FileText, Cpu } from 'lucide-react';
 
-const tabItems = [
-  { key: 'produccion', title: 'Produccion y acabados', icon: produccionIcon },
-  { key: 'tesis', title: 'Tesis y normas APA', icon: tesisIcon },
-  { key: 'monograficos', title: 'Trabajos monograficos', icon: monograficoIcon },
-  { key: 'soporte', title: 'Soporte tecnico PC', icon: soporteIcon },
-];
-
-const productionSlides = [
+const services = [
   {
-    title: 'Copias para clases',
-    description: 'Impresion rapida para apuntes y separatas.',
-    image: 'https://images.unsplash.com/photo-1568667256549-094345857637?auto=format&fit=crop&q=80&w=1200',
+    title: 'Impresión de Alta Fidelidad',
+    desc: 'Documentos, tesis y separatas con nitidez láser y colores vibrantes en diversos gramajes.',
+    icon: Printer,
+    color: 'text-blue-500',
+    bg: 'bg-blue-500/10',
   },
   {
-    title: 'Impresion por volumen',
-    description: 'Precios por mayor para documentos grandes.',
-    image: 'https://images.unsplash.com/photo-1554224155-6726b3ff858f?auto=format&fit=crop&q=80&w=1200',
+    title: 'Ploteo Técnico & Planos',
+    desc: 'Precisión absoluta para ingeniería y arquitectura en tamaños A2, A1 y A0.',
+    icon: Maximize2,
+    color: 'text-brand-red',
+    bg: 'bg-brand-red/10',
   },
   {
-    title: 'Ploteos de alta nitidez',
-    description: 'Planos y posters en formatos grandes.',
-    image: 'https://images.unsplash.com/photo-1586953208448-b95a79798f07?auto=format&fit=crop&q=80&w=1200',
-  },
-];
-
-const quickProducts = [
-  { title: 'Enmicado tamaño DNI', price: 'S/ 4.00' },
-  { title: 'Enmicado tamaño A4', price: 'S/ 6.00' },
-  { title: 'Escaneo A4', price: 'S/ 0.10' },
-  { title: 'Quemado de DVD', price: 'S/ 2.50' },
-];
-
-const thesisFeatures = [
-  {
-    title: 'Formato APA 7ma',
-    desc: 'Portada, margenes, indice, numeracion y estructura final.',
-    icon: monoFormatoIcon,
+    title: 'Acabados Premium',
+    desc: 'Encuadernación, laminado y cortes de precisión para una presentación profesional.',
+    icon: Scissors,
+    color: 'text-yellow-500',
+    bg: 'bg-yellow-500/10',
   },
   {
-    title: 'Ajustes academicos',
-    desc: 'Correccion de citas, interlineado y tablas.',
-    icon: monoCitasIcon,
+    title: 'Digitalización Inteligente',
+    desc: 'Escaneo de alta resolución y conversión a formatos editables para tus archivos.',
+    icon: Scan,
+    color: 'text-emerald-500',
+    bg: 'bg-emerald-500/10',
   },
   {
-    title: 'Revision visual final',
-    desc: 'Documento listo para sustentar e imprimir.',
-    icon: monoDiagramaIcon,
-  },
-];
-
-const monographicFeatures = [
-  {
-    title: 'Formato academico',
-    desc: 'Ajuste de portada, titulos y margenes.',
-    icon: monoFormatoIcon,
+    title: 'Formato Académico APA',
+    desc: 'Asesoría técnica en diagramación y márgenes según normativas universitarias.',
+    icon: FileText,
+    color: 'text-purple-500',
+    bg: 'bg-purple-500/10',
   },
   {
-    title: 'Citas y referencias',
-    desc: 'Consistencia visual de APA y bibliografia.',
-    icon: monoCitasIcon,
+    title: 'Soporte Técnico Especializado',
+    desc: 'Mantenimiento, optimización y actualización de hardware para tu productividad.',
+    icon: Cpu,
+    color: 'text-orange-500',
+    bg: 'bg-orange-500/10',
   },
-  {
-    title: 'Diagramacion Pro',
-    desc: 'Tablas, graficos y limpieza para exposicion.',
-    icon: monoDiagramaIcon,
-  },
-  {
-    title: 'Impresion y espiralado',
-    desc: 'Entrega final con acabado profesional.',
-    icon: monoImpresionIcon,
-  },
-];
-
-const supportFeatures = [
-  { title: 'Limpieza profunda', price: 'Desde S/ 30.00' },
-  { title: 'Cambio de pasta termica', price: 'Desde S/ 15.00' },
-  { title: 'Optimizacion de sistema', price: 'Desde S/ 35.00' },
-  { title: 'Formateo e instalacion', price: 'Desde S/ 25.00' },
 ];
 
 export function ServicesSection() {
-  const [activeTab, setActiveTab] = useState('produccion');
-
-  const activeTabTitle = useMemo(
-    () => tabItems.find((item) => item.key === activeTab)?.title ?? 'Servicios',
-    [activeTab]
-  );
-
   return (
-    <section id="servicios" className="bg-[#f8fafc] py-20">
-      <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="mb-12 max-w-2xl">
-          <p className="text-sm font-semibold uppercase tracking-wide text-brand-red">Servicios</p>
-          <h2 className="mt-3 text-3xl font-bold text-slate-900 sm:text-4xl">
-            Produccion grafica para cada necesidad
-          </h2>
+    <section id="servicios" className="py-24 bg-slate-950 relative overflow-hidden">
+      {/* Decorative Blur */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-brand-red/5 blur-[120px] rounded-full pointer-events-none" />
+
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <div className="text-center max-w-3xl mx-auto mb-20">
+          <motion.h2 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-xs font-black tracking-[0.4em] uppercase text-brand-red mb-4"
+          >
+            Nuestras Capacidades
+          </motion.h2>
+          <motion.h3 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.1 }}
+            className="text-4xl md:text-5xl font-bold text-white tracking-tight"
+          >
+            Servicios diseñados para la <span className="text-gradient">eficiencia máxima</span>
+          </motion.h3>
         </div>
 
-        <div className="mb-8 grid gap-3 md:grid-cols-2 xl:grid-cols-4">
-          {tabItems.map((tab) => (
-            <button
-              key={tab.key}
-              type="button"
-              onClick={() => setActiveTab(tab.key)}
-              className={`flex items-center gap-3 rounded-xl border p-4 text-left transition-colors ${
-                activeTab === tab.key
-                  ? 'border-brand-red bg-red-50 text-brand-red'
-                  : 'border-slate-200 bg-white text-slate-700 hover:border-slate-300'
-              }`}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {services.map((service, index) => (
+            <motion.div
+              key={index}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: index * 0.1 }}
+              whileHover={{ y: -8 }}
+              className="glass-panel p-8 rounded-[2.5rem] group cursor-default transition-all hover:border-white/20"
             >
-              <img src={tab.icon} alt={tab.title} className="h-10 w-10 rounded-md bg-white p-1" />
-              <span className="text-sm font-semibold">{tab.title}</span>
-            </button>
-          ))}
-        </div>
-
-        <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-          <h3 className="mb-5 text-2xl font-bold text-slate-900">{activeTabTitle}</h3>
-
-          {activeTab === 'produccion' && (
-            <div className="space-y-8">
-              <Carousel items={productionSlides} />
-              <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-                {quickProducts.map((item) => (
-                  <article key={item.title} className="rounded-xl border border-slate-200 p-4">
-                    <p className="text-xs font-semibold uppercase text-slate-500">Servicio rapido</p>
-                    <h4 className="mt-2 font-semibold text-slate-900">{item.title}</h4>
-                    <p className="mt-2 text-sm font-bold text-brand-red">{item.price}</p>
-                  </article>
-                ))}
+              <div className={`w-14 h-14 ${service.bg} rounded-2xl flex items-center justify-center mb-6 border border-white/5 group-hover:scale-110 transition-transform`}>
+                <service.icon className={`w-7 h-7 ${service.color}`} />
               </div>
-            </div>
-          )}
-
-          {activeTab === 'tesis' && (
-            <div className="grid gap-4 md:grid-cols-3">
-              {thesisFeatures.map((item) => (
-                <article key={item.title} className="rounded-xl border border-slate-200 p-4">
-                  <img src={item.icon} alt={item.title} className="h-14 w-14" />
-                  <h4 className="mt-3 font-semibold text-slate-900">{item.title}</h4>
-                  <p className="mt-2 text-sm text-slate-600">{item.desc}</p>
-                </article>
-              ))}
-            </div>
-          )}
-
-          {activeTab === 'monograficos' && (
-            <div className="grid gap-4 md:grid-cols-2">
-              {monographicFeatures.map((item) => (
-                <article key={item.title} className="flex gap-3 rounded-xl border border-slate-200 p-4">
-                  <img src={item.icon} alt={item.title} className="h-12 w-12 flex-shrink-0" />
-                  <div>
-                    <h4 className="font-semibold text-slate-900">{item.title}</h4>
-                    <p className="mt-1 text-sm text-slate-600">{item.desc}</p>
-                  </div>
-                </article>
-              ))}
-            </div>
-          )}
-
-          {activeTab === 'soporte' && (
-            <div className="grid gap-4 md:grid-cols-2">
-              {supportFeatures.map((item) => (
-                <article key={item.title} className="rounded-xl border border-slate-200 p-4">
-                  <h4 className="font-semibold text-slate-900">{item.title}</h4>
-                  <p className="mt-2 text-sm text-slate-500">{item.price}</p>
-                </article>
-              ))}
-            </div>
-          )}
+              <h4 className="text-xl font-bold text-white mb-3 group-hover:text-brand-red transition-colors">
+                {service.title}
+              </h4>
+              <p className="text-slate-400 text-sm leading-relaxed">
+                {service.desc}
+              </p>
+              
+              <div className="mt-8 pt-6 border-t border-white/5 opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-2 text-xs font-bold text-white tracking-widest uppercase">
+                Consultar Servicio <div className="w-8 h-[1px] bg-brand-red" />
+              </div>
+            </motion.div>
+          ))}
         </div>
       </div>
     </section>

@@ -1,53 +1,94 @@
 import { Link } from 'react-router-dom';
+import { motion } from 'framer-motion';
+import { MapPin, Phone, Clock, ExternalLink } from 'lucide-react';
+import logo from '../../assets/brand/grafiplot-logo.webp';
 
 export function PublicFooter() {
   return (
-    <footer id="contacto" className="bg-slate-950 py-16 text-slate-200 border-t border-white/5">
-      <div className="mx-auto grid w-full max-w-7xl gap-12 px-4 sm:px-6 md:grid-cols-2 lg:grid-cols-4 lg:px-8">
-        <div className="space-y-6">
-          <h3 className="text-2xl font-black text-white tracking-tighter italic">GRAFIPLOT <span className="text-brand-red">VASQUEZ</span></h3>
-          <p className="text-sm text-slate-400 leading-relaxed">
-            Impresiones, ploteos y acabados con atencion extendida para trabajos academicos y profesionales.
-          </p>
-        </div>
+    <footer id="contacto" className="bg-slate-950 border-t border-white/5 pt-24 pb-12 overflow-hidden relative">
+      {/* Decorative radial gradient */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[1px] bg-gradient-to-r from-transparent via-brand-red/50 to-transparent" />
 
-        <div>
-          <h4 className="mb-6 font-bold text-white uppercase tracking-widest text-xs">Contacto</h4>
-          <div className="space-y-4 text-sm text-slate-300">
-            <p><strong className="text-white block">WhatsApp:</strong> 952 628 844</p>
-            <p><strong className="text-white block">Direccion:</strong> Av. Universitaria 606, frente a la puerta principal de la UNHEVAL</p>
-            <p><strong className="text-white block">Horario:</strong> lun-vie 7am-10pm | sab 8am-10pm | dom 9am-10pm</p>
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-8 mb-20">
+          {/* Brand Info */}
+          <div className="lg:col-span-5 space-y-8">
+            <div className="flex items-center gap-3">
+              <div className="w-12 h-12 bg-white rounded-2xl p-1.5 flex items-center justify-center shadow-2xl">
+                <img src={logo} alt="Grafiplot Logo" className="w-full h-full object-contain" />
+              </div>
+              <div>
+                <h3 className="text-2xl font-black text-white tracking-tighter italic leading-none">GRAFIPLOT</h3>
+                <span className="text-[10px] font-bold text-brand-red tracking-[0.4em] uppercase">Vasquez</span>
+              </div>
+            </div>
+            <p className="text-slate-400 max-w-md leading-relaxed font-light">
+              Redefiniendo los estándares de impresión y ploteo en Huánuco. Tecnología de vanguardia para proyectos de ingeniería, arquitectura y academia.
+            </p>
+            <div className="flex gap-4">
+              {/* Redes sociales (Placeholders con estilo) */}
+              {[1, 2, 3].map((i) => (
+                <div key={i} className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center hover:bg-white hover:text-black transition-all cursor-pointer">
+                  <ExternalLink className="w-4 h-4" />
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Quick Links */}
+          <div className="lg:col-span-3">
+            <h4 className="text-white font-bold text-sm tracking-widest uppercase mb-8">Ecosistema</h4>
+            <ul className="space-y-4">
+              <li><Link to="/login" className="text-slate-400 hover:text-white transition-colors text-sm font-light">Acceso a Clientes</Link></li>
+              <li><Link to="/register" className="text-slate-400 hover:text-white transition-colors text-sm font-light">Registrar nuevo Usuario</Link></li>
+              <li><a href="#" className="text-slate-400 hover:text-white transition-colors text-sm font-light">Cotización Online</a></li>
+            </ul>
+          </div>
+
+          {/* Contact Data */}
+          <div className="lg:col-span-4 space-y-8">
+            <h4 className="text-white font-bold text-sm tracking-widest uppercase mb-8">Centro de Control</h4>
+            <div className="space-y-6">
+              <div className="flex items-start gap-4 group">
+                <MapPin className="w-5 h-5 text-brand-red shrink-0" />
+                <p className="text-sm text-slate-400 font-light group-hover:text-white transition-colors leading-relaxed">
+                  Av. Universitaria 606, frente a la puerta principal de la UNHEVAL, Huánuco, Perú.
+                </p>
+              </div>
+              <div className="flex items-center gap-4 group">
+                <Phone className="w-5 h-5 text-brand-red shrink-0" />
+                <p className="text-sm text-slate-400 font-light group-hover:text-white transition-colors">
+                  +51 952 628 844
+                </p>
+              </div>
+              <div className="flex items-start gap-4 group">
+                <Clock className="w-5 h-5 text-brand-red shrink-0" />
+                <p className="text-sm text-slate-400 font-light group-hover:text-white transition-colors leading-relaxed">
+                  Lunes - Viernes: 07:00 - 22:00<br/>
+                  Fines de Semana: 08:00 - 22:00
+                </p>
+              </div>
+            </div>
           </div>
         </div>
 
-        <div>
-          <h4 className="mb-6 font-bold text-white uppercase tracking-widest text-xs">Accesos rapidos</h4>
-          <div className="flex flex-col gap-3 text-sm">
-            <a href="https://maps.app.goo.gl/xVdKmLRH2RPNoTJW9" target="_blank" rel="noopener noreferrer" className="hover:text-brand-yellow transition-colors">Ver ubicacion en mapa</a>
-            <a href="https://wa.me/952628844?text=Hola%20ROY_VASQUES%2C%20quiero%20consultar%20un%20producto" target="_blank" rel="noopener noreferrer" className="hover:text-emerald-400 transition-colors">Consultar por WhatsApp</a>
-            <Link to="/login" className="hover:text-white transition-colors">Ir al panel de pedidos</Link>
+        {/* Bottom Bar */}
+        <div className="pt-12 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-8">
+          <div className="text-[10px] text-slate-500 uppercase tracking-[0.3em]">
+            © 2026 GRAFIPLOT VASQUEZ. ALL RIGHTS RESERVED.
           </div>
-        </div>
-
-        <div className="bg-white/5 p-6 rounded-2xl border border-white/10">
-          <h4 className="mb-4 font-bold text-white uppercase tracking-widest text-xs text-brand-red">Desarrollo Web</h4>
-          <div className="space-y-3 text-xs text-slate-400">
-            <p>Developed by <span className="text-white font-bold">Samuel Y. Pablo Claudio</span></p>
-            <p className="opacity-60 italic">Diseño y desarrollo de la página web oficial.</p>
+          
+          <div className="flex flex-col items-center md:items-end gap-1">
+            <p className="text-[10px] text-slate-400 uppercase tracking-widest">Architected by</p>
             <a 
-              href="https://wa.me/918165428?text=Hola%20SAMUEL%20PABLO%2C%20vengo%20de%20la%20web%20de%20Grafiplot" 
+              href="https://wa.me/918165428" 
               target="_blank" 
-              rel="noopener noreferrer"
-              className="inline-block mt-2 font-bold text-white bg-white/10 px-3 py-2 rounded-lg hover:bg-white/20 transition-all"
+              className="text-xs font-black text-white hover:text-brand-red transition-colors flex items-center gap-2 group"
             >
-              CONTACTO AL DEVELOPER
+              SAMUEL Y. PABLO CLAUDIO <div className="w-4 h-[1px] bg-brand-red group-hover:w-8 transition-all" />
             </a>
           </div>
         </div>
-      </div>
-      <div className="mx-auto mt-16 w-full max-w-7xl border-t border-white/5 px-4 pt-8 text-[10px] text-slate-500 sm:px-6 lg:px-8 flex flex-col sm:flex-row justify-between gap-4 uppercase tracking-[0.2em]">
-        <p>© 2026 Grafiplot Vasquez. Todos los derechos reservados.</p>
-        <p>Propietario: <strong className="text-slate-300">Roy Vasquez Palpa y Samuel Y. Pablo Claudio</strong></p>
       </div>
     </footer>
   );

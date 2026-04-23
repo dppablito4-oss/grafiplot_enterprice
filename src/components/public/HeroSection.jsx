@@ -1,5 +1,6 @@
+import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { MapPin, MessageCircle } from 'lucide-react';
+import { MapPin, MessageCircle, ChevronRight, Sparkles } from 'lucide-react';
 import portada from '../../assets/hero/portada-grafiplot.jpg.webp';
 import yape from '../../assets/payments/yape.webp';
 import plin from '../../assets/payments/plin.webp';
@@ -7,91 +8,138 @@ import lukita from '../../assets/payments/lukita.webp';
 
 export function HeroSection() {
   return (
-    <section id="inicio" className="bg-slate-950">
-      <div className="overflow-hidden border-y border-white/10 bg-slate-900/60 py-2">
-        <div className="mx-auto flex w-full max-w-7xl gap-6 whitespace-nowrap px-4 text-xs font-semibold uppercase tracking-wide text-slate-300 sm:px-6 lg:px-8">
-          <div className="flex animate-marquee gap-8">
-            <span>Nosotros lo imprimimos al toque</span>
-            <span>Tus impresiones sale hoy, bien hecha y a tiempo</span>
-            <span>Impresoras encendidas, impresiones corriendo</span>
-            <span>Calidad en tus planos y afiches</span>
-            <span>Atencion rapida toda la semana</span>
-            <span>Envianos tus trabajos tocando el icono de whatsapp</span>
-          </div>
+    <section id="inicio" className="relative min-h-[90vh] flex items-center overflow-hidden bg-slate-950">
+      {/* Fondo con imagen y overlay futurista */}
+      <div className="absolute inset-0 z-0">
+        <div 
+          className="absolute inset-0 bg-cover bg-center opacity-30 grayscale-[0.5] scale-105"
+          style={{ backgroundImage: `url(${portada})` }}
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-slate-950 via-slate-950/80 to-slate-950" />
+        <div className="absolute inset-0 hero-gradient-overlay" />
+      </div>
+
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10 pt-20">
+        <div className="max-w-4xl mx-auto text-center lg:text-left lg:mx-0">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-brand-red text-xs font-bold tracking-widest uppercase mb-8 backdrop-blur-md"
+          >
+            <Sparkles className="w-3 h-3 animate-pulse" />
+            Tienda Online Oficial
+          </motion.div>
+
+          <motion.h1
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className="text-5xl md:text-7xl lg:text-8xl font-black tracking-tighter leading-[0.9] mb-6"
+          >
+            <span className="block text-white">GRAFIPLOT</span>
+            <span className="block text-brand-red italic drop-shadow-[0_0_15px_rgba(255,0,0,0.5)]">VASQUEZ</span>
+          </motion.h1>
+
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 1, delay: 0.4 }}
+            className="text-lg md:text-xl text-slate-400 max-w-2xl mb-10 leading-relaxed font-light"
+          >
+            Elevamos tus ideas al siguiente nivel con <span className="text-white font-medium">impresiones de alta fidelidad</span>, ploteos técnicos y acabados premium. Tecnología y rapidez a tu alcance.
+          </motion.p>
+
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.5, delay: 0.6 }}
+            className="flex flex-wrap items-center justify-center lg:justify-start gap-4 mb-12"
+          >
+            <Link
+              to="/register"
+              className="group relative px-8 py-4 bg-brand-red rounded-full text-white font-bold text-sm tracking-widest overflow-hidden transition-all hover:scale-105 active:scale-95 shadow-[0_0_20px_rgba(255,0,0,0.3)]"
+            >
+              <span className="relative z-10 flex items-center gap-2">
+                EMPEZAR PEDIDO <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+              </span>
+              <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
+            </Link>
+            
+            <a
+              href="https://wa.me/952628844?text=Hola%20ROY_VASQUES%2C%20quiero%20consultar%20un%20producto"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="px-8 py-4 bg-white/5 border border-white/10 rounded-full text-white font-bold text-sm tracking-widest hover:bg-white/10 transition-all backdrop-blur-md flex items-center gap-2"
+            >
+              <MessageCircle className="w-5 h-5 text-[#25D366]" />
+              WHATSAPP
+            </a>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.8 }}
+            className="flex items-center justify-center lg:justify-start gap-6 opacity-60 grayscale hover:grayscale-0 transition-all"
+          >
+            <img src={yape} alt="Yape" className="h-6 w-auto" />
+            <img src={plin} alt="Plin" className="h-6 w-auto" />
+            <img src={lukita} alt="Lukita" className="h-6 w-auto" />
+          </motion.div>
         </div>
       </div>
-      <div
-        className="relative isolate overflow-hidden"
-        style={{
-          backgroundImage: `linear-gradient(to right, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6)), url(${portada})`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-        }}
+
+      {/* Floating Info Card (Futuristic Style) */}
+      <motion.div 
+        initial={{ x: 100, opacity: 0 }}
+        animate={{ x: 0, opacity: 1 }}
+        transition={{ duration: 1, delay: 1 }}
+        className="hidden lg:block absolute right-8 top-1/2 -translate-y-1/2 w-80 glass-panel p-6 rounded-3xl"
       >
-        <div className="mx-auto flex min-h-[75vh] w-full max-w-7xl items-center px-4 py-20 sm:px-6 lg:px-8">
-          <div className="max-w-2xl space-y-8">
-            <div className="space-y-4">
-              <p className="inline-flex rounded-full border border-white/30 px-4 py-1 text-sm font-medium text-white/90">
-                Tienda online oficial
-              </p>
-              <h1 className="text-4xl font-extrabold leading-tight text-white sm:text-5xl lg:text-7xl tracking-tight">
-                GRAFIPLOT <span className="text-brand-red">VASQUEZ</span>
-              </h1>
-              <p className="text-xl text-slate-200 font-medium max-w-xl">
-                TU LUGAR DE IMPRESIONES Y PLOTEOS CON PRECIOS COMPETITIVOS. Atendemos corrido toda la semana, incluyendo feriados.
-              </p>
+        <div className="space-y-6">
+          <div className="flex items-start gap-4">
+            <div className="w-10 h-10 rounded-xl bg-brand-red/20 flex items-center justify-center border border-brand-red/30">
+              <MapPin className="w-5 h-5 text-brand-red" />
             </div>
-
-            <div className="flex items-center gap-4 py-2 bg-white/5 w-fit px-4 rounded-xl border border-white/10">
-              <img src={yape} alt="Yape" className="h-8 w-auto" />
-              <img src={plin} alt="Plin" className="h-8 w-auto" />
-              <img src={lukita} alt="Lukita" className="h-8 w-auto" />
+            <div>
+              <p className="text-[10px] text-slate-500 uppercase font-bold tracking-widest mb-1">Ubicación</p>
+              <p className="text-xs text-slate-200 font-medium">Av. Universitaria 606, Huánuco</p>
             </div>
-
-            <div className="flex flex-wrap gap-4 pt-4">
-              <Link
-                to="/register"
-                className="rounded-xl bg-brand-red px-8 py-4 text-sm font-bold text-white transition-all hover:bg-red-700 hover:scale-105 shadow-lg shadow-red-900/20"
-              >
-                IR A TIENDA ONLINE
-              </Link>
-              <a
-                href="https://wa.me/952628844?text=Hola%20ROY_VASQUES%2C%20quiero%20consultar%20un%20producto"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 rounded-xl border border-white/40 px-8 py-4 text-sm font-bold text-white transition-all hover:bg-white/10"
-              >
-                <MessageCircle className="h-5 w-5" />
-                WHATSAPP DIRECTO
-              </a>
-            </div>
-
-            <div className="space-y-3 rounded-2xl border border-white/10 bg-slate-900/80 p-6 text-sm text-slate-200 backdrop-blur-sm">
-              <div className="flex items-start gap-3">
-                <MapPin className="h-5 w-5 text-brand-red shrink-0" />
-                <div>
-                  <p className="font-bold text-white">Direccion:</p>
-                  <p>AV. UNIVERSITARIA 606. ref. FRENTE A LA PUERTA PRINCIPAL DE LA UNHEVAL</p>
-                </div>
+          </div>
+          
+          <div className="space-y-2">
+            <p className="text-[10px] text-slate-500 uppercase font-bold tracking-widest">Disponibilidad</p>
+            <div className="text-xs space-y-1">
+              <div className="flex justify-between">
+                <span>L-V</span>
+                <span className="text-white">07:00 - 22:00</span>
               </div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2 border-t border-white/5">
-                <div>
-                  <p className="font-bold text-white">Horario:</p>
-                  <p className="text-xs opacity-80 leading-relaxed">
-                    lun-vie 7am-10pm<br/>
-                    sab 8am-10pm<br/>
-                    dom 9am-10pm
-                  </p>
-                </div>
-                <div>
-                  <p className="font-bold text-white">WhatsApp:</p>
-                  <p className="text-brand-yellow font-bold text-lg">952 628 844</p>
-                </div>
+              <div className="flex justify-between">
+                <span>Sáb</span>
+                <span className="text-white">08:00 - 22:00</span>
+              </div>
+              <div className="flex justify-between">
+                <span>Dom</span>
+                <span className="text-white">09:00 - 22:00</span>
               </div>
             </div>
           </div>
+          
+          <div className="pt-4 border-t border-white/10 text-center">
+            <a 
+              href="https://maps.app.goo.gl/xVdKmLRH2RPNoTJW9" 
+              target="_blank" 
+              className="text-xs font-bold text-brand-yellow hover:underline flex items-center justify-center gap-1"
+            >
+              Google Maps <ChevronRight className="w-3 h-3" />
+            </a>
+          </div>
         </div>
-      </div>
+      </motion.div>
+
+      {/* Decorative Elements */}
+      <div className="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
     </section>
   );
 }
