@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, X, LogIn, UserPlus } from 'lucide-react';
+import { Menu, X, LogIn, UserPlus, Home, Briefcase, Phone } from 'lucide-react';
 import logo from '../../assets/brand/grafiplot-logo.webp';
 
 export function PublicNavbar({ onNavigateSection }) {
@@ -17,32 +17,32 @@ export function PublicNavbar({ onNavigateSection }) {
   }, []);
 
   const navLinks = [
-    { name: 'Inicio', id: 'inicio' },
-    { name: 'Servicios', id: 'servicios' },
-    { name: 'Contacto', id: 'contacto' },
+    { name: 'Inicio', id: 'inicio', icon: Home },
+    { name: 'Servicios', id: 'servicios', icon: Briefcase },
+    { name: 'Contacto', id: 'contacto', icon: Phone },
   ];
 
   return (
     <nav 
       className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${
         isScrolled 
-          ? 'py-4 bg-white/90 dark:bg-slate-950/90 backdrop-blur-xl border-b border-slate-200 dark:border-white/5 shadow-sm' 
-          : 'py-6 bg-transparent'
+          ? 'py-3 bg-white/95 dark:bg-slate-950/95 backdrop-blur-xl border-b border-slate-200 dark:border-white/5 shadow-sm' 
+          : 'py-5 bg-transparent'
       }`}
     >
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
+      <div className="container mx-auto px-6 flex items-center justify-between">
         <div className="flex items-center gap-3 cursor-pointer group" onClick={() => onNavigateSection('inicio')}>
-          <div className="w-10 h-10 bg-white rounded-xl p-1.5 flex items-center justify-center shadow-lg shadow-slate-200 dark:shadow-none border border-slate-100 dark:border-white/10 group-hover:scale-110 transition-transform">
+          <div className="w-9 h-9 bg-white rounded-xl p-1.5 flex items-center justify-center shadow-lg shadow-slate-200 dark:shadow-none border border-slate-100 dark:border-white/10 group-hover:scale-110 transition-transform">
             <img src={logo} alt="Grafiplot Logo" className="w-full h-full object-contain" />
           </div>
           <div className="flex flex-col -space-y-1">
-            <span className="text-xl font-black text-slate-900 dark:text-white tracking-tighter italic">GRAFIPLOT</span>
-            <span className="text-[10px] font-bold text-brand-red tracking-[0.3em] uppercase">Vasquez</span>
+            <span className="text-lg font-black text-slate-900 dark:text-white tracking-tighter italic">GRAFIPLOT</span>
+            <span className="text-[9px] font-bold text-brand-red tracking-[0.3em] uppercase">Vasquez</span>
           </div>
         </div>
 
         {/* Desktop Menu */}
-        <div className="hidden md:flex items-center gap-8">
+        <div className="hidden md:flex items-center gap-6 lg:gap-8">
           <div className="flex items-center gap-6">
             {navLinks.map((link) => (
               <button
@@ -77,51 +77,71 @@ export function PublicNavbar({ onNavigateSection }) {
 
         {/* Mobile Toggle */}
         <button 
-          className="md:hidden text-slate-900 dark:text-white p-2"
+          className="md:hidden text-slate-900 dark:text-white p-2 rounded-xl bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10"
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
         >
-          {mobileMenuOpen ? <X /> : <Menu />}
+          {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
         </button>
       </div>
 
-      {/* Mobile Menu */}
+      {/* Fullscreen Mobile Menu */}
       <AnimatePresence>
         {mobileMenuOpen && (
           <motion.div
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            className="md:hidden bg-white dark:bg-slate-950 border-b border-slate-200 dark:border-white/10 overflow-hidden"
+            initial={{ opacity: 0, x: '100%' }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: '100%' }}
+            className="fixed inset-0 z-[60] bg-white dark:bg-slate-950 flex flex-col"
           >
-            <div className="px-4 py-10 flex flex-col gap-8 text-center">
-              {navLinks.map((link) => (
-                <button
+            <div className="p-6 flex items-center justify-between border-b border-slate-100 dark:border-white/5">
+               <div className="flex items-center gap-3">
+                <div className="w-8 h-8 bg-white rounded-lg p-1.5 border border-slate-100">
+                  <img src={logo} alt="Logo" className="w-full h-full object-contain" />
+                </div>
+                <span className="text-lg font-black text-slate-900 dark:text-white italic">GRAFIPLOT</span>
+              </div>
+              <button 
+                onClick={() => setMobileMenuOpen(false)}
+                className="p-3 rounded-2xl bg-slate-100 dark:bg-white/5 text-slate-900 dark:text-white"
+              >
+                <X size={24} />
+              </button>
+            </div>
+
+            <div className="flex-1 flex flex-col justify-center px-8 gap-10">
+              {navLinks.map((link, idx) => (
+                <motion.button
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: idx * 0.1 }}
                   key={link.id}
                   onClick={() => {
                     onNavigateSection(link.id);
                     setMobileMenuOpen(false);
                   }}
-                  className="text-xl font-black text-slate-900 dark:text-slate-100 tracking-tighter"
+                  className="flex items-center gap-6 text-3xl font-black text-slate-900 dark:text-white tracking-tighter text-left uppercase"
                 >
+                  <link.icon className="w-8 h-8 text-brand-red dark:text-brand-yellow" />
                   {link.name}
-                </button>
+                </motion.button>
               ))}
-              <div className="flex flex-col gap-4 pt-4 border-t border-slate-100 dark:border-white/5">
-                <Link
-                  to="/login"
-                  className="text-slate-900 dark:text-white font-black tracking-widest text-sm"
-                  onClick={() => setMobileMenuOpen(false)}
-                >
-                  INGRESAR
-                </Link>
-                <Link
-                  to="/register"
-                  className="bg-brand-yellow text-slate-900 py-4 rounded-2xl font-black tracking-widest text-sm shadow-xl shadow-brand-yellow/10"
-                  onClick={() => setMobileMenuOpen(false)}
-                >
-                  CREAR CUENTA
-                </Link>
-              </div>
+            </div>
+
+            <div className="p-8 space-y-4 bg-slate-50 dark:bg-white/5 border-t border-slate-200 dark:border-white/10">
+              <Link
+                to="/login"
+                className="w-full py-5 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-2xl font-black tracking-widest text-sm flex items-center justify-center gap-3"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                <LogIn size={20} /> INGRESAR
+              </Link>
+              <Link
+                to="/register"
+                className="w-full py-5 bg-brand-yellow text-slate-900 rounded-2xl font-black tracking-widest text-sm flex items-center justify-center gap-3 shadow-xl shadow-brand-yellow/20"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                <UserPlus size={20} /> CREAR CUENTA
+              </Link>
             </div>
           </motion.div>
         )}

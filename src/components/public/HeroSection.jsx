@@ -8,34 +8,34 @@ import lukita from '../../assets/payments/lukita.webp';
 
 export function HeroSection() {
   return (
-    <section id="inicio" className="relative min-h-[90vh] flex items-center overflow-hidden bg-slate-50 dark:bg-slate-950 transition-colors duration-500">
+    <section id="inicio" className="relative min-h-[95vh] flex items-center overflow-hidden bg-slate-50 dark:bg-slate-950 transition-colors duration-500 py-12 md:py-0">
       {/* Fondo Adaptativo */}
       <div className="absolute inset-0 z-0">
         <div 
-          className="absolute inset-0 bg-cover bg-center opacity-[0.05] dark:opacity-20 grayscale-[0.3] scale-105 transition-opacity duration-500"
+          className="absolute inset-0 bg-cover bg-center opacity-[0.08] dark:opacity-25 grayscale-[0.2] scale-110 transition-opacity duration-500"
           style={{ backgroundImage: `url(${portada})` }}
         />
         <div className="absolute inset-0 bg-gradient-to-b from-slate-50 via-transparent to-slate-50 dark:from-slate-950 dark:via-slate-950/80 dark:to-slate-950" />
       </div>
 
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10 pt-20">
+      <div className="container mx-auto px-6 lg:px-8 relative z-10 pt-16 md:pt-24">
         <div className="max-w-4xl mx-auto text-center lg:text-left lg:mx-0">
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 text-brand-red dark:text-brand-yellow text-[10px] font-black tracking-[0.2em] uppercase mb-6 shadow-sm"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 text-brand-red dark:text-brand-yellow text-[9px] md:text-[10px] font-black tracking-[0.2em] uppercase mb-6 shadow-sm"
           >
             <Sparkles className="w-3 h-3" />
             Tienda Online Oficial
           </motion.div>
 
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="mb-4"
+            className="mb-3"
           >
-            <h2 className="text-sm md:text-base font-black text-slate-500 dark:text-brand-yellow uppercase tracking-[0.3em]">
+            <h2 className="text-xs md:text-sm font-black text-slate-500 dark:text-brand-yellow uppercase tracking-[0.3em]">
               GRAFIPLOT VASQUEZ
             </h2>
           </motion.div>
@@ -44,7 +44,7 @@ export function HeroSection() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            className="text-4xl md:text-6xl lg:text-7xl font-black tracking-tighter leading-[1.1] mb-8 text-slate-900 dark:text-white uppercase"
+            className="text-3xl md:text-6xl lg:text-7xl font-black tracking-tighter leading-[1.1] mb-6 md:mb-8 text-slate-900 dark:text-white uppercase"
           >
             TU LUGAR DE IMPRESIONES Y <span className="text-brand-red dark:text-brand-yellow italic">PLOTEOS CON PRECIOS COMPETITIVOS</span>
           </motion.h1>
@@ -53,7 +53,7 @@ export function HeroSection() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.4 }}
-            className="text-lg md:text-xl text-slate-600 dark:text-slate-400 max-w-2xl mb-12 leading-relaxed font-light tracking-tight"
+            className="text-base md:text-xl text-slate-600 dark:text-slate-400 max-w-2xl mb-10 md:mb-12 leading-relaxed font-light tracking-tight px-4 md:px-0"
           >
             Atendemos corrido toda la semana, incluyendo feriados. <span className="text-slate-900 dark:text-white font-bold">Calidad técnica y rapidez</span> para tus proyectos más exigentes.
           </motion.p>
@@ -62,60 +62,63 @@ export function HeroSection() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.6 }}
-            className="flex flex-wrap items-center justify-center lg:justify-start gap-4 mb-16"
+            className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center lg:justify-start gap-4 mb-16 px-4 md:px-0"
           >
             <Link
               to="/register"
-              className="group relative px-8 py-4 bg-brand-yellow text-slate-900 font-black text-xs tracking-[0.2em] rounded-2xl overflow-hidden transition-all hover:scale-105 active:scale-95 shadow-xl shadow-brand-yellow/20 dark:shadow-brand-yellow/10 uppercase"
+              className="group relative px-8 py-5 bg-brand-yellow text-slate-900 font-black text-[10px] md:text-xs tracking-[0.2em] rounded-2xl overflow-hidden transition-all hover:scale-[1.02] active:scale-95 shadow-xl shadow-brand-yellow/20 dark:shadow-brand-yellow/10 uppercase text-center"
             >
               Ir a tienda online
               <div className="absolute inset-0 bg-white/20 translate-x-full group-hover:translate-x-0 transition-transform duration-300" />
             </Link>
             
-            <Link
-              to="/login"
-              className="px-8 py-4 bg-slate-900 dark:bg-white text-white dark:text-slate-900 font-black text-xs tracking-[0.2em] rounded-2xl hover:scale-105 transition-all shadow-lg flex items-center gap-2 uppercase"
-            >
-              <LogIn className="w-4 h-4" />
-              Ingresar
-            </Link>
+            <div className="flex gap-3">
+              <Link
+                to="/login"
+                className="flex-1 sm:flex-none px-6 py-5 bg-slate-900 dark:bg-white text-white dark:text-slate-900 font-black text-[10px] md:text-xs tracking-[0.2em] rounded-2xl hover:scale-[1.02] transition-all shadow-lg flex items-center justify-center gap-2 uppercase"
+              >
+                <LogIn className="w-4 h-4" />
+                Ingresar
+              </Link>
 
-            <a
-              href="https://wa.me/952628844?text=Hola%20ROY_VASQUES%2C%20quiero%20consultar%20un%20producto"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="px-8 py-4 bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-2xl text-slate-900 dark:text-white font-black text-xs tracking-[0.2em] hover:bg-slate-100 dark:hover:bg-white/10 transition-all shadow-sm flex items-center gap-2 uppercase"
-            >
-              <MessageCircle className="w-5 h-5 text-[#25D366]" />
-              WhatsApp
-            </a>
+              <a
+                href="https://wa.me/952628844?text=Hola%20ROY_VASQUES%2C%20quiero%20consultar%20un%20producto"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex-1 sm:flex-none px-6 py-5 bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-2xl text-slate-900 dark:text-white font-black text-[10px] md:text-xs tracking-[0.2em] hover:bg-slate-100 dark:hover:bg-white/10 transition-all shadow-sm flex items-center justify-center gap-2 uppercase"
+              >
+                <MessageCircle className="w-5 h-5 text-[#25D366]" />
+                WhatsApp
+              </a>
+            </div>
           </motion.div>
 
+          {/* Logos Pagos - Mejorados para móvil */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.8 }}
-            className="flex items-center justify-center lg:justify-start gap-6 opacity-40 dark:opacity-60 grayscale hover:grayscale-0 transition-all duration-500"
+            className="flex items-center justify-center lg:justify-start gap-4 md:gap-6 opacity-60 dark:opacity-70 grayscale hover:grayscale-0 transition-all duration-500 overflow-x-auto pb-4 no-scrollbar"
           >
-            <div className="bg-white/10 p-2 rounded-lg border border-slate-200 dark:border-white/5 shadow-sm">
-              <img src={yape} alt="Yape" className="h-5 w-auto" />
+            <div className="bg-white/10 dark:bg-white/5 p-2 rounded-xl border border-slate-200 dark:border-white/10 shadow-sm shrink-0">
+              <img src={yape} alt="Yape" className="h-4 md:h-5 w-auto" />
             </div>
-            <div className="bg-white/10 p-2 rounded-lg border border-slate-200 dark:border-white/5 shadow-sm">
-              <img src={plin} alt="Plin" className="h-5 w-auto" />
+            <div className="bg-white/10 dark:bg-white/5 p-2 rounded-xl border border-slate-200 dark:border-white/10 shadow-sm shrink-0">
+              <img src={plin} alt="Plin" className="h-4 md:h-5 w-auto" />
             </div>
-            <div className="bg-white/10 p-2 rounded-lg border border-slate-200 dark:border-white/5 shadow-sm">
-              <img src={lukita} alt="Lukita" className="h-5 w-auto" />
+            <div className="bg-white/10 dark:bg-white/5 p-2 rounded-xl border border-slate-200 dark:border-white/10 shadow-sm shrink-0">
+              <img src={lukita} alt="Lukita" className="h-4 md:h-5 w-auto" />
             </div>
           </motion.div>
         </div>
       </div>
 
-      {/* Info Card Flotante */}
+      {/* Info Card Flotante - Oculta en móviles muy pequeños, mejorada para tablets */}
       <motion.div 
         initial={{ x: 50, opacity: 0 }}
         animate={{ x: 0, opacity: 1 }}
         transition={{ delay: 1 }}
-        className="hidden xl:block absolute right-12 top-1/2 -translate-y-1/2 w-80 bg-white dark:bg-slate-900/40 backdrop-blur-2xl p-8 rounded-[3rem] shadow-2xl shadow-slate-200/50 dark:shadow-none border border-slate-100 dark:border-white/10"
+        className="hidden xl:block absolute right-8 2xl:right-12 top-1/2 -translate-y-1/2 w-80 bg-white/80 dark:bg-slate-900/40 backdrop-blur-3xl p-8 rounded-[3rem] shadow-2xl shadow-slate-200/50 dark:shadow-none border border-slate-100 dark:border-white/10"
       >
         <div className="space-y-8">
           <div className="flex items-start gap-5">
@@ -124,7 +127,7 @@ export function HeroSection() {
             </div>
             <div>
               <p className="text-[10px] text-slate-400 dark:text-slate-500 uppercase font-black tracking-widest mb-1">Local Principal</p>
-              <p className="text-sm text-slate-900 dark:text-slate-200 font-bold leading-tight tracking-tight italic">AV. UNIVERSITARIA 606. ref. FRENTE A LA PUERTA PRINCIPAL DE LA UNHEVAL</p>
+              <p className="text-sm text-slate-900 dark:text-slate-200 font-bold leading-tight tracking-tight italic uppercase">AV. UNIVERSITARIA 606. FRENTE A LA UNHEVAL</p>
             </div>
           </div>
           
