@@ -1,90 +1,101 @@
-import { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Printer, Scissors, Scan, Maximize2, FileText, Cpu, ChevronDown } from 'lucide-react';
+import { useEffect, useRef } from 'react';
+import { Link } from 'react-router-dom';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { motion } from 'framer-motion';
+import { ArrowUpRight } from 'lucide-react';
+import { servicesData } from '../../data/servicesData';
 
-// Imágenes de servicios (ilustraciones detalladas)
-import imgImpresion from '../../assets/services_2/servi-foto-papel-fotografico.svg';
-import imgPloteo from '../../assets/services/monografico.svg';
-import imgAcabados from '../../assets/services_2/servi-enmicado-a3.svg';
-import imgDigitalizacion from '../../assets/services_2/servi-escaneo-a3.svg';
-import imgAPA from '../../assets/services/tesis.svg';
-import imgSoporte from '../../assets/computo/pc-diagnostico.webp';
+gsap.registerPlugin(ScrollTrigger);
 
-const services = [
-  {
-    id: 1,
-    title: 'Impresión Alta Fidelidad',
-    desc: 'Documentos, tesis y separatas con nitidez láser y colores vibrantes en diversos gramajes. Ideal para presentaciones profesionales y académicas.',
-    icon: Printer,
-    image: imgImpresion,
-    color: 'text-blue-600 dark:text-blue-400',
-    bg: 'bg-blue-600/5 dark:bg-blue-400/10',
-    borderColor: 'border-blue-200 dark:border-blue-500/30'
-  },
-  {
-    id: 2,
-    title: 'Ploteo Técnico & Planos',
-    desc: 'Precisión absoluta para ingeniería y arquitectura en tamaños A2, A1 y A0. Calidad de línea impecable para tus proyectos técnicos.',
-    icon: Maximize2,
-    image: imgPloteo,
-    color: 'text-brand-red dark:text-brand-yellow',
-    bg: 'bg-brand-red/5 dark:bg-brand-yellow/10',
-    borderColor: 'border-brand-red/20 dark:border-brand-yellow/30'
-  },
-  {
-    id: 3,
-    title: 'Acabados Especiales',
-    desc: 'Encuadernación, laminado y cortes de precisión para una presentación profesional. Dale el toque final perfecto a tus trabajos.',
-    icon: Scissors,
-    image: imgAcabados,
-    color: 'text-amber-600 dark:text-amber-400',
-    bg: 'bg-amber-600/5 dark:bg-amber-400/10',
-    borderColor: 'border-amber-200 dark:border-amber-500/30'
-  },
-  {
-    id: 4,
-    title: 'Digitalización Inteligente',
-    desc: 'Escaneo de alta resolución y conversión a formatos editables para tus archivos. Preserva tus documentos físicos en formato digital.',
-    icon: Scan,
-    image: imgDigitalizacion,
-    color: 'text-emerald-600 dark:text-emerald-400',
-    bg: 'bg-emerald-600/5 dark:bg-emerald-400/10',
-    borderColor: 'border-emerald-200 dark:border-emerald-500/30'
-  },
-  {
-    id: 5,
-    title: 'Normativa Académica APA',
-    desc: 'Asesoría técnica en diagramación y márgenes según reglamentos universitarios. Asegura que tu tesis cumpla con todos los estándares.',
-    icon: FileText,
-    image: imgAPA,
-    color: 'text-indigo-600 dark:text-indigo-400',
-    bg: 'bg-indigo-600/5 dark:bg-indigo-400/10',
-    borderColor: 'border-indigo-200 dark:border-indigo-500/30'
-  },
-  {
-    id: 6,
-    title: 'Soporte y Hardware',
-    desc: 'Mantenimiento, optimización y actualización de equipos para tu productividad. Servicio técnico de confianza para tus herramientas de trabajo.',
-    icon: Cpu,
-    image: imgSoporte,
-    color: 'text-orange-600 dark:text-orange-400',
-    bg: 'bg-orange-600/5 dark:bg-orange-400/10',
-    borderColor: 'border-orange-200 dark:border-orange-500/30'
-  },
-];
+function ServiceCard({ service, index }) {
+  const containerRef = useRef(null);
+  const imageRef = useRef(null);
+
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      gsap.to(imageRef.current, {
+        y: '-25%',
+        ease: 'none',
+        scrollTrigger: {
+          trigger: containerRef.current,
+          start: 'top bottom',
+          end: 'bottom top',
+          scrub: true,
+        },
+      });
+    }, containerRef);
+
+    return () => ctx.revert();
+  }, []);
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 50 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: '-60px' }}
+      transition={{ duration: 0.5, delay: index * 0.08, ease: 'easeOut' }}
+    >
+      <Link
+        to={`/servicios/${service.id}`}
+        ref={containerRef}
+        className="block group relative overflow-hidden rounded-2xl md:rounded-3xl border border-slate-200 dark:border-white/10 h-72 md:h-80 bg-white dark:bg-[#111] transition-all duration-500 hover:shadow-2xl hover:shadow-slate-900/10 dark:hover:shadow-white/5 hover:-translate-y-1"
+      >
+        {/* Imagen de fondo con efecto parallax GSAP */}
+        <div className="absolute inset-0 z-0 overflow-hidden rounded-2xl md:rounded-3xl">
+          <div
+            ref={imageRef}
+            className="absolute -bottom-12 left-0 w-full h-[150%] bg-cover bg-center opacity-15 dark:opacity-10 group-hover:opacity-25 dark:group-hover:opacity-20 transition-opacity duration-700"
+            style={{ backgroundImage: `url(${service.image})` }}
+          />
+          {/* Gradiente overlay para legibilidad */}
+          <div className="absolute inset-0 bg-gradient-to-t from-white via-white/80 to-transparent dark:from-[#111] dark:via-[#111]/80 dark:to-transparent" />
+        </div>
+
+        {/* Contenido de la tarjeta - Plano superior */}
+        <div className="relative z-20 h-full p-6 md:p-8 flex flex-col justify-between">
+          {/* Top: Icono + Badge */}
+          <div className="flex items-start justify-between">
+            <div className={`w-12 h-12 md:w-14 md:h-14 ${service.bg} rounded-xl md:rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform duration-500`}>
+              <service.icon className={`w-6 h-6 md:w-7 md:h-7 ${service.color}`} />
+            </div>
+            <div className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-slate-100 dark:bg-white/5 flex items-center justify-center opacity-0 group-hover:opacity-100 transform translate-x-2 group-hover:translate-x-0 transition-all duration-300">
+              <ArrowUpRight className="w-4 h-4 md:w-5 md:h-5 text-slate-600 dark:text-white" />
+            </div>
+          </div>
+
+          {/* Bottom: Título + Desc */}
+          <div className="space-y-2">
+            <h4 className="text-xl md:text-2xl font-black text-slate-900 dark:text-white tracking-tight leading-tight group-hover:text-brand-red dark:group-hover:text-brand-yellow transition-colors duration-300">
+              {service.title}
+            </h4>
+            <p className="text-sm text-slate-500 dark:text-slate-400 font-medium leading-relaxed line-clamp-2">
+              {service.shortDesc}
+            </p>
+
+            {/* Línea de acento animada */}
+            <div className="flex items-center gap-2 pt-2">
+              <div
+                className="h-[2px] w-8 group-hover:w-16 transition-all duration-500 rounded-full"
+                style={{ backgroundColor: service.accentHex }}
+              />
+              <span className={`text-[10px] font-black uppercase tracking-[0.2em] ${service.color} opacity-0 group-hover:opacity-100 transition-opacity duration-500`}>
+                Ver detalles
+              </span>
+            </div>
+          </div>
+        </div>
+      </Link>
+    </motion.div>
+  );
+}
 
 export function ServicesSection() {
-  const [expandedId, setExpandedId] = useState(null);
-
-  const toggleExpand = (id) => {
-    setExpandedId(expandedId === id ? null : id);
-  };
-
   return (
     <section id="servicios" className="py-24 md:py-32 bg-slate-50 dark:bg-slate-950 transition-colors duration-500 relative overflow-hidden">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="text-center max-w-3xl mx-auto mb-16 md:mb-24">
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
@@ -92,7 +103,7 @@ export function ServicesSection() {
           >
             Catálogo Interactivo
           </motion.div>
-          <motion.h3 
+          <motion.h3
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -102,84 +113,10 @@ export function ServicesSection() {
           </motion.h3>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8 max-w-6xl mx-auto">
-          {services.map((service, index) => {
-            const isExpanded = expandedId === service.id;
-
-            return (
-              <motion.div
-                layout
-                initial={{ opacity: 0, y: 40 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-50px" }}
-                transition={{ duration: 0.6, delay: index * 0.1, ease: "easeOut" }}
-                key={service.id}
-                onClick={() => toggleExpand(service.id)}
-                className={`premium-card cursor-pointer overflow-hidden transition-all duration-500 shadow-sm hover:shadow-xl dark:shadow-none ${
-                  isExpanded ? 'border-2 ' + service.borderColor : 'hover:border-slate-300 dark:hover:border-white/20 hover:-translate-y-1'
-                }`}
-              >
-                <motion.div layout className="p-4 md:p-8 flex items-center justify-between gap-3 md:gap-4">
-                  <div className="flex items-center gap-3 md:gap-6">
-                    <div className={`w-10 h-10 md:w-16 md:h-16 shrink-0 ${service.bg} rounded-xl md:rounded-[1.2rem] flex items-center justify-center transition-transform ${isExpanded ? 'scale-110' : ''}`}>
-                      <service.icon className={`w-5 h-5 md:w-8 md:h-8 ${service.color}`} />
-                    </div>
-                    <h4 className={`text-base md:text-2xl font-black tracking-tight leading-tight transition-colors ${
-                      isExpanded ? service.color : 'text-slate-900 dark:text-white'
-                    }`}>
-                      {service.title}
-                    </h4>
-                  </div>
-                  <motion.div
-                    animate={{ rotate: isExpanded ? 180 : 0 }}
-                    transition={{ duration: 0.3 }}
-                    className={`w-8 h-8 md:w-10 md:h-10 shrink-0 rounded-full flex items-center justify-center bg-slate-100 dark:bg-white/5 text-slate-400`}
-                  >
-                    <ChevronDown className="w-4 h-4 md:w-5 md:h-5" />
-                  </motion.div>
-                </motion.div>
-
-                <AnimatePresence>
-                  {isExpanded && (
-                    <motion.div
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: 'auto', opacity: 1 }}
-                      exit={{ height: 0, opacity: 0 }}
-                      transition={{ duration: 0.4, ease: "easeInOut" }}
-                    >
-                      <div className="px-6 md:px-8 pb-8 pt-2">
-                        <div className="flex flex-col md:flex-row gap-8 items-center md:items-start border-t border-slate-100 dark:border-white/10 pt-6">
-                          <div className="flex-1 space-y-6">
-                            <p className="text-slate-600 dark:text-slate-400 text-sm md:text-base leading-relaxed font-light tracking-tight">
-                              {service.desc}
-                            </p>
-                            <a 
-                              href={`https://wa.me/952628844?text=Hola%2C%20quisiera%20consultar%20sobre%20el%20servicio%20de%20${encodeURIComponent(service.title)}`}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className={`inline-flex items-center gap-2 px-6 py-3 rounded-xl text-xs font-black tracking-[0.1em] uppercase text-white transition-transform hover:scale-105 active:scale-95 ${
-                                service.id === 2 ? 'bg-brand-red dark:bg-brand-yellow dark:text-slate-900' : 'bg-slate-900 dark:bg-white dark:text-slate-900'
-                              }`}
-                              onClick={(e) => e.stopPropagation()}
-                            >
-                              Consultar Servicio
-                            </a>
-                          </div>
-                          <div className="w-full md:w-1/2 flex justify-center bg-slate-50 dark:bg-white/5 rounded-2xl p-4 border border-slate-100 dark:border-white/5">
-                            <img 
-                              src={service.image} 
-                              alt={service.title} 
-                              className="w-full max-w-[120px] md:max-w-[200px] h-auto object-contain dark:opacity-90"
-                            />
-                          </div>
-                        </div>
-                      </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </motion.div>
-            );
-          })}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6 max-w-7xl mx-auto">
+          {servicesData.map((service, index) => (
+            <ServiceCard key={service.id} service={service} index={index} />
+          ))}
         </div>
       </div>
     </section>

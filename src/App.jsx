@@ -10,6 +10,7 @@ import { Register } from './pages/auth/Register';
 import { ForgotPassword } from './pages/auth/ForgotPassword';
 import { AdminRoute } from './components/auth/AdminRoute';
 import { AdminDashboard } from './pages/admin/AdminDashboard';
+import { ServiceDetail } from './pages/public/ServiceDetail';
 import { supabase } from './lib/supabaseClient';
 import { CartProvider } from './lib/cartStore';
 import { WhatsAppWidget } from './components/common/WhatsAppWidget';
@@ -66,6 +67,7 @@ function App() {
       <Routes>
         {/* Rutas Públicas */}
         <Route path="/" element={<LandingPage />} />
+        <Route path="/servicios/:serviceId" element={<ServiceDetail />} />
         <Route
           path="/login"
           element={session ? <Navigate to="/dashboard" replace /> : <Login />}
