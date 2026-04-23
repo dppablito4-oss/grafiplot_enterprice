@@ -7,7 +7,7 @@ import { Historial } from './pages/Historial';
 import { LandingPage } from './pages/public/LandingPage';
 import { Login } from './pages/auth/Login';
 import { Register } from './pages/auth/Register';
-import { supabase } from './lib/supabaseClient';
+import { hasSupabaseEnv, supabase } from './lib/supabaseClient';
 
 function ProtectedRoute({ session, children }) {
   if (!session) {
@@ -22,6 +22,11 @@ function App() {
   const [loadingAuth, setLoadingAuth] = useState(true);
 
   useEffect(() => {
+    if (!supabase) {
+      setLoadingAuth(false);
+      return;
+    }
+
     let mounted = true;
 
     supabase.auth.getSession().then(({ data }) => {
@@ -56,8 +61,14 @@ function App() {
       <Routes>
         {/* Rutas Públicas */}
         <Route path="/" element={<LandingPage />} />
-        <Route path="/login" element={session ? <Navigate to="/dashboard" replace /> : <Login />} />
-        <Route path="/register" element={session ? <Navigate to="/dashboard" replace /> : <Register />} />
+        <Route
+          path="/login"
+          element={session ? <Navigate to="/dashboard" replace /> : <Login hasSupabaseEnv={hasSupabaseEnv} />}
+        />
+        <Route
+          path="/register"
+          element={session ? <Navigate to="/dashboard" replace /> : <Register hasSupabaseEnv={hasSupabaseEnv} />}
+        />
 
         {/* Rutas Privadas (Dashboard) */}
         <Route

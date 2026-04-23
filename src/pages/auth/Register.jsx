@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { supabase } from '../../lib/supabaseClient';
 
-export function Register() {
+export function Register({ hasSupabaseEnv }) {
   const navigate = useNavigate();
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -15,6 +15,12 @@ export function Register() {
     e.preventDefault();
     setErrorMessage('');
     setSuccessMessage('');
+
+    if (!supabase) {
+      setErrorMessage('Supabase no esta configurado en este entorno.');
+      return;
+    }
+
     setSubmitting(true);
 
     const { data, error } = await supabase.auth.signUp({
@@ -67,6 +73,12 @@ export function Register() {
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
         <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
           <form className="space-y-6" onSubmit={handleRegister}>
+            {!hasSupabaseEnv && (
+              <p className="rounded-md border border-amber-200 bg-amber-50 px-3 py-2 text-sm text-amber-700">
+                Falta configurar variables de Supabase en produccion.
+              </p>
+            )}
+
             <div>
               <label htmlFor="name" className="block text-sm font-medium text-gray-700">
                 Nombre completo
