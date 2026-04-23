@@ -2,11 +2,12 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { supabase } from '../../lib/supabaseClient';
 import logo from '../../assets/brand/grafiplot-logo.webp';
+import graphitaLogo from '../../assets/graphita_ia.svg';
 
 export function Register({ hasSupabaseEnv }) {
   const navigate = useNavigate();
   const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState('');
   const [password, setPassword] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
@@ -24,12 +25,14 @@ export function Register({ hasSupabaseEnv }) {
 
     setSubmitting(true);
 
+    const fakeEmail = `${phone}@grafiplot.temp`;
     const { data, error } = await supabase.auth.signUp({
-      email,
+      email: fakeEmail,
       password,
       options: {
         data: {
           full_name: name,
+          phone_number: phone,
         },
       },
     });
@@ -42,7 +45,8 @@ export function Register({ hasSupabaseEnv }) {
     }
 
     if (!data.session) {
-      setSuccessMessage('Cuenta creada. Revisa tu correo para confirmar la cuenta y luego inicia sesion.');
+      setSuccessMessage('Cuenta creada. Ya puedes iniciar sesión con tu número celular.');
+      // En entorno real con "Confirm email" desactivado, data.session debería existir.
       return;
     }
 
@@ -54,13 +58,19 @@ export function Register({ hasSupabaseEnv }) {
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         <div className="flex justify-center">
           <div className="flex flex-col items-center gap-3">
-            <div className="w-20 h-20 bg-white rounded-2xl shadow-sm p-2 border border-gray-100">
-              <img src={logo} alt="Grafiplot" className="w-full h-full object-contain" />
+            <div className="relative">
+              <div className="w-20 h-20 bg-white rounded-2xl shadow-sm p-2 border border-gray-100">
+                <img src={logo} alt="Grafiplot" className="w-full h-full object-contain" />
+              </div>
+              <img src={graphitaLogo} alt="Graphita IA" className="absolute -bottom-4 -right-6 w-12 h-12 drop-shadow-md animate-bounce" />
             </div>
-            <div className="text-center">
+            <div className="text-center mt-2">
               <h1 className="text-3xl font-black text-gray-900 tracking-tighter italic">
                 GRAFIPLOT <span className="text-brand-red">VASQUEZ</span>
               </h1>
+              <p className="mt-3 text-sm text-brand-red font-medium italic bg-red-50 py-1.5 px-4 rounded-full border border-red-100 max-w-xs mx-auto shadow-sm">
+                "Drop your data here! No te preocupes, tus archivos están safe conmigo." — Graphita
+              </p>
             </div>
           </div>
         </div>
@@ -103,20 +113,20 @@ export function Register({ hasSupabaseEnv }) {
             </div>
 
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-                Correo electrónico
+              <label htmlFor="phone" className="block text-sm font-medium text-gray-700">
+                Número de celular
               </label>
               <div className="mt-1">
                 <input
-                  id="email"
-                  name="email"
-                  type="email"
-                  value={email}
-                  onChange={(event) => setEmail(event.target.value)}
-                  autoComplete="email"
+                  id="phone"
+                  name="phone"
+                  type="tel"
+                  value={phone}
+                  onChange={(event) => setPhone(event.target.value)}
+                  autoComplete="tel"
                   required
                   className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                  placeholder="ejemplo@correo.com"
+                  placeholder="Ej. 999888777"
                 />
               </div>
             </div>
