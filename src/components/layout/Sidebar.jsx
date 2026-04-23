@@ -3,7 +3,7 @@ import { Home, PlusCircle, FolderOpen, ShoppingBag, Settings } from 'lucide-reac
 
 import logo from '../../assets/brand/grafiplot-logo.webp';
 
-export function Sidebar({ isOpen, closeSidebar }) {
+export function Sidebar({ isOpen, closeSidebar, profile }) {
   const menuItems = [
     { icon: Home, label: 'Inicio', path: '/dashboard' },
     { icon: PlusCircle, label: 'Nuevo Pedido', path: '/dashboard/nuevo-pedido' },
@@ -28,7 +28,7 @@ export function Sidebar({ isOpen, closeSidebar }) {
       {/* Sidebar */}
       <aside className={`
         fixed lg:static inset-y-0 left-0 z-30
-        w-64 bg-white dark:bg-slate-900 border-r border-gray-200 dark:border-slate-800
+        w-64 bg-white dark:bg-zinc-950 border-r border-gray-200 dark:border-zinc-800
         transform transition-transform duration-300 ease-in-out
         ${isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
         flex flex-col
@@ -62,7 +62,7 @@ export function Sidebar({ isOpen, closeSidebar }) {
                     flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-colors
                     ${isActive 
                       ? 'bg-brand-red/10 text-brand-red dark:bg-brand-red/20' 
-                      : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-slate-800 hover:text-gray-900 dark:hover:text-gray-100'
+                      : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-zinc-900 hover:text-gray-900 dark:hover:text-gray-100'
                     }
                   `}
                 >
@@ -73,30 +73,32 @@ export function Sidebar({ isOpen, closeSidebar }) {
             </nav>
           </div>
 
-          <div>
-            <p className="px-4 text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">
-              Sistema
-            </p>
-            <nav className="space-y-1">
-              {adminItems.map((item) => (
-                <NavLink
-                  key={item.path}
-                  to={item.path}
-                  onClick={closeSidebar}
-                  className={({ isActive }) => `
-                    flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-colors
-                    ${isActive 
-                      ? 'bg-brand-red/10 text-brand-red dark:bg-brand-red/20' 
-                      : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-slate-800 hover:text-gray-900 dark:hover:text-gray-100'
-                    }
-                  `}
-                >
-                  <item.icon className="w-5 h-5" />
-                  {item.label}
-                </NavLink>
-              ))}
-            </nav>
-          </div>
+          {profile?.role === 'admin' && (
+            <div>
+              <p className="px-4 text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">
+                Sistema
+              </p>
+              <nav className="space-y-1">
+                {adminItems.map((item) => (
+                  <NavLink
+                    key={item.path}
+                    to={item.path}
+                    onClick={closeSidebar}
+                    className={({ isActive }) => `
+                      flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-colors
+                      ${isActive 
+                        ? 'bg-brand-red/10 text-brand-red dark:bg-brand-red/20' 
+                        : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-zinc-900 hover:text-gray-900 dark:hover:text-gray-100'
+                      }
+                    `}
+                  >
+                    <item.icon className="w-5 h-5" />
+                    {item.label}
+                  </NavLink>
+                ))}
+              </nav>
+            </div>
+          )}
         </div>
         
         <div className="p-4 border-t border-gray-200 dark:border-slate-800">

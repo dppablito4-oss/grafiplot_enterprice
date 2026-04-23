@@ -38,8 +38,8 @@ export function DashboardLayout({ children }) {
   };
 
   return (
-    <div className="min-h-screen flex flex-col lg:flex-row bg-[#f9fafb] dark:bg-slate-950 transition-colors">
-      <Sidebar isOpen={sidebarOpen} closeSidebar={() => setSidebarOpen(false)} />
+    <div className="min-h-screen flex flex-col lg:flex-row bg-[#f9fafb] dark:bg-black transition-colors">
+      <Sidebar isOpen={sidebarOpen} closeSidebar={() => setSidebarOpen(false)} profile={profile} />
       
       <div className="flex-1 flex flex-col min-w-0">
         <Header toggleSidebar={() => setSidebarOpen(!sidebarOpen)} profile={profile} />
