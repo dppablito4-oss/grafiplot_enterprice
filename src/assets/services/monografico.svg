@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 140" role="img" aria-label="Trabajos monograficos">
+  <defs>
+    <linearGradient id="g3" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#334155"/>
+      <stop offset="100%" stop-color="#0f766e"/>
+    </linearGradient>
+  </defs>
+  <rect width="240" height="140" rx="14" fill="url(#g3)"/>
+  <rect x="36" y="26" width="72" height="92" rx="7" fill="#f8fafc"/>
+  <rect x="118" y="26" width="86" height="92" rx="7" fill="#ecfeff"/>
+  <rect x="48" y="42" width="48" height="7" rx="3" fill="#0f766e"/>
+  <rect x="48" y="56" width="48" height="7" rx="3" fill="#64748b"/>
+  <rect x="48" y="70" width="48" height="7" rx="3" fill="#64748b"/>
+  <rect x="128" y="42" width="56" height="8" rx="4" fill="#0e7490"/>
+  <rect x="128" y="57" width="56" height="8" rx="4" fill="#155e75"/>
+  <rect x="128" y="72" width="40" height="8" rx="4" fill="#0f766e"/>
+</svg>
