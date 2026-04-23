@@ -119,12 +119,12 @@ export function ServicesSection() {
                   isExpanded ? 'border-2 ' + service.borderColor : 'hover:border-slate-300 dark:hover:border-white/20 hover:-translate-y-1'
                 }`}
               >
-                <motion.div layout className="p-6 md:p-8 flex items-center justify-between gap-4">
-                  <div className="flex items-center gap-4 md:gap-6">
-                    <div className={`w-14 h-14 md:w-16 md:h-16 shrink-0 ${service.bg} rounded-[1.2rem] flex items-center justify-center transition-transform ${isExpanded ? 'scale-110' : ''}`}>
-                      <service.icon className={`w-7 h-7 md:w-8 md:h-8 ${service.color}`} />
+                <motion.div layout className="p-4 md:p-8 flex items-center justify-between gap-3 md:gap-4">
+                  <div className="flex items-center gap-3 md:gap-6">
+                    <div className={`w-10 h-10 md:w-16 md:h-16 shrink-0 ${service.bg} rounded-xl md:rounded-[1.2rem] flex items-center justify-center transition-transform ${isExpanded ? 'scale-110' : ''}`}>
+                      <service.icon className={`w-5 h-5 md:w-8 md:h-8 ${service.color}`} />
                     </div>
-                    <h4 className={`text-lg md:text-2xl font-black tracking-tight leading-tight transition-colors ${
+                    <h4 className={`text-base md:text-2xl font-black tracking-tight leading-tight transition-colors ${
                       isExpanded ? service.color : 'text-slate-900 dark:text-white'
                     }`}>
                       {service.title}
@@ -133,9 +133,9 @@ export function ServicesSection() {
                   <motion.div
                     animate={{ rotate: isExpanded ? 180 : 0 }}
                     transition={{ duration: 0.3 }}
-                    className={`w-10 h-10 shrink-0 rounded-full flex items-center justify-center bg-slate-100 dark:bg-white/5 text-slate-400`}
+                    className={`w-8 h-8 md:w-10 md:h-10 shrink-0 rounded-full flex items-center justify-center bg-slate-100 dark:bg-white/5 text-slate-400`}
                   >
-                    <ChevronDown className="w-5 h-5" />
+                    <ChevronDown className="w-4 h-4 md:w-5 md:h-5" />
                   </motion.div>
                 </motion.div>
 
@@ -169,7 +169,7 @@ export function ServicesSection() {
                             <img 
                               src={service.image} 
                               alt={service.title} 
-                              className="w-full max-w-[200px] h-auto object-contain dark:opacity-90"
+                              className="w-full max-w-[120px] md:max-w-[200px] h-auto object-contain dark:opacity-90"
                             />
                           </div>
                         </div>

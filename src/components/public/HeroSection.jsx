@@ -8,17 +8,18 @@ import lukita from '../../assets/payments/lukita.webp';
 
 export function HeroSection() {
   return (
-    <section id="inicio" className="relative min-h-[95vh] flex items-center overflow-hidden bg-slate-50 dark:bg-slate-950 transition-colors duration-500 py-12 md:py-0">
+    <section id="inicio" className="relative min-h-[100svh] md:min-h-[95vh] flex items-start md:items-center overflow-hidden bg-slate-50 dark:bg-zinc-950 transition-colors duration-500 pt-32 md:pt-0">
       {/* Fondo Adaptativo */}
       <div className="absolute inset-0 z-0">
         <div 
-          className="absolute inset-0 bg-cover bg-center opacity-[0.08] dark:opacity-25 grayscale-[0.2] scale-110 transition-opacity duration-500"
+          className="absolute inset-0 bg-cover bg-right md:bg-[center_right_-5rem] opacity-30 md:opacity-100 transition-opacity duration-500"
           style={{ backgroundImage: `url(${portada})` }}
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-slate-50 via-transparent to-slate-50 dark:from-slate-950 dark:via-slate-950/80 dark:to-slate-950" />
+        {/* Mobile Gradient (Bottom to top) and Desktop Gradient (Left to right) */}
+        <div className="absolute inset-0 bg-gradient-to-t md:bg-gradient-to-r from-slate-50 via-slate-50/90 md:via-slate-50/50 to-transparent dark:from-zinc-950 dark:via-zinc-950/90 dark:md:via-zinc-950/10 dark:to-transparent" />
       </div>
 
-      <div className="container mx-auto px-6 lg:px-8 relative z-10 pt-16 md:pt-24">
+      <div className="container mx-auto px-6 lg:px-8 relative z-10 pt-4 md:pt-24">
         <div className="max-w-4xl mx-auto text-center lg:text-left lg:mx-0">
           <motion.div
             initial={{ opacity: 0, y: 10 }}
@@ -118,7 +119,7 @@ export function HeroSection() {
         initial={{ x: 50, opacity: 0 }}
         animate={{ x: 0, opacity: 1 }}
         transition={{ delay: 1 }}
-        className="hidden xl:block absolute right-8 2xl:right-12 top-1/2 -translate-y-1/2 w-80 bg-white/80 dark:bg-slate-900/40 backdrop-blur-3xl p-8 rounded-[3rem] shadow-2xl shadow-slate-200/50 dark:shadow-none border border-slate-100 dark:border-white/10"
+        className="hidden xl:block absolute right-8 2xl:right-12 top-1/2 -translate-y-1/2 w-80 bg-white/80 dark:bg-zinc-900/40 backdrop-blur-3xl p-8 rounded-[3rem] shadow-2xl shadow-slate-200/50 dark:shadow-none border border-slate-100 dark:border-white/10"
       >
         <div className="space-y-8">
           <div className="flex items-start gap-5">
