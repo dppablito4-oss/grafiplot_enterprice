@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, X, LogIn, UserPlus, Home, Briefcase, Phone } from 'lucide-react';
+import { Menu, X, LogIn, UserPlus, Home, Briefcase, Phone, LogOut, ChevronDown } from 'lucide-react';
 import logo from '../../assets/brand/grafiplot-logo.webp';
+import { supabase } from '../../lib/supabaseClient';
 
 export function PublicNavbar({ onNavigateSection, profile }) {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -57,15 +58,40 @@ export function PublicNavbar({ onNavigateSection, profile }) {
           
           <div className="flex items-center gap-3">
             {profile ? (
-              <Link
-                to="/dashboard"
-                className="flex items-center gap-2 text-[10px] font-black text-white bg-slate-900 dark:bg-brand-yellow dark:text-slate-900 px-5 py-2.5 rounded-xl hover:scale-105 transition-all shadow-md shadow-slate-200 dark:shadow-brand-yellow/10 tracking-[0.1em] uppercase"
-              >
-                <div className="w-4 h-4 rounded-full bg-white dark:bg-slate-900 flex items-center justify-center text-[10px] text-slate-900 dark:text-brand-yellow font-black">
-                  {profile.full_name?.charAt(0).toUpperCase() || 'U'}
+              <div className="relative group">
+                <button
+                  className="flex items-center gap-2 text-[10px] font-black text-white bg-slate-900 dark:bg-brand-yellow dark:text-slate-900 px-5 py-2.5 rounded-xl hover:scale-105 transition-all shadow-md shadow-slate-200 dark:shadow-brand-yellow/10 tracking-[0.1em] uppercase"
+                >
+                  <div className="w-4 h-4 rounded-full bg-white dark:bg-slate-900 flex items-center justify-center text-[10px] text-slate-900 dark:text-brand-yellow font-black">
+                    {profile.full_name?.charAt(0).toUpperCase() || 'U'}
+                  </div>
+                  {profile.full_name?.split(' ')[0] || 'Mi Cuenta'}
+                  <ChevronDown className="w-3 h-3 ml-1" />
+                </button>
+                
+                {/* Dropdown Menu */}
+                <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-slate-900 rounded-xl shadow-xl border border-slate-100 dark:border-white/10 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform origin-top-right">
+                  <div className="p-2 space-y-1">
+                    <Link
+                      to="/dashboard"
+                      className="flex items-center gap-2 px-3 py-2 text-xs font-bold text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg transition-colors uppercase tracking-wider"
+                    >
+                      <Home className="w-4 h-4" />
+                      Ir al Dashboard
+                    </Link>
+                    <button
+                      onClick={async () => {
+                        await supabase.auth.signOut();
+                        window.location.reload();
+                      }}
+                      className="w-full flex items-center gap-2 px-3 py-2 text-xs font-bold text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors uppercase tracking-wider"
+                    >
+                      <LogOut className="w-4 h-4" />
+                      Cerrar Sesión
+                    </button>
+                  </div>
                 </div>
-                {profile.full_name?.split(' ')[0] || 'Dashboard'}
-              </Link>
+              </div>
             ) : (
               <>
                 <Link
@@ -138,13 +164,24 @@ export function PublicNavbar({ onNavigateSection, profile }) {
 
             <div className="p-8 space-y-4 bg-slate-50 dark:bg-white/5 border-t border-slate-200 dark:border-white/10">
               {profile ? (
-                <Link
-                  to="/dashboard"
-                  className="w-full py-5 bg-brand-yellow text-slate-900 rounded-2xl font-black tracking-widest text-sm flex items-center justify-center gap-3 shadow-xl shadow-brand-yellow/20"
-                  onClick={() => setMobileMenuOpen(false)}
-                >
-                  <Home size={20} /> IR AL DASHBOARD
-                </Link>
+                <>
+                  <Link
+                    to="/dashboard"
+                    className="w-full py-4 bg-brand-yellow text-slate-900 rounded-2xl font-black tracking-widest text-sm flex items-center justify-center gap-3 shadow-xl shadow-brand-yellow/20"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    <Home size={20} /> IR AL DASHBOARD
+                  </Link>
+                  <button
+                    onClick={async () => {
+                      await supabase.auth.signOut();
+                      window.location.reload();
+                    }}
+                    className="w-full py-4 bg-red-100 dark:bg-red-900/20 text-red-600 dark:text-red-400 rounded-2xl font-black tracking-widest text-sm flex items-center justify-center gap-3"
+                  >
+                    <LogOut size={20} /> CERRAR SESIÓN
+                  </button>
+                </>
               ) : (
                 <>
                   <Link
