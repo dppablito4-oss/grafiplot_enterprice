@@ -7,6 +7,7 @@ import { Historial } from './pages/Historial';
 import { LandingPage } from './pages/public/LandingPage';
 import { Login } from './pages/auth/Login';
 import { Register } from './pages/auth/Register';
+import { ForgotPassword } from './pages/auth/ForgotPassword';
 import { hasSupabaseEnv, supabase } from './lib/supabaseClient';
 import { CartProvider } from './lib/cartStore';
 import { WhatsAppWidget } from './components/common/WhatsAppWidget';
@@ -70,6 +71,10 @@ function App() {
         <Route
           path="/register"
           element={session ? <Navigate to="/dashboard" replace /> : <Register hasSupabaseEnv={hasSupabaseEnv} />}
+        />
+        <Route
+          path="/forgot-password"
+          element={session ? <Navigate to="/dashboard" replace /> : <ForgotPassword />}
         />
 
         {/* Rutas Privadas (Dashboard) */}

@@ -126,9 +126,9 @@ export function Login({ hasSupabaseEnv }) {
               </div>
 
               <div className="text-sm">
-                <a href="#" className="font-medium text-brand-red hover:text-red-700">
+                <Link to="/forgot-password" className="font-medium text-brand-red hover:text-red-700">
                   ¿Olvidaste tu contraseña?
-                </a>
+                </Link>
               </div>
             </div>
 
