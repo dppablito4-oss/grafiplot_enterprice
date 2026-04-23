@@ -1,5 +1,4 @@
-import React from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/Card';
+import { Card, CardContent } from '../components/ui/Card';
 import { Carousel } from '../components/ui/Carousel';
 import { Button } from '../components/ui/Button';
 import { Clock, CheckCircle, FileText, Printer, Scissors, Scan, Maximize2, ArrowRight } from 'lucide-react';
@@ -91,7 +90,7 @@ export function Home() {
             <h2 className="text-lg font-semibold mb-4">Servicios Frecuentes</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {quickActions.map(action => (
-                <Link to="/nuevo-pedido" key={action.id}>
+                <Link to="/dashboard/nuevo-pedido" key={action.id}>
                   <Card className="hover:border-brand-red transition-colors cursor-pointer h-full group">
                     <CardContent className="p-0 flex items-center gap-4">
                       <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${action.bg} ${action.color} group-hover:scale-110 transition-transform`}>
@@ -113,7 +112,7 @@ export function Home() {
         <div className="space-y-4">
           <div className="flex items-center justify-between">
             <h2 className="text-lg font-semibold">Trabajos Recientes</h2>
-            <Link to="/historial" className="text-sm text-brand-red hover:underline">Ver todos</Link>
+            <Link to="/dashboard/historial" className="text-sm text-brand-red hover:underline">Ver todos</Link>
           </div>
           <Card>
             <CardContent className="p-0">

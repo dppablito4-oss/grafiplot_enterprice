@@ -1,5 +1,4 @@
-import React from 'react';
-import { Settings, LogOut, Bell, Menu } from 'lucide-react';
+import { Bell, Menu } from 'lucide-react';
 import { Button } from '../ui/Button';
 
 export function Header({ toggleSidebar }) {

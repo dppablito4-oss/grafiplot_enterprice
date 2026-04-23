@@ -1,17 +1,16 @@
-import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { Home, PlusCircle, FolderOpen, ShoppingBag, Settings } from 'lucide-react';
 
 export function Sidebar({ isOpen, closeSidebar }) {
   const menuItems = [
-    { icon: Home, label: 'Inicio', path: '/' },
-    { icon: PlusCircle, label: 'Nuevo Pedido', path: '/nuevo-pedido' },
-    { icon: FolderOpen, label: 'Mis Trabajos', path: '/historial' },
-    { icon: ShoppingBag, label: 'Catálogo', path: '/catalogo' },
+    { icon: Home, label: 'Inicio', path: '/dashboard' },
+    { icon: PlusCircle, label: 'Nuevo Pedido', path: '/dashboard/nuevo-pedido' },
+    { icon: FolderOpen, label: 'Mis Trabajos', path: '/dashboard/historial' },
+    { icon: ShoppingBag, label: 'Catálogo', path: '/dashboard/catalogo' },
   ];
 
   const adminItems = [
-    { icon: Settings, label: 'Administración', path: '/admin' },
+    { icon: Settings, label: 'Administración', path: '/dashboard/admin' },
   ];
 
   return (
