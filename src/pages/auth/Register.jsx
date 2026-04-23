@@ -82,12 +82,6 @@ export function Register({ hasSupabaseEnv }) {
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
         <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
           <form className="space-y-6" onSubmit={handleRegister}>
-            {!hasSupabaseEnv && (
-              <p className="rounded-md border border-amber-200 bg-amber-50 px-3 py-2 text-sm text-amber-700">
-                Falta configurar variables de Supabase en produccion.
-              </p>
-            )}
-
             <div>
               <label htmlFor="name" className="block text-sm font-medium text-gray-700">
                 Nombre completo

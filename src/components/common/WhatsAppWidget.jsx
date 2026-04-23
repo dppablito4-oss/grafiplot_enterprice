@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, MessageCircle } from 'lucide-react';
+import { X } from 'lucide-react';
 import whatsappLogo from '../../assets/whatsapp/whatsapp-logo.webp';
 
 export function WhatsAppWidget() {
@@ -34,8 +34,8 @@ export function WhatsAppWidget() {
             
             <div className="flex flex-col gap-4">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-[0.8rem] bg-[#25D366]/10 flex items-center justify-center border border-[#25D366]/20">
-                   <MessageCircle className="w-5 h-5 text-[#25D366]" />
+                <div className="w-10 h-10 rounded-[0.8rem] bg-white flex items-center justify-center border border-slate-100 shadow-sm">
+                   <img src={whatsappLogo} alt="WhatsApp" className="w-6 h-6 object-contain" />
                 </div>
                 <div>
                   <p className="text-sm font-black text-slate-900 dark:text-white tracking-tighter">ROY VASQUEZ</p>
@@ -68,14 +68,14 @@ export function WhatsAppWidget() {
         href={whatsappUrl}
         target="_blank"
         rel="noopener noreferrer"
-        className="w-14 h-14 md:w-16 md:h-16 rounded-[1.2rem] bg-[#25D366] shadow-[0_10px_20px_rgba(37,211,102,0.3)] flex items-center justify-center pointer-events-auto group relative overflow-hidden"
+        className="w-14 h-14 md:w-16 md:h-16 rounded-[1.2rem] bg-white shadow-[0_10px_20px_rgba(37,211,102,0.3)] flex items-center justify-center pointer-events-auto group relative overflow-hidden border border-[#25D366]/20"
         aria-label="WhatsApp"
       >
-        <div className="absolute inset-0 bg-white/20 -translate-y-full group-hover:translate-y-0 transition-transform duration-500" />
+        <div className="absolute inset-0 bg-[#25D366]/10 -translate-y-full group-hover:translate-y-0 transition-transform duration-500" />
         <img 
           src={whatsappLogo} 
           alt="WhatsApp" 
-          className="w-6 h-6 md:w-7 md:h-7 relative z-10 brightness-0 invert" 
+          className="w-8 h-8 md:w-10 md:h-10 relative z-10 object-contain drop-shadow-sm" 
         />
       </motion.a>
     </div>
