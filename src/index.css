@@ -1,0 +1,33 @@
+@import "tailwindcss";
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+@theme {
+  --color-brand-red: #dc2626;
+  --color-brand-red-hover: #ef4444;
+  --color-brand-yellow: #facc15;
+  --color-brand-yellow-light: #fde047;
+  --color-bg-light: #f9fafb;
+  --color-bg-dark: #1a1a1a;
+  --color-text-light: #f3f4f6;
+  --color-text-dark: #111827;
+}
+
+@layer base {
+  :root {
+    font-family: 'Inter', system-ui, sans-serif;
+    background-color: var(--color-bg-light);
+    color: var(--color-text-dark);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      background-color: var(--color-bg-dark);
+      color: var(--color-text-light);
+    }
+  }
+
+  body {
+    @apply antialiased min-h-screen transition-colors duration-300;
+  }
+}
