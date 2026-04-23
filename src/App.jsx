@@ -8,6 +8,7 @@ import { LandingPage } from './pages/public/LandingPage';
 import { Login } from './pages/auth/Login';
 import { Register } from './pages/auth/Register';
 import { hasSupabaseEnv, supabase } from './lib/supabaseClient';
+import { CartProvider } from './lib/cartStore';
 
 function ProtectedRoute({ session, children }) {
   if (!session) {
@@ -97,4 +98,10 @@ function App() {
   );
 }
 
-export default App;
+export default function AppWrapper() {
+  return (
+    <CartProvider>
+      <App />
+    </CartProvider>
+  );
+}
