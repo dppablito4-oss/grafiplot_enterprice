@@ -24,7 +24,7 @@ export function Header({ toggleSidebar, profile }) {
         <Button variant="ghost" className="lg:hidden p-2 dark:text-slate-300" onClick={toggleSidebar}>
           <Menu className="w-5 h-5" />
         </Button>
-        <img src={logo} alt="Grafiplot" className="h-8 w-auto object-contain" />
+        <img src={logo} alt="Grafiplot" className="h-8 w-auto object-contain lg:hidden" />
       </div>
 
       <div className="flex items-center gap-2 lg:gap-4">

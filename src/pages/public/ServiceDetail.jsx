@@ -13,6 +13,7 @@ export function ServiceDetail() {
   const [profile, setProfile] = useState(null);
 
   useEffect(() => {
+    window.scrollTo(0, 0); // Opcional pero recomendado para que empiece arriba
     const fetchProfile = async () => {
       const { data: { session } } = await supabase.auth.getSession();
       if (session) {
@@ -25,7 +26,7 @@ export function ServiceDetail() {
       }
     };
     fetchProfile();
-  }, []);
+  }, [serviceId]);
 
   if (!service) {
     return (
