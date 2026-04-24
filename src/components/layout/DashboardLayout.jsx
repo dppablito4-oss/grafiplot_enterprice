@@ -79,7 +79,7 @@ export function DashboardLayout({ children }) {
       )}
 
       {/* Panel de Chat de Graphita */}
-      <GraphitaChatSidebar isOpen={graphitaOpen} onClose={() => setGraphitaOpen(false)} />
+      <GraphitaChatSidebar isOpen={graphitaOpen} onClose={() => setGraphitaOpen(false)} profile={profile} />
 
       {/* Modal de Upgrade */}
       <GraphitaUpgradeModal 

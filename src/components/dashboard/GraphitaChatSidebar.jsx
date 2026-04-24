@@ -4,7 +4,7 @@ import { Sparkles, Send, X, Loader2 } from 'lucide-react';
 import { supabase } from '../../lib/supabaseClient';
 import graphitaLogo from '../../assets/graphita_ia.svg';
 
-export function GraphitaChatSidebar({ isOpen, onClose }) {
+export function GraphitaChatSidebar({ isOpen, onClose, profile }) {
   const [messages, setMessages] = useState([
     { role: 'assistant', content: '¡Hola! Soy Graphita. ¿En qué te ayudo con tus archivos o impresiones hoy?' }
   ]);
@@ -34,7 +34,8 @@ export function GraphitaChatSidebar({ isOpen, onClose }) {
       const { data, error } = await supabase.functions.invoke('graphita-chat', {
         body: { 
           message: userMsg,
-          history: messages.map(m => ({ role: m.role, content: m.content }))
+          history: messages.map(m => ({ role: m.role, content: m.content })),
+          profile: profile
         }
       });
 
