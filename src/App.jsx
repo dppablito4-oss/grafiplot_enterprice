@@ -16,6 +16,7 @@ import { Verificado } from './pages/auth/Verificado';
 import { supabase } from './lib/supabaseClient';
 import { CartProvider } from './lib/cartStore';
 import { WhatsAppWidget } from './components/common/WhatsAppWidget';
+import { GlobalGraphita } from './components/common/GlobalGraphita';
 
 function ProtectedRoute({ session, children }) {
   if (!session) {
@@ -114,6 +115,7 @@ function App() {
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
       <WhatsAppWidget />
+      <GlobalGraphita />
     </HashRouter>
   );
 }

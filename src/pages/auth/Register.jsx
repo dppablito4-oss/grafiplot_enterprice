@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { supabase } from '../../lib/supabaseClient';
 import logo from '../../assets/brand/grafiplot-logo.webp';
-import { GraphitaFloatingChat } from '../../components/common/GraphitaFloatingChat';
 
 export function Register() {
   const navigate = useNavigate();
@@ -163,7 +162,6 @@ export function Register() {
           </form>
         </div>
       </div>
-      <GraphitaFloatingChat message="¡Hola! Regístrate para poder guardar tus archivos y ayudarte a imprimir." />
     </div>
   );
 }

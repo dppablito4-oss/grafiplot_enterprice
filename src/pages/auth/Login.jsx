@@ -3,7 +3,6 @@ import { Link, useNavigate } from 'react-router-dom';
 import { LogIn } from 'lucide-react';
 import { supabase } from '../../lib/supabaseClient';
 import logo from '../../assets/brand/grafiplot-logo.webp';
-import { GraphitaFloatingChat } from '../../components/common/GraphitaFloatingChat';
 
 export function Login() {
   const navigate = useNavigate();
@@ -152,7 +151,6 @@ export function Login() {
           </form>
         </div>
       </div>
-      <GraphitaFloatingChat message="Drop your data here! No te preocupes, tus archivos están safe conmigo." />
     </div>
   );
 }
