@@ -11,6 +11,7 @@ import { ForgotPassword } from './pages/auth/ForgotPassword';
 import { AdminRoute } from './components/auth/AdminRoute';
 import { AdminDashboard } from './pages/admin/AdminDashboard';
 import { ServiceDetail } from './pages/public/ServiceDetail';
+import { Verificado } from './pages/auth/Verificado';
 import { supabase } from './lib/supabaseClient';
 import { CartProvider } from './lib/cartStore';
 import { WhatsAppWidget } from './components/common/WhatsAppWidget';
@@ -68,6 +69,7 @@ function App() {
         {/* Rutas Públicas */}
         <Route path="/" element={<LandingPage />} />
         <Route path="/servicios/:serviceId" element={<ServiceDetail />} />
+        <Route path="/verificado" element={<Verificado />} />
         <Route
           path="/login"
           element={session ? <Navigate to="/dashboard" replace /> : <Login />}
