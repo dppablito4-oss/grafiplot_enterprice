@@ -32,8 +32,7 @@ function ServiceCard({ service, index, reverse }) {
       );
 
       // 2. Persiana enrollable: clipPath revela la imagen de arriba a abajo
-      // REVEAL TARDÍO: empieza cuando el card pasa el 70% del viewport,
-      // termina cuando el FONDO del card llega al CENTRO de pantalla
+      // Rango amplio para que la cortina se abra completamente
       gsap.fromTo(imageWrapRef.current,
         { clipPath: 'inset(0 0 100% 0)' },
         {
@@ -41,10 +40,9 @@ function ServiceCard({ service, index, reverse }) {
           ease: 'none',
           scrollTrigger: {
             trigger: cardRef.current,
-            start: 'top 70%',        // gatillo: cuando el top del card llega al 70% del viewport
-            end: 'bottom center',     // fin: cuando el bottom del card llega al centro — reveal tardío
-            scrub: 1.5,              // VELOCIDAD 70/100 — suavidad intermedia, ni rápido ni lento
-            toggleActions: 'play none none none', // PERSISTENCIA: no se revierte al subir
+            start: 'top 80%',         // empieza cuando el card entra al 80% del viewport
+            end: 'bottom 20%',        // termina cuando el fondo del card llega al 20% — rango largo
+            scrub: 1.5,               // suavidad 70/100
           }
         }
       );
