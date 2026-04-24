@@ -9,14 +9,8 @@ export function PublicFooter() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 mb-10">
           {/* Brand Info */}
           <div className="lg:col-span-5 space-y-6">
-            <div className="flex items-center gap-4">
-              <div className="w-14 h-14 bg-white rounded-2xl p-2 flex items-center justify-center shadow-xl shadow-slate-200 dark:shadow-none border border-slate-100 dark:border-white/10">
-                <img src={logo} alt="Grafiplot Logo" className="w-full h-full object-contain" />
-              </div>
-              <div>
-                <h3 className="text-3xl font-black text-slate-900 dark:text-white tracking-tighter italic leading-none">GRAFIPLOT</h3>
-                <span className="text-xs font-bold text-brand-red tracking-[0.4em] uppercase">Vasquez</span>
-              </div>
+            <div className="flex items-center">
+              <img src={logo} alt="Grafiplot Logo" className="h-12 w-auto object-contain" />
             </div>
             <p className="text-slate-600 dark:text-slate-400 max-w-md text-lg leading-relaxed font-light tracking-tight">
               Liderando la industria de la impresión en Huánuco con tecnología de precisión y atención personalizada.

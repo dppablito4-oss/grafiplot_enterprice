@@ -1,13 +1,31 @@
+import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowLeft, CheckCircle2, MessageCircle } from 'lucide-react';
 import { servicesData } from '../../data/servicesData';
 import { PublicNavbar } from '../../components/public/PublicNavbar';
 import { PublicFooter } from '../../components/public/PublicFooter';
+import { supabase } from '../../lib/supabaseClient';
 
 export function ServiceDetail() {
   const { serviceId } = useParams();
   const service = servicesData.find(s => s.id === serviceId);
+  const [profile, setProfile] = useState(null);
+
+  useEffect(() => {
+    const fetchProfile = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session) {
+        const { data } = await supabase
+          .from('profiles')
+          .select('*')
+          .eq('id', session.user.id)
+          .single();
+        setProfile(data);
+      }
+    };
+    fetchProfile();
+  }, []);
 
   if (!service) {
     return (
@@ -23,7 +41,7 @@ export function ServiceDetail() {
 
   return (
     <div className="min-h-screen bg-white dark:bg-slate-950 transition-colors">
-      <PublicNavbar onNavigateSection={() => {}} />
+      <PublicNavbar onNavigateSection={() => {}} profile={profile} />
 
       {/* Hero del servicio */}
       <section className="pt-28 md:pt-36 pb-16 md:pb-24 relative overflow-hidden">
