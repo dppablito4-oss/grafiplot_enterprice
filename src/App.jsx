@@ -11,6 +11,7 @@ import { ForgotPassword } from './pages/auth/ForgotPassword';
 import { AdminRoute } from './components/auth/AdminRoute';
 import { AdminDashboard } from './pages/admin/AdminDashboard';
 import { ServiceDetail } from './pages/public/ServiceDetail';
+import { TerminosYCondiciones } from './pages/public/TerminosYCondiciones';
 import { Verificado } from './pages/auth/Verificado';
 import { supabase } from './lib/supabaseClient';
 import { CartProvider } from './lib/cartStore';
@@ -69,6 +70,7 @@ function App() {
         {/* Rutas Públicas */}
         <Route path="/" element={<LandingPage />} />
         <Route path="/servicios/:serviceId" element={<ServiceDetail />} />
+        <Route path="/terminos" element={<TerminosYCondiciones />} />
         <Route path="/verificado" element={<Verificado />} />
         <Route
           path="/login"

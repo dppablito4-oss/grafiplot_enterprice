@@ -29,7 +29,7 @@ export function PublicFooter() {
             <ul className="space-y-3">
               <li><Link to="/login" className="text-slate-500 dark:text-slate-400 hover:text-brand-red dark:hover:text-brand-yellow transition-colors text-sm font-bold tracking-tight uppercase">Acceso Clientes</Link></li>
               <li><Link to="/register" className="text-slate-500 dark:text-slate-400 hover:text-brand-red dark:hover:text-brand-yellow transition-colors text-sm font-bold tracking-tight uppercase">Registrarse</Link></li>
-              <li><a href="#" className="text-slate-500 dark:text-slate-400 hover:text-brand-red dark:hover:text-brand-yellow transition-colors text-sm font-bold tracking-tight uppercase">Soporte</a></li>
+              <li><Link to="/terminos" className="text-slate-500 dark:text-slate-400 hover:text-brand-red dark:hover:text-brand-yellow transition-colors text-sm font-bold tracking-tight uppercase">Términos y Privacidad (IA)</Link></li>
             </ul>
           </div>
 
