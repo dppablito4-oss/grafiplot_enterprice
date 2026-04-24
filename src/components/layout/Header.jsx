@@ -2,6 +2,7 @@ import { Bell, LogOut, Menu } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '../ui/Button';
 import { supabase } from '../../lib/supabaseClient';
+import logo from '../../assets/brand/grafiplot-logo.webp';
 
 export function Header({ toggleSidebar, profile }) {
   const navigate = useNavigate();
@@ -23,12 +24,7 @@ export function Header({ toggleSidebar, profile }) {
         <Button variant="ghost" className="lg:hidden p-2 dark:text-slate-300" onClick={toggleSidebar}>
           <Menu className="w-5 h-5" />
         </Button>
-        <div className="flex items-center gap-2">
-          <div className="w-8 h-8 bg-brand-red rounded flex items-center justify-center font-bold text-white">
-            G
-          </div>
-          <span className="text-xl font-black tracking-tighter italic dark:text-white">GRAFIPLOT</span>
-        </div>
+        <img src={logo} alt="Grafiplot" className="h-8 w-auto object-contain" />
       </div>
 
       <div className="flex items-center gap-2 lg:gap-4">
