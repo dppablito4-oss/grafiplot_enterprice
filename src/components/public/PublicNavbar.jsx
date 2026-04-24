@@ -8,14 +8,50 @@ import { supabase } from '../../lib/supabaseClient';
 export function PublicNavbar({ onNavigateSection, profile }) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [internalProfile, setInternalProfile] = useState(null);
 
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
     };
     window.addEventListener('scroll', handleScroll);
+
+    // Fetch session if profile prop is not provided
+    if (!profile) {
+      const fetchSession = async () => {
+        const { data: { session } } = await supabase.auth.getSession();
+        if (session) {
+          const { data: profileData } = await supabase.from('profiles')
+            .select('*')
+            .eq('id', session.user.id)
+            .single();
+          setInternalProfile(profileData);
+        }
+      };
+      fetchSession();
+
+      const { data: { subscription } } = supabase.auth.onAuthStateChange(async (_event, session) => {
+        if (session) {
+          const { data: profileData } = await supabase.from('profiles')
+            .select('*')
+            .eq('id', session.user.id)
+            .single();
+          setInternalProfile(profileData);
+        } else {
+          setInternalProfile(null);
+        }
+      });
+
+      return () => {
+        window.removeEventListener('scroll', handleScroll);
+        subscription.unsubscribe();
+      };
+    }
+
     return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  }, [profile]);
+
+  const activeProfile = profile || internalProfile;
 
   const navLinks = [
     { name: 'Inicio', id: 'inicio', icon: Home },
@@ -57,15 +93,15 @@ export function PublicNavbar({ onNavigateSection, profile }) {
           <div className="w-px h-4 bg-slate-200 dark:bg-white/10 mx-2" />
           
           <div className="flex items-center gap-3">
-            {profile ? (
+            {activeProfile ? (
               <div className="relative group">
                 <button
                   className="flex items-center gap-2 text-[10px] font-black text-white bg-slate-900 dark:bg-brand-yellow dark:text-slate-900 px-5 py-2.5 rounded-xl hover:scale-105 transition-all shadow-md shadow-slate-200 dark:shadow-brand-yellow/10 tracking-[0.1em] uppercase"
                 >
                   <div className="w-4 h-4 rounded-full bg-white dark:bg-slate-900 flex items-center justify-center text-[10px] text-slate-900 dark:text-brand-yellow font-black">
-                    {profile.full_name?.charAt(0).toUpperCase() || 'U'}
+                    {activeProfile.full_name?.charAt(0).toUpperCase() || 'U'}
                   </div>
-                  {profile.full_name?.split(' ')[0] || 'Mi Cuenta'}
+                  {activeProfile.full_name?.split(' ')[0] || 'Mi Cuenta'}
                   <ChevronDown className="w-3 h-3 ml-1" />
                 </button>
                 
@@ -163,7 +199,7 @@ export function PublicNavbar({ onNavigateSection, profile }) {
             </div>
 
             <div className="p-8 space-y-4 bg-slate-50 dark:bg-white/5 border-t border-slate-200 dark:border-white/10">
-              {profile ? (
+              {activeProfile ? (
                 <>
                   <Link
                     to="/dashboard"
