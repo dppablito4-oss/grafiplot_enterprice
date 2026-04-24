@@ -1,4 +1,4 @@
-import { NavLink } from 'react-router-dom';
+import { NavLink, Link } from 'react-router-dom';
 import { Home, PlusCircle, FolderOpen, ShoppingBag, Settings } from 'lucide-react';
 
 import logo from '../../assets/brand/grafiplot-logo.webp';

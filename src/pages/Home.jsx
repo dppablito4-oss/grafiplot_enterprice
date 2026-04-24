@@ -17,49 +17,41 @@ export function Home() {
     <div className="space-y-12">
       {/* Sección 1: Resumen del Estado */}
       <div>
-        <h2 className="text-xl font-bold mb-6 text-gray-900 dark:text-white">Resumen del Estado</h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <Card className="border-t-4 border-t-brand-yellow hover:shadow-md transition-all cursor-pointer dark:bg-zinc-900 dark:border-zinc-800">
-            <CardContent className="p-6">
-              <p className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-2">Trabajos en Proceso</p>
-              <h2 className="text-4xl font-bold text-gray-900 dark:text-white">0</h2>
-            </CardContent>
-          </Card>
+        <h2 className="text-2xl font-black mb-6 text-gray-900 dark:text-white tracking-tight">Resumen del Estado</h2>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 lg:gap-6">
+          <div className="p-6 rounded-2xl bg-white dark:bg-zinc-950/50 border border-gray-100 dark:border-white/5 hover:border-brand-yellow/50 transition-all group">
+            <p className="text-xs font-bold text-gray-400 dark:text-zinc-500 uppercase tracking-widest mb-2">Trabajos en Proceso</p>
+            <h2 className="text-5xl font-black text-gray-900 dark:text-white tracking-tighter">0</h2>
+          </div>
 
-          <Card className="border-t-4 border-t-brand-yellow hover:shadow-md transition-all cursor-pointer dark:bg-zinc-900 dark:border-zinc-800">
-            <CardContent className="p-6">
-              <p className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-2">Listos para Entrega</p>
-              <h2 className="text-4xl font-bold text-gray-900 dark:text-white">0</h2>
-            </CardContent>
-          </Card>
+          <div className="p-6 rounded-2xl bg-white dark:bg-zinc-950/50 border border-gray-100 dark:border-white/5 hover:border-emerald-500/50 transition-all group">
+            <p className="text-xs font-bold text-gray-400 dark:text-zinc-500 uppercase tracking-widest mb-2">Listos para Entrega</p>
+            <h2 className="text-5xl font-black text-gray-900 dark:text-white tracking-tighter">0</h2>
+          </div>
 
-          <Card className="border-t-4 border-t-brand-yellow hover:shadow-md transition-all cursor-pointer dark:bg-zinc-900 dark:border-zinc-800">
-            <CardContent className="p-6">
-              <p className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-2">Nuevas Solicitudes</p>
-              <h2 className="text-4xl font-bold text-gray-900 dark:text-white">0</h2>
-            </CardContent>
-          </Card>
+          <div className="p-6 rounded-2xl bg-white dark:bg-zinc-950/50 border border-gray-100 dark:border-white/5 hover:border-brand-red/50 transition-all group">
+            <p className="text-xs font-bold text-gray-400 dark:text-zinc-500 uppercase tracking-widest mb-2">Nuevas Solicitudes</p>
+            <h2 className="text-5xl font-black text-gray-900 dark:text-white tracking-tighter">0</h2>
+          </div>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
-        {/* Sección 3: Acciones Rápidas (Izquierda, toma más espacio en desktop) */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-12">
+        {/* Sección 3: Acciones Rápidas (Izquierda) */}
         <div className="lg:col-span-2">
-          <h2 className="text-xl font-bold mb-6 text-gray-900 dark:text-white">Acciones Rápidas</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+          <h2 className="text-xl font-bold mb-6 text-gray-900 dark:text-white tracking-tight">Acciones Rápidas</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 lg:gap-6">
             {quickActions.map(action => (
-              <Link to="/dashboard/nuevo-pedido" key={action.id}>
-                <Card className="hover:border-brand-red transition-colors cursor-pointer h-full group bg-white dark:bg-zinc-900 dark:border-zinc-800">
-                  <CardContent className="p-6 flex items-start gap-4">
-                    <div className="w-12 h-12 rounded-lg bg-gray-50 dark:bg-zinc-800 flex items-center justify-center text-brand-red group-hover:scale-110 group-hover:bg-red-50 dark:group-hover:bg-red-900/20 transition-all">
-                      <action.icon className="w-6 h-6" />
-                    </div>
-                    <div>
-                      <h3 className="font-semibold text-gray-900 dark:text-white text-lg">{action.title}</h3>
-                      <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">{action.desc}</p>
-                    </div>
-                  </CardContent>
-                </Card>
+              <Link to="/dashboard/nuevo-pedido" key={action.id} className="block group">
+                <div className="p-6 rounded-2xl bg-white dark:bg-zinc-950/50 border border-gray-100 dark:border-white/5 group-hover:border-brand-red/30 group-hover:bg-brand-red/5 dark:group-hover:bg-brand-red/5 transition-all h-full flex items-start gap-5">
+                  <div className="w-12 h-12 rounded-xl bg-gray-50 dark:bg-zinc-900 flex items-center justify-center text-brand-red group-hover:scale-110 group-hover:rotate-3 transition-transform border border-gray-100 dark:border-white/5">
+                    <action.icon className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <h3 className="font-bold text-gray-900 dark:text-white text-base mb-1">{action.title}</h3>
+                    <p className="text-xs font-medium text-gray-500 dark:text-gray-400 leading-relaxed">{action.desc}</p>
+                  </div>
+                </div>
               </Link>
             ))}
           </div>
@@ -68,48 +60,46 @@ export function Home() {
         {/* Sección 2: Mis Trabajos Recientes (Derecha) */}
         <div>
           <div className="flex items-center justify-between mb-6">
-            <h2 className="text-xl font-bold text-gray-900 dark:text-white">Mis Trabajos</h2>
-            <Link to="/dashboard/historial" className="text-sm font-medium text-brand-red hover:text-brand-red-hover transition-colors">
+            <h2 className="text-xl font-bold text-gray-900 dark:text-white tracking-tight">Mis Trabajos</h2>
+            <Link to="/dashboard/historial" className="text-xs font-bold text-brand-red uppercase tracking-widest hover:text-brand-yellow transition-colors">
               Ver todos
             </Link>
           </div>
-          <Card className="bg-white dark:bg-zinc-900 dark:border-zinc-800 shadow-sm">
-            <CardContent className="p-0">
-              <div className="divide-y divide-gray-100 dark:divide-zinc-800">
-                {recentJobs.length > 0 ? (
-                  recentJobs.map(job => (
-                    <div key={job.id} className="p-4 flex items-center justify-between hover:bg-gray-50 dark:hover:bg-zinc-800/50 transition-colors">
-                      <div>
-                        <p className="font-medium text-gray-900 dark:text-white text-sm">{job.title}</p>
-                        <div className="flex items-center gap-2 mt-1">
-                          <span className="text-xs text-gray-500">{job.date}</span>
-                          <span className="text-xs text-gray-300 dark:text-gray-700">•</span>
-                          <span className={`text-xs font-medium ${
-                            job.status === 'Listo' ? 'text-yellow-600 dark:text-yellow-500' :
-                            job.status === 'En Proceso' ? 'text-blue-600 dark:text-blue-500' :
-                            'text-gray-500'
-                          }`}>
-                            {job.status}
-                          </span>
-                        </div>
+          <div className="rounded-2xl bg-white dark:bg-zinc-950/50 border border-gray-100 dark:border-white/5 overflow-hidden">
+            <div className="divide-y divide-gray-50 dark:divide-zinc-800/50">
+              {recentJobs.length > 0 ? (
+                recentJobs.map(job => (
+                  <div key={job.id} className="p-5 flex items-center justify-between hover:bg-gray-50 dark:hover:bg-zinc-900/50 transition-colors group cursor-pointer">
+                    <div>
+                      <p className="font-bold text-gray-900 dark:text-white text-sm mb-1">{job.title}</p>
+                      <div className="flex items-center gap-2">
+                        <span className="text-xs font-medium text-gray-400">{job.date}</span>
+                        <span className="w-1 h-1 rounded-full bg-gray-300 dark:bg-zinc-700"></span>
+                        <span className={`text-[10px] font-black uppercase tracking-widest ${
+                          job.status === 'Listo' ? 'text-emerald-500' :
+                          job.status === 'En Proceso' ? 'text-amber-500' :
+                          'text-gray-500'
+                        }`}>
+                          {job.status}
+                        </span>
                       </div>
-                      <Button variant="ghost" className="w-8 h-8 p-0 rounded-full text-gray-400 hover:text-brand-red">
-                        <ArrowRight className="w-4 h-4" />
-                      </Button>
                     </div>
-                  ))
-                ) : (
-                  <div className="p-12 text-center flex flex-col items-center justify-center">
-                    <div className="w-16 h-16 bg-gray-50 dark:bg-zinc-800 rounded-full flex items-center justify-center mb-4 text-gray-400 dark:text-zinc-500">
-                      <FolderOpen className="w-8 h-8" />
+                    <div className="w-8 h-8 rounded-full bg-gray-50 dark:bg-zinc-900 flex items-center justify-center text-gray-400 group-hover:text-brand-red group-hover:scale-110 transition-all border border-gray-100 dark:border-white/5">
+                      <ArrowRight className="w-4 h-4" />
                     </div>
-                    <p className="text-sm font-bold text-gray-900 dark:text-white mb-1">Aún no hay trabajos</p>
-                    <p className="text-xs text-gray-500 dark:text-zinc-400">Tus pedidos recientes aparecerán aquí.</p>
                   </div>
-                )}
-              </div>
-            </CardContent>
-          </Card>
+                ))
+              ) : (
+                <div className="p-12 text-center flex flex-col items-center justify-center">
+                  <div className="w-16 h-16 rounded-2xl bg-gray-50 dark:bg-zinc-900 flex items-center justify-center mb-5 border border-gray-100 dark:border-white/5">
+                    <FolderOpen className="w-6 h-6 text-gray-400" />
+                  </div>
+                  <h3 className="text-sm font-bold text-gray-900 dark:text-white mb-2">Aún no hay trabajos</h3>
+                  <p className="text-xs font-medium text-gray-500 dark:text-gray-400 max-w-[200px]">Tus pedidos recientes aparecerán aquí.</p>
+                </div>
+              )}
+            </div>
+          </div>
         </div>
       </div>
     </div>
