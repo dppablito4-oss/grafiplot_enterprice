@@ -1,5 +1,5 @@
-import { Bell, LogOut, Menu } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import { Bell, LogOut, Menu, Home } from 'lucide-react';
+import { useNavigate, Link } from 'react-router-dom';
 import { Button } from '../ui/Button';
 import { supabase } from '../../lib/supabaseClient';
 import logo from '../../assets/brand/grafiplot-logo.webp';
@@ -19,12 +19,17 @@ export function Header({ toggleSidebar, profile }) {
   const initial = displayName.charAt(0).toUpperCase();
 
   return (
-    <header className="h-16 bg-white dark:bg-zinc-950 border-b border-gray-200 dark:border-zinc-800 flex items-center justify-between px-4 lg:px-8 z-10 sticky top-0 transition-colors">
+    <header className="h-16 bg-white/80 dark:bg-zinc-950/80 backdrop-blur-xl border-b border-gray-200 dark:border-zinc-800 flex items-center justify-between px-4 lg:px-8 z-10 sticky top-0 transition-all">
+      {/* Brand Accent Line */}
+      <div className="absolute bottom-0 left-0 w-full h-[1px] bg-gradient-to-r from-brand-red/50 via-brand-red to-brand-yellow/50" />
+      
       <div className="flex items-center gap-4">
         <Button variant="ghost" className="lg:hidden p-2 dark:text-slate-300" onClick={toggleSidebar}>
           <Menu className="w-5 h-5" />
         </Button>
-        <img src={logo} alt="Grafiplot" className="h-8 w-auto object-contain lg:hidden" />
+        <Link to="/" className="lg:hidden hover:opacity-80 transition-opacity">
+          <img src={logo} alt="Grafiplot" className="h-8 w-auto object-contain" />
+        </Link>
       </div>
 
       <div className="flex items-center gap-2 lg:gap-4">

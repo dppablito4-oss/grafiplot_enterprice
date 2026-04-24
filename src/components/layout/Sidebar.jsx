@@ -33,9 +33,9 @@ export function Sidebar({ isOpen, closeSidebar, profile }) {
         ${isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
         flex flex-col
       `}>
-        <div className="p-5 border-b border-gray-100 dark:border-gray-800 flex items-center justify-center">
-          <img src={logo} alt="Grafiplot" className="h-10 w-auto object-contain" />
-        </div>
+        <Link to="/" className="p-5 border-b border-gray-100 dark:border-gray-800 flex items-center justify-center hover:opacity-80 transition-all group">
+          <img src={logo} alt="Grafiplot" className="h-10 w-auto object-contain group-hover:scale-105 transition-transform" />
+        </Link>
 
         <div className="flex-1 py-6 px-4 space-y-8 overflow-y-auto">
           <div>
