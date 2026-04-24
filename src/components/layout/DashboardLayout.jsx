@@ -29,12 +29,25 @@ export function DashboardLayout({ children }) {
     fetchProfile();
   }, []);
 
-  const handleToggleGraphita = () => {
-    if (!profile?.is_verified) {
-      setShowUpgrade(true);
+  const handleToggleGraphita = async () => {
+    // Admins o usuarios con correo real verificado no necesitan el modal de upgrade
+    if (profile?.role === 'admin' || profile?.is_verified) {
+      setGraphitaOpen(true);
       return;
     }
-    setGraphitaOpen(true);
+
+    // Verificar si el usuario ya tiene email real (no el fake de teléfono @grafiplot.com)
+    const { data: { session } } = await supabase.auth.getSession();
+    const userEmail = session?.user?.email || '';
+    const isFakeEmail = userEmail.endsWith('@grafiplot.com');
+    
+    if (userEmail && !isFakeEmail) {
+      // Tiene correo real, no necesita vincular
+      setGraphitaOpen(true);
+      return;
+    }
+
+    setShowUpgrade(true);
   };
 
   return (
