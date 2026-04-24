@@ -7,4 +7,10 @@ const supabaseAnonKey =
 
 export const hasSupabaseEnv = Boolean(supabaseUrl && supabaseAnonKey);
 
-export const supabase = hasSupabaseEnv ? createClient(supabaseUrl, supabaseAnonKey) : null;
+export const supabase = hasSupabaseEnv 
+  ? createClient(supabaseUrl, supabaseAnonKey, {
+      auth: {
+        flowType: 'implicit',
+      },
+    }) 
+  : null;
