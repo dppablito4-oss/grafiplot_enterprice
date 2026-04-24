@@ -31,8 +31,7 @@ function ServiceCard({ service, index, reverse }) {
         }
       );
 
-      // 2. Persiana enrollable: clipPath revela la imagen de arriba a abajo
-      // Rango amplio para que la cortina se abra completamente
+      // 2. Persiana enrollable — se abre al 100% cuando el card está centrado
       gsap.fromTo(imageWrapRef.current,
         { clipPath: 'inset(0 0 100% 0)' },
         {
@@ -40,9 +39,9 @@ function ServiceCard({ service, index, reverse }) {
           ease: 'none',
           scrollTrigger: {
             trigger: cardRef.current,
-            start: 'top 80%',         // empieza cuando el card entra al 80% del viewport
-            end: 'bottom 20%',        // termina cuando el fondo del card llega al 20% — rango largo
-            scrub: 1.5,               // suavidad 70/100
+            start: 'top 90%',
+            end: 'top 10%',
+            scrub: 0.8,
           }
         }
       );
