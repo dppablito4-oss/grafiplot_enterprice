@@ -1,14 +1,23 @@
 import { useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { CheckCircle2, Home } from 'lucide-react';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { CheckCircle2, Home, AlertCircle, LogIn } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 export function Verificado() {
   const navigate = useNavigate();
+  const location = useLocation();
   const [countdown, setCountdown] = useState(5);
+  const [hasError, setHasError] = useState(false);
 
   useEffect(() => {
-    // Redirigir automáticamente después de 5 segundos
+    // Revisar si Supabase mandó un error en la URL (pasa cuando abres el link en otro dispositivo sin estar logueado)
+    const hash = window.location.hash;
+    if (hash.includes('error=access_denied') || hash.includes('error_code=otp_expired')) {
+      setHasError(true);
+      return; // No hacer el countdown si hay error
+    }
+
+    // Redirigir automáticamente después de 5 segundos solo si es exitoso
     const timer = setInterval(() => {
       setCountdown((prev) => {
         if (prev <= 1) {
@@ -22,6 +31,38 @@ export function Verificado() {
 
     return () => clearInterval(timer);
   }, [navigate]);
+
+  if (hasError) {
+    return (
+      <div className="min-h-screen bg-slate-50 dark:bg-slate-950 flex flex-col items-center justify-center p-4">
+        <motion.div 
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          className="bg-white dark:bg-slate-900 p-8 rounded-3xl shadow-xl shadow-brand-red/5 max-w-md w-full text-center border border-slate-100 dark:border-white/5"
+        >
+          <div className="w-20 h-20 bg-amber-100 dark:bg-amber-900/30 rounded-full flex items-center justify-center mx-auto mb-6">
+            <AlertCircle className="w-10 h-10 text-amber-600 dark:text-amber-500" />
+          </div>
+          
+          <h1 className="text-2xl font-black text-slate-900 dark:text-white uppercase tracking-tight mb-2">
+            Inicia Sesión Primero
+          </h1>
+          
+          <p className="text-slate-600 dark:text-slate-400 mb-8 font-medium">
+            Para verificar tu correo desde este dispositivo, primero debes tener tu sesión iniciada por motivos de seguridad.
+          </p>
+
+          <Link 
+            to="/login"
+            className="w-full py-4 bg-brand-yellow hover:bg-yellow-500 text-slate-900 rounded-xl font-black tracking-widest text-sm flex items-center justify-center gap-2 transition-all uppercase shadow-lg shadow-brand-yellow/20 mb-4"
+          >
+            <LogIn className="w-5 h-5" />
+            Iniciar Sesión
+          </Link>
+        </motion.div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-slate-950 flex flex-col items-center justify-center p-4">
