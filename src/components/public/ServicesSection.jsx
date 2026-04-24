@@ -31,17 +31,17 @@ function ServiceCard({ service, index, reverse }) {
         }
       );
 
-      // 2. Persiana enrollable — se abre al 100% cuando el card está centrado
+      // 2. Persiana — abre 100% ANTES de que el card llegue al centro
       gsap.fromTo(imageWrapRef.current,
         { clipPath: 'inset(0 0 100% 0)' },
         {
           clipPath: 'inset(0 0 0% 0)',
-          ease: 'none',
+          ease: 'power1.out',
           scrollTrigger: {
             trigger: cardRef.current,
-            start: 'top 90%',
-            end: 'top 10%',
-            scrub: 0.8,
+            start: 'top bottom',      // empieza apenas el card aparece por abajo
+            end: 'top center',        // termina cuando el TOP del card llega al CENTRO
+            scrub: 0.5,               // respuesta rápida
           }
         }
       );
