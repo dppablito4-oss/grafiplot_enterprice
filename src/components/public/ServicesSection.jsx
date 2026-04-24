@@ -25,38 +25,38 @@ function ServiceCard({ service, index, reverse }) {
           ease: 'power3.out',
           scrollTrigger: {
             trigger: cardRef.current,
-            start: 'top 85%',
+            start: 'top 95%',
             toggleActions: 'play none none none',
           }
         }
       );
 
-      // 2. Persiana — abre 100% ANTES de que el card llegue al centro
+      // 2. Persiana — abre 100%
       gsap.fromTo(imageWrapRef.current,
         { clipPath: 'inset(0 0 100% 0)' },
         {
           clipPath: 'inset(0 0 0% 0)',
-          ease: 'power1.out',
+          duration: 1.2,
+          ease: 'power3.inOut',
           scrollTrigger: {
             trigger: cardRef.current,
-            start: 'top bottom',      // empieza apenas el card aparece por abajo
-            end: 'top center',        // termina cuando el TOP del card llega al CENTRO
-            scrub: 0.5,               // respuesta rápida
+            start: 'top 95%',
+            toggleActions: 'play none none none',
           }
         }
       );
 
-      // 3. La imagen en sí sube ligeramente (parallax inverso) mientras se revela
+      // 3. La imagen en sí sube ligeramente
       gsap.fromTo(imageRef.current,
         { y: 50, scale: 1.1 },
         {
-          y: -30, scale: 1,
-          ease: 'none',
+          y: -10, scale: 1,
+          duration: 1.2,
+          ease: 'power3.out',
           scrollTrigger: {
             trigger: cardRef.current,
-            start: 'top bottom',
-            end: 'bottom top',
-            scrub: 1.5,               // misma suavidad que la cortina
+            start: 'top 95%',
+            toggleActions: 'play none none none',
           }
         }
       );
@@ -175,9 +175,6 @@ export function ServicesSection() {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Header */}
         <div ref={titleRef} className="text-center max-w-3xl mx-auto mb-16 md:mb-20 opacity-0">
-          <div className="inline-block px-4 py-1.5 rounded-full bg-slate-200/50 dark:bg-white/5 border border-slate-200 dark:border-white/10 text-slate-500 dark:text-slate-400 text-[10px] font-black tracking-[0.3em] uppercase mb-6">
-            Catálogo Interactivo
-          </div>
           <h3 className="text-4xl md:text-5xl lg:text-6xl font-black text-slate-900 dark:text-white tracking-tighter leading-none uppercase">
             SOLUCIONES CON <span className="text-brand-red dark:text-brand-yellow italic">PRECISIÓN</span>
           </h3>

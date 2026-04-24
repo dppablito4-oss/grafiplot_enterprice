@@ -8,7 +8,7 @@ import lukita from '../../assets/payments/lukita.webp';
 
 export function HeroSection() {
   return (
-    <section id="inicio" className="relative min-h-[100svh] md:min-h-[95vh] flex items-start md:items-center overflow-hidden bg-slate-50 dark:bg-zinc-950 transition-colors duration-500 pt-32 md:pt-0">
+    <section id="inicio" className="relative pb-16 md:pb-0 md:min-h-[95vh] flex items-start md:items-center overflow-hidden bg-slate-50 dark:bg-zinc-950 transition-colors duration-500 pt-32 md:pt-0">
       {/* Fondo Adaptativo */}
       <div className="absolute inset-0 z-0">
         <div 
