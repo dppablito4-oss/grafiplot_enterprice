@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '../../../lib/supabaseClient';
-import { HardDrive, Trash2, Download, Search, FileText, Loader2, AlertCircle } from 'lucide-react';
+import { HardDrive, Trash2, Download, Search, FileText, Loader2, AlertCircle, RefreshCcw } from 'lucide-react';
 
 export function StorageManager() {
   const [files, setFiles] = useState([]);
