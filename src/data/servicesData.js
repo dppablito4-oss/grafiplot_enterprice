@@ -21,17 +21,19 @@ export const servicesData = [
     borderColor: 'border-blue-200 dark:border-blue-500/30',
     accentHex: '#2563eb',
     features: [
-      'Impresión a color y blanco/negro',
-      'Papel bond 75g, 80g y 90g',
-      'Papel couché brillante y mate',
-      'Tamaños A4, A3, Oficio y Letter',
+      'Impresión estándar y láser A4/A3',
+      'Papel Fotográfico, Couché, Cartulina Hilo',
+      'Descuentos especiales para más de 100 hojas',
       'Impresión a doble cara automática',
+      'Cartulina escolar, Acetato y Folkotec',
     ],
     pricing: [
-      { item: 'Impresión B/N A4', price: 'S/ 0.10' },
-      { item: 'Impresión Color A4', price: 'S/ 0.50' },
-      { item: 'Impresión Color A3', price: 'S/ 1.00' },
-      { item: 'Papel Fotográfico A4', price: 'S/ 2.00' },
+      { item: 'Estándar A4 (B/N o Color)', price: 'S/ 0.10' },
+      { item: 'Estándar A4 (>100 B/N)', price: 'S/ 0.08' },
+      { item: 'Láser A4 (Una Cara)', price: 'S/ 0.50' },
+      { item: 'Láser A4 (Doble Cara)', price: 'S/ 1.00' },
+      { item: 'Papel Fotográfico A4', price: 'S/ 1.50' },
+      { item: 'Cartulina Hilo / Couché', price: 'S/ 1.50' },
     ]
   },
   {
@@ -47,16 +49,16 @@ export const servicesData = [
     accentHex: '#dc2626',
     features: [
       'Ploteo en blanco/negro y color',
-      'Formatos A2, A1 y A0',
-      'Papel bond, couché y fotográfico',
+      'Formatos A3, A2, A1 y A0',
+      'Descuento al por mayor (Más de 100)',
       'Alta resolución para detalles técnicos',
       'Entrega rápida para proyectos urgentes',
     ],
     pricing: [
-      { item: 'Ploteo B/N A2', price: 'S/ 3.00' },
-      { item: 'Ploteo B/N A1', price: 'S/ 5.00' },
-      { item: 'Ploteo B/N A0', price: 'S/ 8.00' },
-      { item: 'Ploteo Color A1', price: 'S/ 12.00' },
+      { item: 'Ploteo A3 (B/N o Color)', price: 'S/ 0.50' },
+      { item: 'Ploteo A2 (B/N o Color)', price: 'S/ 1.50' },
+      { item: 'Ploteo A1 (B/N o Color)', price: 'S/ 2.00' },
+      { item: 'Ploteo A0 (B/N o Color)', price: 'S/ 4.00' },
     ]
   },
   {
@@ -71,17 +73,17 @@ export const servicesData = [
     borderColor: 'border-amber-200 dark:border-amber-500/30',
     accentHex: '#d97706',
     features: [
-      'Anillado metálico y plástico',
-      'Encuadernación tapa dura',
-      'Laminado mate y brillante',
-      'Enmicado A4 y A3',
-      'Corte y guillotina de precisión',
+      'Anillado estándar y doble ring (hasta 450 hojas)',
+      'Encuadernación doble ring tapa dura',
+      'Laminado A4 y A3',
+      'Enmicado A4, A3 y DNI',
+      'Descuentos al por mayor',
     ],
     pricing: [
-      { item: 'Anillado simple', price: 'S/ 3.00' },
-      { item: 'Enmicado A4', price: 'S/ 1.50' },
-      { item: 'Enmicado A3', price: 'S/ 3.00' },
-      { item: 'Laminado por metro', price: 'S/ 5.00' },
+      { item: 'Anillado (1 a 100 hojas)', price: 'S/ 1.50' },
+      { item: 'Anillado Doble Ring', price: 'S/ 4.00' },
+      { item: 'Enmicado A4 / A3', price: 'S/ 4.00 / 7.00' },
+      { item: 'Laminado A4 / A3', price: 'S/ 2.00 / 3.00' },
     ]
   },
   {

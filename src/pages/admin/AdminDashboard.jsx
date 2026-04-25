@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { Users, Mail, Settings, ShieldAlert, LogOut } from 'lucide-react';
+import { Users, Mail, Settings, ShieldAlert, LogOut, HardDrive } from 'lucide-react';
 import { supabase } from '../../lib/supabaseClient';
 import { SmtpSettings } from './components/SmtpSettings';
 import { UsersList } from './components/UsersList';
+import { StorageManager } from './components/StorageManager';
 
 export function AdminDashboard() {
   const [activeTab, setActiveTab] = useState('users');
@@ -42,6 +43,18 @@ export function AdminDashboard() {
           </button>
           
           <button
+            onClick={() => setActiveTab('storage')}
+            className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold transition-all ${
+              activeTab === 'storage' 
+                ? 'bg-brand-red text-white shadow-md shadow-brand-red/20' 
+                : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-white/5'
+            }`}
+          >
+            <HardDrive className="w-5 h-5" />
+            Almacenamiento
+          </button>
+
+          <button
             onClick={() => setActiveTab('smtp')}
             className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold transition-all ${
               activeTab === 'smtp' 
@@ -80,6 +93,7 @@ export function AdminDashboard() {
       {/* Main Content */}
       <main className="flex-1 p-6 md:p-10 overflow-y-auto">
         {activeTab === 'users' && <UsersList />}
+        {activeTab === 'storage' && <StorageManager />}
         {activeTab === 'smtp' && <SmtpSettings />}
         {activeTab === 'settings' && (
           <div className="flex flex-col items-center justify-center h-64 text-slate-500">
