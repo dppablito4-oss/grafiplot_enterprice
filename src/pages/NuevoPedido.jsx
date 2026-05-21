@@ -181,6 +181,29 @@ export function NuevoPedido() {
 
       const { data: { publicUrl } } = supabase.storage.from('pedidos').getPublicUrl(filePath);
 
+      // Guardar registro en Base de Datos para el Historial (solo si está logueado)
+      if (userId !== 'anon_user') {
+        const { error: dbError } = await supabase.from('pedidos').insert({
+          user_id: userId,
+          file_name: file.name,
+          pages: numPages,
+          amount: total,
+          status: 'Pendiente',
+          details: {
+            size: config.size,
+            color: config.color,
+            paper: config.paper,
+            duplex: config.duplex,
+            copies: config.copies,
+            finish: config.finish,
+            totalSheets: totalSheets,
+            isWholesale: isWholesale,
+            observaciones: config.observaciones
+          }
+        });
+        if (dbError) console.error('Error guardando pedido en DB:', dbError);
+      }
+
       const text = `*NUEVO PEDIDO AVANZADO* 🖨️\n\n` +
         `*Archivo:* ${file.name}\n` +
         `*Páginas:* ${numPages} (x${config.copies} copias = ${totalPages} págs totales)\n\n` +
