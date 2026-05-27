@@ -1,7 +1,9 @@
+import { useState, useEffect } from 'react';
 import { Card, CardContent } from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
 import { Printer, Scissors, Scan, Maximize2, ArrowRight, FolderOpen } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { supabase } from '../lib/supabaseClient';
 
 const quickActions = [
   { id: 1, title: 'Impresión Rápida', desc: 'Para PDFs, documentos, A4/A3', icon: Printer },
@@ -10,9 +12,45 @@ const quickActions = [
   { id: 4, title: 'Digitalización', desc: 'Escaneo profesional, OCR', icon: Scan },
 ];
 
-const recentJobs = [];
-
 export function Home() {
+  const [stats, setStats] = useState({ enProceso: 0, listos: 0, nuevos: 0 });
+  const [recentJobs, setRecentJobs] = useState([]);
+
+  useEffect(() => {
+    const fetchStats = async () => {
+      try {
+        const { data: sessionData } = await supabase.auth.getSession();
+        const user = sessionData?.session?.user;
+        if (!user) return;
+
+        const { data: jobs, error } = await supabase
+          .from('pedidos')
+          .select('*')
+          .order('created_at', { ascending: false });
+
+        if (error) throw error;
+
+        if (jobs) {
+          const enProceso = jobs.filter(j => j.status === 'En Proceso').length;
+          const listos = jobs.filter(j => j.status === 'Listo' || j.status === 'Entregado').length;
+          const nuevos = jobs.filter(j => j.status === 'Pendiente').length;
+          setStats({ enProceso, listos, nuevos });
+
+          const recientesFormateados = jobs.slice(0, 5).map(job => ({
+            id: job.id,
+            title: job.file_name,
+            date: new Date(job.created_at).toLocaleDateString('es-ES', { month: 'short', day: 'numeric' }),
+            status: job.status
+          }));
+          setRecentJobs(recientesFormateados);
+        }
+      } catch (err) {
+        console.error('Error al obtener datos para Home:', err);
+      }
+    };
+    fetchStats();
+  }, []);
+
   return (
     <div className="space-y-12">
       {/* Sección 1: Resumen del Estado */}
@@ -21,17 +59,17 @@ export function Home() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 lg:gap-6">
           <div className="p-6 rounded-2xl bg-white dark:bg-zinc-950/50 border border-gray-100 dark:border-white/5 hover:border-brand-yellow/50 transition-all group">
             <p className="text-xs font-bold text-gray-400 dark:text-zinc-500 uppercase tracking-widest mb-2">Trabajos en Proceso</p>
-            <h2 className="text-5xl font-black text-gray-900 dark:text-white tracking-tighter">0</h2>
+            <h2 className="text-5xl font-black text-gray-900 dark:text-white tracking-tighter">{stats.enProceso}</h2>
           </div>
 
           <div className="p-6 rounded-2xl bg-white dark:bg-zinc-950/50 border border-gray-100 dark:border-white/5 hover:border-emerald-500/50 transition-all group">
             <p className="text-xs font-bold text-gray-400 dark:text-zinc-500 uppercase tracking-widest mb-2">Listos para Entrega</p>
-            <h2 className="text-5xl font-black text-gray-900 dark:text-white tracking-tighter">0</h2>
+            <h2 className="text-5xl font-black text-gray-900 dark:text-white tracking-tighter">{stats.listos}</h2>
           </div>
 
           <div className="p-6 rounded-2xl bg-white dark:bg-zinc-950/50 border border-gray-100 dark:border-white/5 hover:border-brand-red/50 transition-all group">
             <p className="text-xs font-bold text-gray-400 dark:text-zinc-500 uppercase tracking-widest mb-2">Nuevas Solicitudes</p>
-            <h2 className="text-5xl font-black text-gray-900 dark:text-white tracking-tighter">0</h2>
+            <h2 className="text-5xl font-black text-gray-900 dark:text-white tracking-tighter">{stats.nuevos}</h2>
           </div>
         </div>
       </div>

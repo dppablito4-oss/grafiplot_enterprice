@@ -10,32 +10,54 @@ export function Historial() {
   const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
+    let subscription = null;
+    let mounted = true;
+
     const fetchJobs = async () => {
       try {
         const { data: sessionData } = await supabase.auth.getSession();
         const user = sessionData?.session?.user;
         
         if (!user) {
-          setIsLoading(false);
+          if (mounted) setIsLoading(false);
           return;
         }
 
-        // Obtener historial de pedidos (RLS ya se encarga de filtrar solo los de este usuario)
+        // Obtener historial inicial
         const { data, error } = await supabase
           .from('pedidos')
           .select('*')
           .order('created_at', { ascending: false });
 
         if (error) throw error;
-        setJobs(data || []);
+        if (mounted) setJobs(data || []);
+
+        // Suscribirse a cambios en tiempo real para este usuario
+        subscription = supabase.channel(`pedidos-usuario-${user.id}`)
+          .on('postgres_changes', { event: '*', schema: 'public', table: 'pedidos', filter: `user_id=eq.${user.id}` }, (payload) => {
+            if (payload.eventType === 'INSERT') {
+              setJobs(current => [payload.new, ...current]);
+            } else if (payload.eventType === 'UPDATE') {
+              setJobs(current => current.map(job => job.id === payload.new.id ? payload.new : job));
+            } else if (payload.eventType === 'DELETE') {
+              setJobs(current => current.filter(job => job.id !== payload.old.id));
+            }
+          })
+          .subscribe();
+
       } catch (err) {
         console.error('Error cargando historial:', err);
       } finally {
-        setIsLoading(false);
+        if (mounted) setIsLoading(false);
       }
     };
 
     fetchJobs();
+
+    return () => {
+      mounted = false;
+      if (subscription) supabase.removeChannel(subscription);
+    };
   }, []);
 
   const formatDate = (dateString) => {

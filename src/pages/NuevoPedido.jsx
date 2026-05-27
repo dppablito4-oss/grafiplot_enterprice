@@ -2,9 +2,11 @@ import { useState, useRef, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { UploadCloud, FileText, Settings, Calculator, MessageCircle, X, AlertCircle, RefreshCcw, Loader2, Layers } from 'lucide-react';
 import * as pdfjsLib from 'pdfjs-dist/build/pdf.mjs';
+import PdfWorker from 'pdfjs-dist/build/pdf.worker.mjs?worker';
 import { supabase } from '../lib/supabaseClient';
+import { calculatePrice } from '../lib/pricingEngine';
 
-pdfjsLib.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@${pdfjsLib.version}/build/pdf.worker.min.mjs`;
+pdfjsLib.GlobalWorkerOptions.workerPort = new PdfWorker();
 
 const MAX_FILE_SIZE_MB = 30;
 
@@ -14,6 +16,7 @@ export function NuevoPedido() {
   const [isReading, setIsReading] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
   const [error, setError] = useState(null);
+  const [whatsappLink, setWhatsappLink] = useState(null);
   const fileInputRef = useRef(null);
 
   const [config, setConfig] = useState({
@@ -26,100 +29,9 @@ export function NuevoPedido() {
     observaciones: ''
   });
 
-  // Base de Precios
-  const PRICES = {
-    normal: {
-      A1: { unit_bw: 2, unit_color: 2, whole_bw: 1.9, whole_color: 1.9 },
-      A2: { unit_bw: 1.5, unit_color: 1.5, whole_bw: 1.3, whole_color: 1.3 },
-      A0: { unit_bw: 4, unit_color: 4, whole_bw: 3.7, whole_color: 3.7 },
-      A3: { unit_bw: 0.5, unit_color: 0.5, whole_bw: 0.3, whole_color: 0.5 },
-      A4: { unit_bw: 0.1, unit_color: 0.1, whole_bw: 0.08, whole_color: 0.1 },
-    },
-    fotografico: { unit: 1.5, whole: 1.0 },
-    couche: { unit: 1.5, whole: 1.0 },
-    hilo: { unit: 1.5, whole: 1.0 },
-    escolar: { unit: 0.5, whole: 0.3 },
-    acetato: { unit: 4.0, whole: 2.0 },
-    folkotec: { unit: 4.0, whole: 2.0 },
-  };
-
-  const FINISH_PRICES = {
-    doble_ring: { unit: 4, whole: 2.5 },
-    doble_ring_dura: { unit: 6, whole: 4 },
-    enmicado: { A4: { unit: 4, whole: 3 }, A3: { unit: 7, whole: 4 } },
-    laminado: { A4: { unit: 2, whole: 0.5 }, A3: { unit: 3, whole: 1 } },
-  };
-
-  // Motor Matemático de Precios
+  // Motor Matemático de Precios (Importado de pricingEngine)
   const { printCost, finishCost, total, isWholesale, sheetsPerBook, totalSheets, totalPages } = useMemo(() => {
-    if (!numPages) return { printCost: 0, finishCost: 0, total: 0, isWholesale: false, sheetsPerBook: 0, totalSheets: 0, totalPages: 0 };
-
-    const cTotalPages = numPages * config.copies;
-    const cSheetsPerBook = config.duplex ? Math.ceil(numPages / 2) : numPages;
-    const cTotalSheets = cSheetsPerBook * config.copies;
-    const wholesale = cTotalSheets >= 100;
-
-    let pCost = 0;
-
-    // 1. Costo de Impresión
-    if (config.paper === 'normal') {
-      const p = PRICES.normal[config.size] || PRICES.normal['A4'];
-      
-      // Regla especial A4 Color Doble Cara Mayor a 100
-      if (config.size === 'A4' && config.color && config.duplex && wholesale) {
-        pCost = cTotalSheets * 0.13; // 0.13 por HOJA (ambas caras)
-      } else {
-        const costPerFace = config.color ? (wholesale ? p.whole_color : p.unit_color) : (wholesale ? p.whole_bw : p.unit_bw);
-        pCost = cTotalPages * costPerFace; // Por cada página del PDF
-      }
-    } else if (config.paper === 'laser') {
-      if (config.duplex) {
-        pCost = cTotalSheets * (wholesale ? 0.60 : 1.00);
-      } else {
-        pCost = cTotalSheets * (wholesale ? 0.35 : 0.50);
-      }
-    } else {
-      // Otros papeles especiales (fotográfico, couché, etc)
-      const p = PRICES[config.paper];
-      const costPerSheet = wholesale ? p.whole : p.unit;
-      pCost = cTotalSheets * costPerSheet;
-    }
-
-    // 2. Costo de Acabados
-    let fCost = 0;
-    if (config.finish !== 'ninguno') {
-      if (config.finish === 'anillado_simple') {
-        let costPerBook = 0;
-        if (cSheetsPerBook <= 100) costPerBook = 1.5;
-        else if (cSheetsPerBook <= 300) costPerBook = 2.5;
-        else costPerBook = 5.0;
-        fCost = costPerBook * config.copies;
-      } 
-      else if (config.finish === 'doble_ring') {
-        fCost = config.copies * (wholesale ? FINISH_PRICES.doble_ring.whole : FINISH_PRICES.doble_ring.unit);
-      }
-      else if (config.finish === 'doble_ring_dura') {
-        fCost = config.copies * (wholesale ? FINISH_PRICES.doble_ring_dura.whole : FINISH_PRICES.doble_ring_dura.unit);
-      }
-      else if (config.finish === 'enmicado') {
-        const p = FINISH_PRICES.enmicado[config.size === 'A3' ? 'A3' : 'A4'];
-        fCost = cTotalSheets * (wholesale ? p.whole : p.unit);
-      }
-      else if (config.finish === 'laminado') {
-        const p = FINISH_PRICES.laminado[config.size === 'A3' ? 'A3' : 'A4'];
-        fCost = cTotalSheets * (wholesale ? p.whole : p.unit);
-      }
-    }
-
-    return {
-      printCost: pCost,
-      finishCost: fCost,
-      total: pCost + fCost,
-      isWholesale: wholesale,
-      sheetsPerBook: cSheetsPerBook,
-      totalSheets: cTotalSheets,
-      totalPages: cTotalPages
-    };
+    return calculatePrice(config, numPages);
   }, [numPages, config]);
 
   const handleFileChange = async (e) => {
@@ -160,7 +72,7 @@ export function NuevoPedido() {
   };
 
   const resetForm = () => {
-    setFile(null); setNumPages(null); setError(null); setIsUploading(false);
+    setFile(null); setNumPages(null); setError(null); setIsUploading(false); setWhatsappLink(null);
     if (fileInputRef.current) fileInputRef.current.value = '';
     setConfig({ size: 'A4', color: true, paper: 'normal', duplex: false, copies: 1, finish: 'ninguno', observaciones: '' });
   };
@@ -168,13 +80,13 @@ export function NuevoPedido() {
   const handleSendAndUpload = async () => {
     if (!file || !numPages) return;
     setIsUploading(true);
+    setError(null);
 
     try {
       const { data: sessionData } = await supabase.auth.getSession();
       const userId = sessionData?.session?.user?.id || 'anon_user';
-      const safeFilename = file.name.replace(/[^a-zA-Z0-9.]/g, '_');
-      const timestamp = new Date().getTime();
-      const filePath = `${timestamp}_${userId}_${safeFilename}`;
+      const fileExt = file.name.split('.').pop();
+      const filePath = `${crypto.randomUUID()}.${fileExt}`;
 
       const { error: uploadError } = await supabase.storage.from('pedidos').upload(filePath, file, { upsert: true });
       if (uploadError) throw uploadError;
@@ -201,7 +113,10 @@ export function NuevoPedido() {
             observaciones: config.observaciones
           }
         });
-        if (dbError) console.error('Error guardando pedido en DB:', dbError);
+        if (dbError) {
+          console.error('Error guardando pedido en DB:', dbError);
+          throw new Error('Hubo un problema al registrar el pedido en la base de datos.');
+        }
       }
 
       const text = `*NUEVO PEDIDO AVANZADO* 🖨️\n\n` +
@@ -220,10 +135,10 @@ export function NuevoPedido() {
         `*TOTAL ESTIMADO:* S/ ${total.toFixed(2)}\n\n` +
         `📎 *Descargar Archivo:*\n${publicUrl}`;
 
-      window.open(`https://wa.me/952628844?text=${encodeURIComponent(text)}`, '_blank');
+      setWhatsappLink(`https://wa.me/952628844?text=${encodeURIComponent(text)}`);
     } catch (err) {
       console.error(err);
-      alert('Hubo un error al subir el archivo.');
+      setError(err.message || 'Hubo un error al subir el archivo.');
     } finally {
       setIsUploading(false);
     }
@@ -382,9 +297,15 @@ export function NuevoPedido() {
                   </div>
                 </div>
 
-                <button onClick={handleSendAndUpload} disabled={isUploading} className="w-full flex items-center justify-center gap-2 py-3.5 bg-brand-red hover:bg-red-700 disabled:bg-slate-800 disabled:text-slate-500 text-white font-black rounded-xl transition-all uppercase text-sm">
-                  {isUploading ? <><Loader2 className="w-4 h-4 animate-spin" /> Subiendo...</> : <><MessageCircle className="w-4 h-4" /> Enviar por WhatsApp</>}
-                </button>
+                {!whatsappLink ? (
+                  <button onClick={handleSendAndUpload} disabled={isUploading} className="w-full flex items-center justify-center gap-2 py-3.5 bg-brand-red hover:bg-red-700 disabled:bg-slate-800 disabled:text-slate-500 text-white font-black rounded-xl transition-all uppercase text-sm">
+                    {isUploading ? <><Loader2 className="w-4 h-4 animate-spin" /> Subiendo...</> : <><MessageCircle className="w-4 h-4" /> Finalizar Pedido</>}
+                  </button>
+                ) : (
+                  <a href={whatsappLink} target="_blank" rel="noopener noreferrer" className="w-full flex items-center justify-center gap-2 py-3.5 bg-emerald-500 hover:bg-emerald-600 text-white font-black rounded-xl transition-all uppercase text-sm animate-pulse">
+                    <MessageCircle className="w-4 h-4" /> Enviar por WhatsApp
+                  </a>
+                )}
               </motion.div>
             )}
           </AnimatePresence>
