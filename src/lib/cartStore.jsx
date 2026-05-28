@@ -1,14 +1,7 @@
 import { createContext, useContext, useState, useCallback } from 'react';
-import { BULK_THRESHOLD, BINDING_BLOCK_PRICE } from '../data/catalog';
+import { BULK_THRESHOLD, getAutoBindingTotal } from './pricing';
 
 const CartContext = createContext(null);
-
-function getAutoBindingTotal(pages) {
-  if (pages <= 100) return 1.5;
-  if (pages <= 200) return 2;
-  if (pages <= 499) return 3;
-  return Math.ceil(pages / 250) * 3;
-}
 
 function recompute(item) {
   const base = item.bulkUnitPrice && item.quantity > BULK_THRESHOLD
