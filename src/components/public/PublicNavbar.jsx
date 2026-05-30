@@ -4,54 +4,23 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X, LogIn, UserPlus, Home, Briefcase, Phone, LogOut, ChevronDown } from 'lucide-react';
 import logo from '../../assets/brand/grafiplot-logo.webp';
 import { supabase } from '../../lib/supabaseClient';
+import { useProfile } from '../../contexts/ProfileContext';
 
-export function PublicNavbar({ onNavigateSection, profile }) {
+export function PublicNavbar({ onNavigateSection, profile: profileProp }) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [internalProfile, setInternalProfile] = useState(null);
+  const { profile: contextProfile } = useProfile();
+
+  // Usar prop si se pasa, sino el contexto centralizado
+  const activeProfile = profileProp || contextProfile;
 
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
     };
     window.addEventListener('scroll', handleScroll);
-
-    // Fetch session if profile prop is not provided
-    if (!profile) {
-      const fetchSession = async () => {
-        const { data: { session } } = await supabase.auth.getSession();
-        if (session) {
-          const { data: profileData } = await supabase.from('profiles')
-            .select('*')
-            .eq('id', session.user.id)
-            .single();
-          setInternalProfile(profileData);
-        }
-      };
-      fetchSession();
-
-      const { data: { subscription } } = supabase.auth.onAuthStateChange(async (_event, session) => {
-        if (session) {
-          const { data: profileData } = await supabase.from('profiles')
-            .select('*')
-            .eq('id', session.user.id)
-            .single();
-          setInternalProfile(profileData);
-        } else {
-          setInternalProfile(null);
-        }
-      });
-
-      return () => {
-        window.removeEventListener('scroll', handleScroll);
-        subscription.unsubscribe();
-      };
-    }
-
     return () => window.removeEventListener('scroll', handleScroll);
-  }, [profile]);
-
-  const activeProfile = profile || internalProfile;
+  }, []);
 
   const navLinks = [
     { name: 'Inicio', id: 'inicio', icon: Home },

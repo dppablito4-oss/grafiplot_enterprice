@@ -1,40 +1,15 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Sparkles } from 'lucide-react';
 import { supabase } from '../../lib/supabaseClient';
 import graphitaLogo from '../../assets/graphita_ia.svg';
 import { GraphitaChatSidebar } from '../dashboard/GraphitaChatSidebar';
 import { GraphitaUpgradeModal } from './GraphitaUpgradeModal';
+import { useProfile } from '../../contexts/ProfileContext';
 
 export function GlobalGraphita() {
   const [isOpen, setIsOpen] = useState(false);
   const [showUpgrade, setShowUpgrade] = useState(false);
-  const [profile, setProfile] = useState(null);
-
-  useEffect(() => {
-    if (!supabase) return;
-
-    const fetchProfile = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (session) {
-        const { data } = await supabase
-          .from('profiles')
-          .select('*')
-          .eq('id', session.user.id)
-          .single();
-        setProfile(data);
-      } else {
-        setProfile(null);
-      }
-    };
-    
-    fetchProfile();
-    
-    const { data } = supabase.auth.onAuthStateChange(() => {
-      fetchProfile();
-    });
-    
-    return () => data?.subscription?.unsubscribe();
-  }, []);
+  const { profile, session } = useProfile();
 
   const handleToggle = async () => {
     if (isOpen) {
@@ -47,8 +22,6 @@ export function GlobalGraphita() {
       return;
     }
 
-    const { data: { session } } = await supabase.auth.getSession();
-    
     if (session) {
       const userEmail = session?.user?.email || '';
       const isFakeEmail = userEmail.endsWith('@grafiplot.com');

@@ -4,7 +4,7 @@ import { UploadCloud, FileText, Settings, Calculator, MessageCircle, X, AlertCir
 import * as pdfjsLib from 'pdfjs-dist/build/pdf.mjs';
 import PdfWorker from 'pdfjs-dist/build/pdf.worker.mjs?worker';
 import { supabase } from '../lib/supabaseClient';
-import { calculatePrice } from '../lib/pricingEngine';
+import { calculatePrice } from '../lib/pricing';
 
 pdfjsLib.GlobalWorkerOptions.workerPort = new PdfWorker();
 
@@ -37,7 +37,7 @@ export function NuevoPedido() {
     observaciones: ''
   });
 
-  // Motor Matemático de Precios (Importado de pricingEngine)
+  // Motor Matemático de Precios (Importado de pricing.js)
   const { printCost, finishCost, total, isWholesale, sheetsPerBook, totalSheets, totalPages } = useMemo(() => {
     return calculatePrice(config, numPages);
   }, [numPages, config]);

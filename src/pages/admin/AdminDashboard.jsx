@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Users, Mail, Settings, ShieldAlert, LogOut, HardDrive } from 'lucide-react';
 import { supabase } from '../../lib/supabaseClient';
 import { SmtpSettings } from './components/SmtpSettings';

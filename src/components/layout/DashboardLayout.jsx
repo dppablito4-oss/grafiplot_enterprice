@@ -1,28 +1,12 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Outlet } from 'react-router-dom';
 import { Header } from './Header';
 import { Sidebar } from './Sidebar';
-import { supabase } from '../../lib/supabaseClient';
+import { useProfile } from '../../contexts/ProfileContext';
 
 export function DashboardLayout({ children }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [profile, setProfile] = useState(null);
-
-  useEffect(() => {
-    const fetchProfile = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (session) {
-        const { data } = await supabase
-          .from('profiles')
-          .select('*')
-          .eq('id', session.user.id)
-          .single();
-        setProfile(data);
-      }
-    };
-    fetchProfile();
-  }, []);
-
+  const { profile } = useProfile();
 
   return (
     <div className="min-h-screen flex flex-col lg:flex-row bg-[#f9fafb] dark:bg-black transition-colors">

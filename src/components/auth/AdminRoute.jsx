@@ -1,39 +1,8 @@
-import { useEffect, useState } from 'react';
 import { Navigate, Outlet } from 'react-router-dom';
-import { supabase } from '../../lib/supabaseClient';
+import { useProfile } from '../../contexts/ProfileContext';
 
 export function AdminRoute() {
-  const [isAdmin, setIsAdmin] = useState(null);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const checkAdmin = async () => {
-      try {
-        const { data: { session } } = await supabase.auth.getSession();
-        
-        if (!session) {
-          setIsAdmin(false);
-          setLoading(false);
-          return;
-        }
-
-        const { data: profile } = await supabase
-          .from('profiles')
-          .select('role')
-          .eq('id', session.user.id)
-          .single();
-
-        setIsAdmin(profile?.role === 'admin');
-      } catch (error) {
-        console.error('Error checking admin role:', error);
-        setIsAdmin(false);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    checkAdmin();
-  }, []);
+  const { profile, loading, isAdmin, session } = useProfile();
 
   if (loading) {
     return (
@@ -43,5 +12,6 @@ export function AdminRoute() {
     );
   }
 
+  if (!session) return <Navigate to="/login" replace />;
   return isAdmin ? <Outlet /> : <Navigate to="/login" replace />;
 }

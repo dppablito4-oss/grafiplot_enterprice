@@ -1,5 +1,5 @@
 {
-  "name": "temp_dir",
+  "name": "grafiplot-enterprise",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -7,7 +7,8 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "optimize-assets": "svgo -r src/assets/ --multipass"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.104.0",
@@ -31,6 +32,7 @@
     "eslint-plugin-react-refresh": "^0.5.2",
     "globals": "^17.5.0",
     "postcss": "^8.5.10",
+    "svgo": "^4.0.1",
     "tailwindcss": "^4.2.4",
     "vite": "^8.0.10"
   }

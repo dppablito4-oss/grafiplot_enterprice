@@ -1,8 +1,6 @@
 
-// ---- Constantes de negocio ----
-export const BULK_THRESHOLD = 100;
-export const BINDING_BLOCK_SIZE = 200;
-export const BINDING_BLOCK_PRICE = 6;
+// Re-export constantes de negocio desde la fuente única de precios
+export { BULK_THRESHOLD, BINDING_BLOCK_SIZE, BINDING_BLOCK_PRICE } from '../lib/pricing';
 
 export const BUSINESS_INFO = {
   name: 'Grafiplot Vasquez',
