@@ -34,6 +34,7 @@ export function Historial() {
         // Suscribirse a cambios en tiempo real para este usuario
         subscription = supabase.channel(`pedidos-usuario-${user.id}`)
           .on('postgres_changes', { event: '*', schema: 'public', table: 'pedidos', filter: `user_id=eq.${user.id}` }, (payload) => {
+            if (!mounted) return;
             if (payload.eventType === 'INSERT') {
               setJobs(current => [payload.new, ...current]);
             } else if (payload.eventType === 'UPDATE') {
@@ -67,8 +68,8 @@ export function Historial() {
   };
 
   const filteredJobs = jobs.filter(job => 
-    job.file_name.toLowerCase().includes(searchTerm.toLowerCase()) || 
-    job.id.toLowerCase().includes(searchTerm.toLowerCase())
+    job?.file_name?.toLowerCase().includes(searchTerm.toLowerCase()) || 
+    job?.id?.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
@@ -120,7 +121,7 @@ export function Historial() {
                   filteredJobs.map((job) => (
                     <tr key={job.id} className="hover:bg-gray-50 dark:hover:bg-zinc-900/50 transition-colors group">
                       <td className="px-6 py-4 font-mono text-xs text-gray-500 dark:text-gray-400">
-                        {job.id.split('-')[0]}
+                        {job?.id?.split('-')[0]}
                       </td>
                       <td className="px-6 py-4">
                         <div className="flex items-center gap-3">

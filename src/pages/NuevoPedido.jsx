@@ -1,4 +1,4 @@
-import { useState, useRef, useMemo } from 'react';
+import { useState, useRef, useMemo, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { UploadCloud, FileText, Calculator, MessageCircle, X, AlertCircle, RefreshCcw, Loader2, Layers } from 'lucide-react';
 import * as pdfjsLib from 'pdfjs-dist/build/pdf.mjs';
@@ -26,6 +26,15 @@ export function NuevoPedido() {
   const [authToken, setAuthToken] = useState('');
   const [authLoading, setAuthLoading] = useState(false);
   const [authError, setAuthError] = useState('');
+  const [resendCooldown, setResendCooldown] = useState(0);
+
+  useEffect(() => {
+    let timer;
+    if (resendCooldown > 0) {
+      timer = setInterval(() => setResendCooldown(c => c - 1), 1000);
+    }
+    return () => clearInterval(timer);
+  }, [resendCooldown]);
 
   const [config, setConfig] = useState({
     size: 'A4',
@@ -105,6 +114,7 @@ export function NuevoPedido() {
       setAuthError(error.message);
     } else {
       setAuthStep(2);
+      setResendCooldown(30);
     }
   };
 
@@ -132,7 +142,7 @@ export function NuevoPedido() {
     setError(null);
 
     try {
-      const fileExt = file.name.split('.').pop();
+      const fileExt = file.name.includes('.') ? file.name.split('.').pop() : 'pdf';
       const filePath = `${crypto.randomUUID()}.${fileExt}`;
 
       const { error: uploadError } = await supabase.storage.from('pedidos').upload(filePath, file, { upsert: true });
@@ -217,6 +227,11 @@ export function NuevoPedido() {
                   <button type="submit" disabled={authLoading || authToken.length < 6} className="w-full bg-brand-red hover:bg-red-700 text-white font-bold py-3 rounded-xl transition-colors disabled:opacity-50">
                     {authLoading ? 'Verificando...' : 'Verificar y Guardar Pedido'}
                   </button>
+                  <div className="text-center mt-4">
+                    <button type="button" disabled={resendCooldown > 0 || authLoading} onClick={handleAuthSendOtp} className="text-xs font-bold text-slate-500 hover:text-brand-red disabled:opacity-50 transition-colors">
+                      {resendCooldown > 0 ? `Reenviar código en ${resendCooldown}s` : '¿No recibiste el código? Reenviar'}
+                    </button>
+                  </div>
                 </form>
               )}
             </motion.div>
@@ -235,11 +250,11 @@ export function NuevoPedido() {
           {/* UPLOAD AREA */}
           <div 
             className={`relative rounded-3xl border-2 border-dashed p-8 text-center transition-all duration-300
-              ${!file ? 'border-brand-red/30 bg-brand-red/5 hover:bg-brand-red/10 cursor-pointer' : 'border-slate-200 dark:border-white/10 bg-white dark:bg-[#1a1a1a]'}
+              ${!file ? (isUploading ? 'border-slate-200 bg-slate-50 opacity-50' : 'border-brand-red/30 bg-brand-red/5 hover:bg-brand-red/10 cursor-pointer') : 'border-slate-200 dark:border-white/10 bg-white dark:bg-[#1a1a1a]'}
             `}
-            onDragOver={handleDragOver} onDrop={handleDrop} onClick={() => !file && fileInputRef.current?.click()}
+            onDragOver={handleDragOver} onDrop={e => { if (!isUploading) handleDrop(e); }} onClick={() => !file && !isUploading && fileInputRef.current?.click()}
           >
-            <input type="file" ref={fileInputRef} onChange={handleFileChange} accept=".pdf" className="hidden" />
+            <input type="file" ref={fileInputRef} onChange={handleFileChange} accept=".pdf" className="hidden" disabled={isUploading} />
             <AnimatePresence mode="wait">
               {!file ? (
                 <motion.div key="upload" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="flex flex-col items-center">

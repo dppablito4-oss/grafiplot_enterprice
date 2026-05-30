@@ -64,19 +64,36 @@ serve(async (req) => {
       { role: 'user', content: message },
     ];
 
-    const response = await fetch(DEEPSEEK_API_URL, {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${apiKey}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        model: 'deepseek-chat',
-        messages,
-        max_tokens: 300,
-        temperature: 0.7,
-      }),
-    });
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 20000);
+
+    let response;
+    try {
+      response = await fetch(DEEPSEEK_API_URL, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${apiKey}`,
+          'Content-Type': 'application/json',
+        },
+        signal: controller.signal,
+        body: JSON.stringify({
+          model: 'deepseek-chat',
+          messages,
+          max_tokens: 300,
+          temperature: 0.7,
+        }),
+      });
+    } catch (fetchError: any) {
+      if (fetchError.name === 'AbortError') {
+        return new Response(
+          JSON.stringify({ reply: "Uy, me quedé pensando mucho porque hay mucha gente en la tienda. 🙈 ¡Inténtalo de nuevo en unos segunditos! ✨" }),
+          { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 200 }
+        );
+      }
+      throw fetchError;
+    } finally {
+      clearTimeout(timeoutId);
+    }
 
     if (!response.ok) {
       const errorText = await response.text();

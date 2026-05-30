@@ -83,7 +83,7 @@ export function HeroSection() {
               </Link>
 
               <a
-                href="https://wa.me/952628844?text=Hola%20ROY_VASQUES%2C%20quiero%20consultar%20un%20producto"
+                href="https://wa.me/952628844?text=Hola%20Grafiplot%2C%20quiero%20consultar%20un%20producto"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex-1 sm:flex-none px-6 py-5 bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-2xl text-slate-900 dark:text-white font-black text-[10px] md:text-xs tracking-[0.2em] hover:bg-slate-100 dark:hover:bg-white/10 transition-all shadow-sm flex items-center justify-center gap-2 uppercase"
@@ -102,13 +102,13 @@ export function HeroSection() {
             className="flex items-center justify-center lg:justify-start gap-4 md:gap-6 opacity-60 dark:opacity-70 grayscale hover:grayscale-0 transition-all duration-500 overflow-x-auto pb-4 no-scrollbar"
           >
             <div className="bg-white/10 dark:bg-white/5 p-2 rounded-xl border border-slate-200 dark:border-white/10 shadow-sm shrink-0">
-              <img src={yape} alt="Yape" className="h-4 md:h-5 w-auto" />
+              <img src={yape} alt="Yape" loading="lazy" className="h-4 md:h-5 w-auto" />
             </div>
             <div className="bg-white/10 dark:bg-white/5 p-2 rounded-xl border border-slate-200 dark:border-white/10 shadow-sm shrink-0">
-              <img src={plin} alt="Plin" className="h-4 md:h-5 w-auto" />
+              <img src={plin} alt="Plin" loading="lazy" className="h-4 md:h-5 w-auto" />
             </div>
             <div className="bg-white/10 dark:bg-white/5 p-2 rounded-xl border border-slate-200 dark:border-white/10 shadow-sm shrink-0">
-              <img src={lukita} alt="Lukita" className="h-4 md:h-5 w-auto" />
+              <img src={lukita} alt="Lukita" loading="lazy" className="h-4 md:h-5 w-auto" />
             </div>
           </motion.div>
         </div>

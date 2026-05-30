@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Bell, LogOut, Menu } from 'lucide-react';
 import { useNavigate, Link } from 'react-router-dom';
 import { Button } from '../ui/Button';
@@ -6,12 +7,17 @@ import logo from '../../assets/brand/grafiplot-logo.webp';
 
 export function Header({ toggleSidebar, profile }) {
   const navigate = useNavigate();
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
 
   const handleLogout = async () => {
-    if (supabase) {
-      await supabase.auth.signOut();
+    setIsLoggingOut(true);
+    try {
+      if (supabase) {
+        await supabase.auth.signOut();
+      }
+    } finally {
+      navigate('/login', { replace: true });
     }
-    navigate('/login', { replace: true });
   };
 
   const displayName = profile?.full_name || 'Usuario';
@@ -40,8 +46,8 @@ export function Header({ toggleSidebar, profile }) {
         
         <div className="h-6 w-px bg-gray-200 dark:bg-zinc-800 hidden sm:block mx-2"></div>
 
-        <Button variant="ghost" className="p-2 dark:text-slate-300" onClick={handleLogout} title="Cerrar sesion">
-          <LogOut className="w-5 h-5" />
+        <Button variant="ghost" className="p-2 dark:text-slate-300" onClick={handleLogout} title="Cerrar sesión" disabled={isLoggingOut}>
+          {isLoggingOut ? <div className="w-5 h-5 border-2 border-brand-red border-t-transparent rounded-full animate-spin"></div> : <LogOut className="w-5 h-5" />}
         </Button>
         
         <div className="flex items-center gap-3 ml-2">

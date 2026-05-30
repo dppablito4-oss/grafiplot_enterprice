@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { supabase } from '../../../lib/supabaseClient';
 import { HardDrive, Trash2, Download, Search, FileText, Loader2, AlertCircle, RefreshCcw } from 'lucide-react';
 
@@ -17,7 +17,7 @@ export function StorageManager() {
     setError(null);
     try {
       const { data, error } = await supabase.storage.from('pedidos').list('', {
-        limit: 100,
+        limit: 1000,
         offset: 0,
         sortBy: { column: 'created_at', order: 'desc' }
       });
@@ -36,9 +36,7 @@ export function StorageManager() {
   };
 
   useEffect(() => {
-    setTimeout(() => {
-      fetchFiles();
-    }, 0);
+    fetchFiles();
   }, []);
 
   const handleDelete = async (fileName) => {
@@ -66,13 +64,18 @@ export function StorageManager() {
     return data.publicUrl;
   };
 
-  // Calcular espacio usado
-  const totalBytes = files.reduce((acc, file) => acc + (file.metadata?.size || 0), 0);
-  const totalMB = (totalBytes / (1024 * 1024)).toFixed(2);
-  const percentageUsed = Math.min(100, ((totalMB / MAX_STORAGE_MB) * 100)).toFixed(1);
+  // Calcular espacio usado memoizado
+  const { totalMB, percentageUsed } = useMemo(() => {
+    const totalBytes = files.reduce((acc, file) => acc + (file.metadata?.size || 0), 0);
+    const mb = (totalBytes / (1024 * 1024)).toFixed(2);
+    const percent = Math.min(100, ((mb / MAX_STORAGE_MB) * 100)).toFixed(1);
+    return { totalMB: mb, percentageUsed: percent };
+  }, [files]);
 
-  // Filtrado de archivos
-  const filteredFiles = files.filter(f => f.name.toLowerCase().includes(searchTerm.toLowerCase()));
+  // Filtrado de archivos memoizado
+  const filteredFiles = useMemo(() => {
+    return files.filter(f => f?.name?.toLowerCase().includes(searchTerm.toLowerCase()));
+  }, [files, searchTerm]);
 
   // Formatear fecha
   const formatDate = (dateString) => {
