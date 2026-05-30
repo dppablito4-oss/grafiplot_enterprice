@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Search, UserCheck, UserX, Database } from 'lucide-react';
 import { supabase } from '../../../lib/supabaseClient';
 
@@ -8,24 +8,26 @@ export function UsersList() {
   const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
-    fetchUsers();
+    const fetchUsers = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('profiles')
+          .select('*')
+          .order('id', { ascending: false });
+
+        if (error) throw error;
+        setUsers(data || []);
+      } catch (err) {
+        console.error('Error fetching users:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    setTimeout(() => {
+      fetchUsers();
+    }, 0);
   }, []);
-
-  const fetchUsers = async () => {
-    try {
-      const { data, error } = await supabase
-        .from('profiles')
-        .select('*')
-        .order('id', { ascending: false });
-
-      if (error) throw error;
-      setUsers(data || []);
-    } catch (err) {
-      console.error('Error fetching users:', err);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const filteredUsers = users.filter(user => 
     (user.full_name?.toLowerCase().includes(searchTerm.toLowerCase())) ||

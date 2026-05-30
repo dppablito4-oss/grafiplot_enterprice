@@ -42,7 +42,7 @@ export function ProfileProvider({ children }) {
 
   useEffect(() => {
     if (!supabase) {
-      setLoading(false);
+      setTimeout(() => setLoading(false), 0);
       return;
     }
 
@@ -102,6 +102,7 @@ export function ProfileProvider({ children }) {
  * 
  * @returns {{ profile: object|null, session: object|null, loading: boolean, isAdmin: boolean, refetch: function }}
  */
+// eslint-disable-next-line react-refresh/only-export-components
 export function useProfile() {
   const context = useContext(ProfileContext);
   if (context === null) {

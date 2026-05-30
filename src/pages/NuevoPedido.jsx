@@ -1,6 +1,6 @@
 import { useState, useRef, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { UploadCloud, FileText, Settings, Calculator, MessageCircle, X, AlertCircle, RefreshCcw, Loader2, Layers } from 'lucide-react';
+import { UploadCloud, FileText, Calculator, MessageCircle, X, AlertCircle, RefreshCcw, Loader2, Layers } from 'lucide-react';
 import * as pdfjsLib from 'pdfjs-dist/build/pdf.mjs';
 import PdfWorker from 'pdfjs-dist/build/pdf.worker.mjs?worker';
 import { supabase } from '../lib/supabaseClient';
@@ -38,7 +38,7 @@ export function NuevoPedido() {
   });
 
   // Motor Matemático de Precios (Importado de pricing.js)
-  const { printCost, finishCost, total, isWholesale, sheetsPerBook, totalSheets, totalPages } = useMemo(() => {
+  const { printCost, finishCost, total, isWholesale, totalSheets, totalPages } = useMemo(() => {
     return calculatePrice(config, numPages);
   }, [numPages, config]);
 

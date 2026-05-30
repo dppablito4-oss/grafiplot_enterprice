@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { MapPin, Phone, Clock, ExternalLink } from 'lucide-react';
+import { MapPin, Phone } from 'lucide-react';
 import logo from '../../assets/brand/grafiplot-logo.webp';
 
 export function PublicFooter() {

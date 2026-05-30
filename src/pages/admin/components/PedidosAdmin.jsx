@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { supabase } from '../../../lib/supabaseClient';
-import { FileText, Download, CheckCircle, Clock, Package, MoreVertical } from 'lucide-react';
+import { FileText, Download } from 'lucide-react';
 
 export function PedidosAdmin() {
   const [pedidos, setPedidos] = useState([]);
@@ -26,7 +26,9 @@ export function PedidosAdmin() {
   };
 
   useEffect(() => {
-    fetchPedidos();
+    setTimeout(() => {
+      fetchPedidos();
+    }, 0);
 
     // Suscribirse a cambios
     const subscription = supabase.channel('admin-pedidos')

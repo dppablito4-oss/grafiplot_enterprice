@@ -1,16 +1,9 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { X, Cookie } from 'lucide-react';
 
 export function CookieBanner() {
-  const [isVisible, setIsVisible] = useState(false);
-
-  useEffect(() => {
-    const consent = localStorage.getItem('grafiplot_cookie_consent');
-    if (!consent) {
-      setIsVisible(true);
-    }
-  }, []);
+  const [isVisible, setIsVisible] = useState(() => !localStorage.getItem('grafiplot_cookie_consent'));
 
   const acceptCookies = () => {
     localStorage.setItem('grafiplot_cookie_consent', 'true');

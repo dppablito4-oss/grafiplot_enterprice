@@ -1,21 +1,18 @@
 import { useEffect, useState } from 'react';
-import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { CheckCircle2, Home, AlertCircle, LogIn } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 export function Verificado() {
   const navigate = useNavigate();
-  const location = useLocation();
   const [countdown, setCountdown] = useState(5);
-  const [hasError, setHasError] = useState(false);
+  const [hasError] = useState(() => {
+    const hash = window.location.hash;
+    return hash.includes('error=access_denied') || hash.includes('error_code=otp_expired');
+  });
 
   useEffect(() => {
-    // Revisar si Supabase mandó un error en la URL (pasa cuando abres el link en otro dispositivo sin estar logueado)
-    const hash = window.location.hash;
-    if (hash.includes('error=access_denied') || hash.includes('error_code=otp_expired')) {
-      setHasError(true);
-      return; // No hacer el countdown si hay error
-    }
+    if (hasError) return;
 
     // Redirigir automáticamente después de 5 segundos solo si es exitoso
     const timer = setInterval(() => {
@@ -30,7 +27,7 @@ export function Verificado() {
     }, 1000);
 
     return () => clearInterval(timer);
-  }, [navigate]);
+  }, [navigate, hasError]);
 
   if (hasError) {
     return (

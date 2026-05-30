@@ -1,4 +1,4 @@
-import { Bell, LogOut, Menu, Home } from 'lucide-react';
+import { Bell, LogOut, Menu } from 'lucide-react';
 import { useNavigate, Link } from 'react-router-dom';
 import { Button } from '../ui/Button';
 import { supabase } from '../../lib/supabaseClient';

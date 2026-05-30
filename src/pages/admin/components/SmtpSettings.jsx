@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Save, Server, KeyRound, Mail, CheckCircle2, AlertCircle } from 'lucide-react';
 import { supabase } from '../../../lib/supabaseClient';
 
@@ -16,28 +16,30 @@ export function SmtpSettings() {
   });
 
   useEffect(() => {
-    loadSettings();
-  }, []);
+    const loadSettings = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('system_settings')
+          .select('value')
+          .eq('key', 'smtp_config')
+          .single();
 
-  const loadSettings = async () => {
-    try {
-      const { data, error } = await supabase
-        .from('system_settings')
-        .select('value')
-        .eq('key', 'smtp_config')
-        .single();
-
-      if (error && error.code !== 'PGRST116') throw error; // PGRST116 is not found
-      
-      if (data && data.value) {
-        setConfig(data.value);
+        if (error && error.code !== 'PGRST116') throw error; // PGRST116 is not found
+        
+        if (data && data.value) {
+          setConfig(data.value);
+        }
+      } catch (err) {
+        console.error('Error loading SMTP settings:', err);
+      } finally {
+        setInitialLoading(false);
       }
-    } catch (err) {
-      console.error('Error loading SMTP settings:', err);
-    } finally {
-      setInitialLoading(false);
-    }
-  };
+    };
+
+    setTimeout(() => {
+      loadSettings();
+    }, 0);
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;

@@ -1,10 +1,10 @@
 import { useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
 import { servicesData } from '../../data/servicesData';
 
-function ServiceCard({ service, index, reverse }) {
+function ServiceCard({ service, reverse }) {
   const cardRef = useRef(null);
 
   const direction = reverse ? 100 : -100;
@@ -112,7 +112,6 @@ export function ServicesSection() {
             <ServiceCard
               key={service.id}
               service={service}
-              index={i}
               reverse={i % 2 !== 0}
             />
           ))}

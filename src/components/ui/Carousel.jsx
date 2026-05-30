@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import useEmblaCarousel from 'embla-carousel-react'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { Button } from './Button'
@@ -22,7 +22,7 @@ export function Carousel({ items }) {
 
   useEffect(() => {
     if (!emblaApi) return
-    onSelect()
+    setTimeout(() => onSelect(), 0)
     emblaApi.on('select', onSelect)
     emblaApi.on('reInit', onSelect)
   }, [emblaApi, onSelect])

@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { MapPin, MessageCircle, ChevronRight, Sparkles, LogIn, UserPlus } from 'lucide-react';
+import { MapPin, MessageCircle, ChevronRight, Sparkles, LogIn } from 'lucide-react';
 import portada from '../../assets/hero/portada-grafiplot.jpg.webp';
 import yape from '../../assets/payments/yape.webp';
 import plin from '../../assets/payments/plin.webp';

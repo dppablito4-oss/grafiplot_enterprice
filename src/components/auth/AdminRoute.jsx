@@ -2,7 +2,7 @@ import { Navigate, Outlet } from 'react-router-dom';
 import { useProfile } from '../../contexts/ProfileContext';
 
 export function AdminRoute() {
-  const { profile, loading, isAdmin, session } = useProfile();
+  const { loading, isAdmin, session } = useProfile();
 
   if (loading) {
     return (

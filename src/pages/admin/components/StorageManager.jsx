@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { supabase } from '../../../lib/supabaseClient';
 import { HardDrive, Trash2, Download, Search, FileText, Loader2, AlertCircle, RefreshCcw } from 'lucide-react';
 
@@ -36,7 +36,9 @@ export function StorageManager() {
   };
 
   useEffect(() => {
-    fetchFiles();
+    setTimeout(() => {
+      fetchFiles();
+    }, 0);
   }, []);
 
   const handleDelete = async (fileName) => {

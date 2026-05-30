@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Card, CardContent } from '../components/ui/Card';
-import { Button } from '../components/ui/Button';
+
 import { Printer, Scissors, Scan, Maximize2, ArrowRight, FolderOpen } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { supabase } from '../lib/supabaseClient';
