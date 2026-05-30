@@ -5,6 +5,7 @@ import { CartProvider } from './lib/cartStore';
 import { WhatsAppWidget } from './components/common/WhatsAppWidget';
 import { GlobalGraphita } from './components/common/GlobalGraphita';
 import { ErrorBoundary } from './components/common/ErrorBoundary';
+import { CookieBanner } from './components/common/CookieBanner';
 
 // Lazy loading de componentes para mejorar el tiempo de carga inicial
 const DashboardLayout = lazy(() => import('./components/layout/DashboardLayout').then(m => ({ default: m.DashboardLayout })));
@@ -13,7 +14,6 @@ const NuevoPedido = lazy(() => import('./pages/NuevoPedido').then(m => ({ defaul
 const Historial = lazy(() => import('./pages/Historial').then(m => ({ default: m.Historial })));
 const LandingPage = lazy(() => import('./pages/public/LandingPage').then(m => ({ default: m.LandingPage })));
 const Login = lazy(() => import('./pages/auth/Login').then(m => ({ default: m.Login })));
-const Register = lazy(() => import('./pages/auth/Register').then(m => ({ default: m.Register })));
 const ForgotPassword = lazy(() => import('./pages/auth/ForgotPassword').then(m => ({ default: m.ForgotPassword })));
 const AdminRoute = lazy(() => import('./components/auth/AdminRoute').then(m => ({ default: m.AdminRoute })));
 const AdminDashboard = lazy(() => import('./pages/admin/AdminDashboard').then(m => ({ default: m.AdminDashboard })));
@@ -88,14 +88,10 @@ function App() {
               path="/login"
               element={session ? <Navigate to="/dashboard" replace /> : <Login />}
             />
-            <Route
-              path="/register"
-              element={session ? <Navigate to="/dashboard" replace /> : <Register />}
-            />
-            <Route
-              path="/forgot-password"
-              element={session ? <Navigate to="/dashboard" replace /> : <ForgotPassword />}
-            />
+            {/* Rutas Públicas dentro del Layout del Dashboard */}
+            <Route element={<DashboardLayout />}>
+              <Route path="/cotizar" element={<NuevoPedido />} />
+            </Route>
 
             {/* Rutas Privadas (Dashboard) */}
             <Route
@@ -107,7 +103,6 @@ function App() {
               )}
             >
               <Route index element={<Home />} />
-              <Route path="nuevo-pedido" element={<NuevoPedido />} />
               <Route path="historial" element={<Historial />} />
               <Route path="*" element={
                 <div className="flex flex-col items-center justify-center h-64 text-center">
@@ -130,6 +125,7 @@ function App() {
       
       <WhatsAppWidget />
       <GlobalGraphita />
+      <CookieBanner />
     </HashRouter>
   );
 }

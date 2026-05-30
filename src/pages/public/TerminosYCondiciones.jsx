@@ -58,8 +58,11 @@ export function TerminosYCondiciones() {
                 <h2 className="text-xl font-black text-slate-900 dark:text-white uppercase tracking-tight mb-3">
                   3. Cuentas y Seguridad
                 </h2>
+                <p className="mb-2">
+                  Para guardar el historial de tus pedidos, deberás ingresar tu correo electrónico. No utilizamos contraseñas; en su lugar, recibirás un código de acceso único (OTP) cada vez que necesites entrar. Eres responsable de mantener seguro tu acceso al correo.
+                </p>
                 <p>
-                  Para acceder a ciertas funciones (como el historial de pedidos y carga de archivos pesados), debes registrarte usando un número de celular o correo electrónico válido. Eres responsable de mantener la confidencialidad de tu cuenta. Grafiplot Vasquez utilizará tus datos de contacto exclusivamente para notificaciones del estado de tus pedidos y alertas de seguridad.
+                  <strong>Uso de Cookies y Tokens:</strong> Utilizamos <em>tokens de sesión</em> (una alternativa técnica a las cookies) guardados en tu navegador para mantener tu sesión activa de manera segura y no tener que pedirte el código constantemente. Al utilizar la plataforma e iniciar sesión, aceptas el uso de estas tecnologías estrictamente necesarias para el funcionamiento del servicio.
                 </p>
               </div>
 

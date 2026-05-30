@@ -18,6 +18,14 @@ export function NuevoPedido() {
   const [error, setError] = useState(null);
   const [whatsappLink, setWhatsappLink] = useState(null);
   const fileInputRef = useRef(null);
+  
+  // Modal de Autenticación
+  const [showAuthModal, setShowAuthModal] = useState(false);
+  const [authStep, setAuthStep] = useState(1);
+  const [authEmail, setAuthEmail] = useState('');
+  const [authToken, setAuthToken] = useState('');
+  const [authLoading, setAuthLoading] = useState(false);
+  const [authError, setAuthError] = useState('');
 
   const [config, setConfig] = useState({
     size: 'A4',
@@ -77,14 +85,53 @@ export function NuevoPedido() {
     setConfig({ size: 'A4', color: true, paper: 'normal', duplex: false, copies: 1, finish: 'ninguno', observaciones: '' });
   };
 
-  const handleSendAndUpload = async () => {
+  const checkAuthAndSubmit = async () => {
+    if (!file || !numPages) return;
+    const { data } = await supabase.auth.getSession();
+    if (data.session) {
+      handleSendAndUpload(data.session.user.id);
+    } else {
+      setShowAuthModal(true);
+    }
+  };
+
+  const handleAuthSendOtp = async (e) => {
+    e.preventDefault();
+    setAuthError('');
+    setAuthLoading(true);
+    const { error } = await supabase.auth.signInWithOtp({ email: authEmail.trim() });
+    setAuthLoading(false);
+    if (error) {
+      setAuthError(error.message);
+    } else {
+      setAuthStep(2);
+    }
+  };
+
+  const handleAuthVerifyOtp = async (e) => {
+    e.preventDefault();
+    setAuthError('');
+    setAuthLoading(true);
+    const { data, error } = await supabase.auth.verifyOtp({
+      email: authEmail.trim(),
+      token: authToken.trim(),
+      type: 'email'
+    });
+    setAuthLoading(false);
+    if (error) {
+      setAuthError(error.message || 'Código inválido');
+    } else if (data.session) {
+      setShowAuthModal(false);
+      handleSendAndUpload(data.session.user.id);
+    }
+  };
+
+  const handleSendAndUpload = async (userId) => {
     if (!file || !numPages) return;
     setIsUploading(true);
     setError(null);
 
     try {
-      const { data: sessionData } = await supabase.auth.getSession();
-      const userId = sessionData?.session?.user?.id || 'anon_user';
       const fileExt = file.name.split('.').pop();
       const filePath = `${crypto.randomUUID()}.${fileExt}`;
 
@@ -93,30 +140,29 @@ export function NuevoPedido() {
 
       const { data: { publicUrl } } = supabase.storage.from('pedidos').getPublicUrl(filePath);
 
-      // Guardar registro en Base de Datos para el Historial (solo si está logueado)
-      if (userId !== 'anon_user') {
-        const { error: dbError } = await supabase.from('pedidos').insert({
-          user_id: userId,
-          file_name: file.name,
-          pages: numPages,
-          amount: total,
-          status: 'Pendiente',
-          details: {
-            size: config.size,
-            color: config.color,
-            paper: config.paper,
-            duplex: config.duplex,
-            copies: config.copies,
-            finish: config.finish,
-            totalSheets: totalSheets,
-            isWholesale: isWholesale,
-            observaciones: config.observaciones
-          }
-        });
-        if (dbError) {
-          console.error('Error guardando pedido en DB:', dbError);
-          throw new Error('Hubo un problema al registrar el pedido en la base de datos.');
+      // Guardar registro en Base de Datos para el Historial
+      const { error: dbError } = await supabase.from('pedidos').insert({
+        user_id: userId,
+        file_name: file.name,
+        pages: numPages,
+        amount: total,
+        status: 'Pendiente',
+        details: {
+          storagePath: filePath,
+          size: config.size,
+          color: config.color,
+          paper: config.paper,
+          duplex: config.duplex,
+          copies: config.copies,
+          finish: config.finish,
+          totalSheets: totalSheets,
+          isWholesale: isWholesale,
+          observaciones: config.observaciones
         }
+      });
+      if (dbError) {
+        console.error('Error guardando pedido en DB:', dbError);
+        throw new Error('Hubo un problema al registrar el pedido en la base de datos.');
       }
 
       const text = `*NUEVO PEDIDO AVANZADO* 🖨️\n\n` +
@@ -145,7 +191,39 @@ export function NuevoPedido() {
   };
 
   return (
-    <div className="max-w-5xl mx-auto pb-12">
+    <div className="max-w-5xl mx-auto pb-12 relative">
+      {/* MODAL DE AUTENTICACIÓN */}
+      <AnimatePresence>
+        {showAuthModal && (
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+            <motion.div initial={{ scale: 0.95 }} animate={{ scale: 1 }} exit={{ scale: 0.95 }} className="bg-white dark:bg-zinc-900 rounded-3xl p-6 sm:p-8 max-w-md w-full shadow-2xl relative">
+              <button onClick={() => setShowAuthModal(false)} className="absolute top-4 right-4 text-slate-400 hover:text-brand-red"><X className="w-5 h-5" /></button>
+              <h2 className="text-2xl font-black text-slate-900 dark:text-white mb-2">Inicia Sesión</h2>
+              <p className="text-slate-500 dark:text-slate-400 text-sm mb-6">Para guardar tu pedido y hacerle seguimiento, necesitamos verificar tu correo.</p>
+              
+              {authStep === 1 ? (
+                <form onSubmit={handleAuthSendOtp} className="space-y-4">
+                  <input type="email" required placeholder="ejemplo@correo.com" value={authEmail} onChange={e => setAuthEmail(e.target.value)} className="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-zinc-700 bg-slate-50 dark:bg-zinc-950 text-slate-900 dark:text-white focus:ring-2 focus:ring-brand-red focus:outline-none" />
+                  {authError && <p className="text-red-500 text-xs font-bold">{authError}</p>}
+                  <button type="submit" disabled={authLoading} className="w-full bg-brand-red hover:bg-red-700 text-white font-bold py-3 rounded-xl transition-colors disabled:opacity-50">
+                    {authLoading ? 'Enviando...' : 'Enviar código al correo'}
+                  </button>
+                </form>
+              ) : (
+                <form onSubmit={handleAuthVerifyOtp} className="space-y-4">
+                  <p className="text-xs font-bold text-slate-400">Enviamos un código de 6 dígitos a {authEmail}</p>
+                  <input type="text" required maxLength={6} placeholder="000000" value={authToken} onChange={e => setAuthToken(e.target.value)} className="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-zinc-700 bg-slate-50 dark:bg-zinc-950 text-slate-900 dark:text-white tracking-[0.5em] text-center font-mono focus:ring-2 focus:ring-brand-red focus:outline-none" />
+                  {authError && <p className="text-red-500 text-xs font-bold">{authError}</p>}
+                  <button type="submit" disabled={authLoading || authToken.length < 6} className="w-full bg-brand-red hover:bg-red-700 text-white font-bold py-3 rounded-xl transition-colors disabled:opacity-50">
+                    {authLoading ? 'Verificando...' : 'Verificar y Guardar Pedido'}
+                  </button>
+                </form>
+              )}
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       <div className="mb-8">
         <h1 className="text-3xl font-black text-slate-900 dark:text-white tracking-tight mb-2">Cotizador Maestro</h1>
         <p className="text-slate-500 dark:text-slate-400">Cotización avanzada con cálculos al por mayor automáticos (Límite {MAX_FILE_SIZE_MB}MB).</p>
@@ -298,7 +376,7 @@ export function NuevoPedido() {
                 </div>
 
                 {!whatsappLink ? (
-                  <button onClick={handleSendAndUpload} disabled={isUploading} className="w-full flex items-center justify-center gap-2 py-3.5 bg-brand-red hover:bg-red-700 disabled:bg-slate-800 disabled:text-slate-500 text-white font-black rounded-xl transition-all uppercase text-sm">
+                  <button onClick={checkAuthAndSubmit} disabled={isUploading} className="w-full flex items-center justify-center gap-2 py-3.5 bg-brand-red hover:bg-red-700 disabled:bg-slate-800 disabled:text-slate-500 text-white font-black rounded-xl transition-all uppercase text-sm">
                     {isUploading ? <><Loader2 className="w-4 h-4 animate-spin" /> Subiendo...</> : <><MessageCircle className="w-4 h-4" /> Finalizar Pedido</>}
                   </button>
                 ) : (

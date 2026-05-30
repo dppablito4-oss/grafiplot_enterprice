@@ -4,9 +4,11 @@ import { supabase } from '../../lib/supabaseClient';
 import { SmtpSettings } from './components/SmtpSettings';
 import { UsersList } from './components/UsersList';
 import { StorageManager } from './components/StorageManager';
+import { PedidosAdmin } from './components/PedidosAdmin';
+import { FileText } from 'lucide-react';
 
 export function AdminDashboard() {
-  const [activeTab, setActiveTab] = useState('users');
+  const [activeTab, setActiveTab] = useState('pedidos');
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
@@ -30,6 +32,18 @@ export function AdminDashboard() {
         </div>
 
         <nav className="flex-1 p-4 space-y-2">
+          <button
+            onClick={() => setActiveTab('pedidos')}
+            className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold transition-all ${
+              activeTab === 'pedidos' 
+                ? 'bg-brand-red text-white shadow-md shadow-brand-red/20' 
+                : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-white/5'
+            }`}
+          >
+            <FileText className="w-5 h-5" />
+            Pedidos Recientes
+          </button>
+
           <button
             onClick={() => setActiveTab('users')}
             className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold transition-all ${
@@ -92,6 +106,7 @@ export function AdminDashboard() {
 
       {/* Main Content */}
       <main className="flex-1 p-6 md:p-10 overflow-y-auto">
+        {activeTab === 'pedidos' && <PedidosAdmin />}
         {activeTab === 'users' && <UsersList />}
         {activeTab === 'storage' && <StorageManager />}
         {activeTab === 'smtp' && <SmtpSettings />}
