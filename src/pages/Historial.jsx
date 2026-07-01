@@ -13,6 +13,10 @@ export function Historial() {
     let mounted = true;
 
     const fetchJobs = async () => {
+      if (!supabase) {
+        if (mounted) setIsLoading(false);
+        return;
+      }
       try {
         const { data: sessionData } = await supabase.auth.getSession();
         const user = sessionData?.session?.user;
@@ -26,6 +30,7 @@ export function Historial() {
         const { data, error } = await supabase
           .from('pedidos')
           .select('*')
+          .eq('user_id', user.id)
           .order('created_at', { ascending: false });
 
         if (error) throw error;

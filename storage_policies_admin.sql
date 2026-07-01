@@ -1,13 +1,12 @@
 -- ==============================================================================
--- 🛠️ PERMISOS PARA EL GESTOR DE ALMACENAMIENTO (PANEL DE ADMIN)
+-- ⚠️ ARCHIVO DEPRECADO POR SEGURIDAD
 -- ==============================================================================
--- Copia todo este código y pégalo en el "SQL Editor" de Supabase y dale a "Run".
--- Esto permitirá que los Administradores puedan eliminar archivos desde la web.
-
--- Permitir ELIMINAR (DELETE) archivos del bucket "pedidos"
--- NOTA: Por seguridad, aquí lo permitimos de forma general para que funcione de inmediato.
--- Si deseas más seguridad, puedes restringirlo solo a usuarios con rol 'admin'.
-CREATE POLICY "Permitir eliminacion publica a pedidos" 
-ON storage.objects FOR DELETE 
-TO public
-USING ( bucket_id = 'pedidos' );
+-- La política de eliminación pública definida anteriormente en este archivo permitía
+-- que cualquier usuario anónimo borrara archivos.
+--
+-- Por favor, utiliza la nueva política segura definida en `update_schema_v2.sql`
+-- la cual restringe la eliminación de archivos únicamente a los administradores.
+--
+-- Si ya ejecutaste la política pública anterior, bórrala desde el editor SQL de Supabase con:
+-- DROP POLICY IF EXISTS "Permitir eliminacion publica a pedidos" ON storage.objects;
+-- ==============================================================================

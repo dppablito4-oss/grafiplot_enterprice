@@ -71,3 +71,15 @@ USING (
     WHERE profiles.id = auth.uid() AND profiles.role = 'admin'
   )
 );
+
+-- 4.4. Los administradores pueden eliminar cualquier archivo del bucket pedidos
+CREATE POLICY "Administradores pueden eliminar archivos de pedidos" 
+ON storage.objects FOR DELETE 
+TO authenticated
+USING (
+  bucket_id = 'pedidos' AND 
+  EXISTS (
+    SELECT 1 FROM public.profiles
+    WHERE profiles.id = auth.uid() AND profiles.role = 'admin'
+  )
+);

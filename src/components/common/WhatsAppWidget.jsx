@@ -13,7 +13,7 @@ export function WhatsAppWidget() {
     return () => clearTimeout(timer);
   }, []);
 
-  const whatsappUrl = "https://wa.me/952628844?text=Hola%20ROY_VASQUES%2C%20quiero%20consultar%20un%20producto";
+  const whatsappUrl = "https://wa.me/51952628844?text=Hola%20ROY_VASQUES%2C%20quiero%20consultar%20un%20producto";
 
   return (
     <div className="fixed bottom-6 right-4 md:bottom-8 md:right-8 z-30 flex flex-col items-end gap-4 pointer-events-none">

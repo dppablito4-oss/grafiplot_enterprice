@@ -30,6 +30,9 @@ export function GraphitaChatSidebar({ isOpen, onClose, profile }) {
     setLoading(true);
 
     try {
+      if (!supabase) {
+        throw new Error('Supabase no está configurado.');
+      }
       // Llamada a la Edge Function de Supabase
       const { data, error } = await supabase.functions.invoke('graphita-chat', {
         body: { 

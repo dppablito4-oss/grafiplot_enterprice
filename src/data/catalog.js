@@ -44,46 +44,10 @@ export const PAPER_OPTIONS = {
   'cartulina-hilo': { label: 'Cartulina de hilo', absolutePriceBySize: { a4: 1, a3: 2 } },
 };
 
-export const PRICE_MATRIX = {
-  a4: {
-    single: {
-      color: { unit: 0.10, bulk: 0.09, name: 'A4 una cara - Color' },
-      bn: { unit: 0.10, bulk: 0.08, name: 'A4 una cara - Blanco y Negro' },
-    },
-    duplex: {
-      color: { unit: 0.15, bulk: 0.12, name: 'A4 ambas caras (duplex) - Color' },
-      bn: { unit: 0.10, bulk: 0.09, name: 'A4 ambas caras (duplex) - Blanco y Negro' },
-    },
-  },
-  a3: {
-    single: {
-      color: { unit: 0.50, bulk: 0.50, name: 'Ploteo formato A3 - Color' },
-      bn: { unit: 0.50, bulk: 0.50, name: 'Ploteo formato A3 - Blanco y Negro' },
-    },
-    duplex: {
-      color: { unit: 0.50, bulk: 0.50, name: 'A3 ambas caras (duplex) - Color' },
-      bn: { unit: 0.50, bulk: 0.50, name: 'A3 ambas caras (duplex) - Blanco y Negro' },
-    },
-  },
-  a2: {
-    single: {
-      color: { unit: 1.50, bulk: 1.40, name: 'Ploteo formato A2 - Color' },
-      bn: { unit: 1.50, bulk: 1.40, name: 'Ploteo formato A2 - Blanco y Negro' },
-    },
-  },
-  a1: {
-    single: {
-      color: { unit: 2.00, bulk: 1.90, name: 'Ploteo formato A1 - Color' },
-      bn: { unit: 2.00, bulk: 1.90, name: 'Ploteo formato A1 - Blanco y Negro' },
-    },
-  },
-  a0: {
-    single: {
-      color: { unit: 4.00, bulk: 3.80, name: 'Ploteo formato A0 - Color' },
-      bn: { unit: 4.00, bulk: 3.80, name: 'Ploteo formato A0 - Blanco y Negro' },
-    },
-  },
-};
+// PRECIOS DE IMPRESIÓN CENTRALIZADOS
+// Nota: Toda la lógica de precios y matrices se encuentra centralizada
+// en `src/lib/pricing.js` para mantener una única fuente de verdad.
+// No duplicar matrices de precios aquí.
 
 // ---- Productos rápidos ----
 export const QUICK_PRODUCTS = [

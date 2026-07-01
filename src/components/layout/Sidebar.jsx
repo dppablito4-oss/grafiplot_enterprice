@@ -6,9 +6,9 @@ import logo from '../../assets/brand/grafiplot-logo.webp';
 export function Sidebar({ isOpen, closeSidebar, profile }) {
   const menuItems = [
     { icon: Home, label: 'Inicio', path: '/dashboard' },
-    { icon: PlusCircle, label: 'Nuevo Pedido', path: '/dashboard/nuevo-pedido' },
+    { icon: PlusCircle, label: 'Nuevo Pedido', path: '/cotizar' },
     { icon: FolderOpen, label: 'Mis Trabajos', path: '/dashboard/historial' },
-    { icon: ShoppingBag, label: 'Catálogo', path: '/dashboard/catalogo' },
+    { icon: ShoppingBag, label: 'Catálogo', path: '/cotizar' },
   ];
 
   const adminItems = [

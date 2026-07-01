@@ -17,6 +17,7 @@ export function Home() {
 
   useEffect(() => {
     const fetchStats = async () => {
+      if (!supabase) return;
       try {
         const { data: sessionData } = await supabase.auth.getSession();
         const user = sessionData?.session?.user;
@@ -25,6 +26,7 @@ export function Home() {
         const { data: jobs, error } = await supabase
           .from('pedidos')
           .select('*')
+          .eq('user_id', user.id)
           .order('created_at', { ascending: false });
 
         if (error) throw error;
@@ -79,7 +81,7 @@ export function Home() {
           <h2 className="text-xl font-bold mb-6 text-gray-900 dark:text-white tracking-tight">Acciones Rápidas</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 lg:gap-6">
             {quickActions.map(action => (
-              <Link to="/dashboard/nuevo-pedido" key={action.id} className="block group">
+              <Link to="/cotizar" key={action.id} className="block group">
                 <div className="p-6 rounded-2xl bg-white dark:bg-zinc-950/50 border border-gray-100 dark:border-white/5 group-hover:border-brand-red/30 group-hover:bg-brand-red/5 dark:group-hover:bg-brand-red/5 transition-all h-full flex items-start gap-5">
                   <div className="w-12 h-12 rounded-xl bg-gray-50 dark:bg-zinc-900 flex items-center justify-center text-brand-red group-hover:scale-110 group-hover:rotate-3 transition-transform border border-gray-100 dark:border-white/5">
                     <action.icon className="w-5 h-5" />

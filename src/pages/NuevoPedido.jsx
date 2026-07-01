@@ -96,6 +96,10 @@ export function NuevoPedido() {
 
   const checkAuthAndSubmit = async () => {
     if (!file || !numPages) return;
+    if (!supabase) {
+      setError('El servicio no está configurado (variables de entorno de Supabase faltantes).');
+      return;
+    }
     const { data } = await supabase.auth.getSession();
     if (data.session) {
       handleSendAndUpload(data.session.user.id);
@@ -191,7 +195,7 @@ export function NuevoPedido() {
         `*TOTAL ESTIMADO:* S/ ${total.toFixed(2)}\n\n` +
         `📎 *Descargar Archivo:*\n${publicUrl}`;
 
-      setWhatsappLink(`https://wa.me/952628844?text=${encodeURIComponent(text)}`);
+      setWhatsappLink(`https://wa.me/51952628844?text=${encodeURIComponent(text)}`);
     } catch (err) {
       console.error(err);
       setError(err.message || 'Hubo un error al subir el archivo.');
