@@ -276,9 +276,9 @@ export function Login() {
                     value={token}
                     onChange={(event) => setToken(event.target.value)}
                     required
-                    maxLength={6}
-                    className="appearance-none block w-full pl-12 pr-4 py-3 border border-slate-300 dark:border-slate-700 rounded-xl shadow-sm placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-brand-red focus:border-brand-red text-center tracking-[0.5em] text-lg font-mono bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white transition-colors"
-                    placeholder="000000"
+                    maxLength={8}
+                    className="appearance-none block w-full pl-12 pr-4 py-3 border border-slate-300 dark:border-slate-700 rounded-xl shadow-sm placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-brand-red focus:border-brand-red text-center tracking-[0.3em] text-lg font-mono bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white transition-colors"
+                    placeholder="Código"
                   />
                 </div>
               </div>
