@@ -6,7 +6,7 @@ import graphitaLogo from '../../assets/graphita_ia.svg';
 
 export function GraphitaChatSidebar({ isOpen, onClose, profile }) {
   const [messages, setMessages] = useState([
-    { role: 'assistant', content: '¡Hola! Soy Graphita. ¿En qué te ayudo con tus archivos o impresiones hoy?' }
+    { role: 'assistant', content: '¡Habla! Soy Grafi-bot. ¿En qué te ayudo con tus archivos o impresiones hoy? 🛠️' }
   ]);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
@@ -55,7 +55,7 @@ export function GraphitaChatSidebar({ isOpen, onClose, profile }) {
       setLimitReached(true);
       setMessages(prev => [...prev, { 
         role: 'assistant', 
-        content: '¡Ups! Has alcanzado tu límite gratuito de 5 consultas diarias. Vincula tu correo principal para seguir chateando de forma ilimitada con Graphita. ✨' 
+        content: '¡Uy! Alcanzaste tu límite gratuito de 5 consultas diarias. Vincula tu correo principal para seguir conversando de forma ilimitada con Grafi-bot. 🛠️' 
       }]);
       return;
     }
@@ -99,7 +99,7 @@ export function GraphitaChatSidebar({ isOpen, onClose, profile }) {
 
       setMessages(prev => [...prev, { role: 'assistant', content: data.reply }]);
     } catch (err) {
-      console.error("Error chatting with Graphita:", err);
+      console.error("Error chatting with Grafi-bot:", err);
       setMessages(prev => [...prev, { role: 'assistant', content: 'Uy, creo que me desconecté un rato. ¿Puedes intentar de nuevo?' }]);
     } finally {
       setLoading(false);
@@ -131,11 +131,11 @@ export function GraphitaChatSidebar({ isOpen, onClose, profile }) {
             <div className="p-4 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between bg-slate-50/50 dark:bg-slate-950/50">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-full bg-brand-red/10 border border-brand-red/20 overflow-hidden flex-shrink-0">
-                  <img src={graphitaLogo} alt="Graphita" className="w-full h-full object-cover" />
+                  <img src={graphitaLogo} alt="Grafi-bot" className="w-full h-full object-cover" />
                 </div>
                 <div>
                   <h3 className="font-bold text-sm text-slate-900 dark:text-white flex items-center gap-1">
-                    Graphita <Sparkles className="w-3 h-3 text-amber-500" />
+                    Grafi-bot <Sparkles className="w-3 h-3 text-amber-500" />
                   </h3>
                   <p className="text-[10px] text-emerald-600 dark:text-emerald-500 font-bold uppercase tracking-wider">Asistente Virtual</p>
                 </div>

@@ -38,13 +38,13 @@ export function TerminosYCondiciones() {
                 </p>
               </div>
 
-              {/* Sección 2: Graphita IA */}
+              {/* Sección 2: Grafi-bot IA */}
               <div className="p-6 bg-brand-red/5 dark:bg-brand-red/10 rounded-2xl border border-brand-red/20">
                 <h2 className="text-xl font-black text-brand-red dark:text-brand-yellow uppercase tracking-tight mb-3">
-                  2. Uso de Graphita IA y Privacidad de Archivos
+                  2. Uso de Grafi-bot IA y Privacidad de Archivos
                 </h2>
                 <p className="mb-3">
-                  Nuestra plataforma cuenta con <strong>Graphita</strong>, un asistente virtual impulsado por Inteligencia Artificial diseñado para facilitar cotizaciones, revisar formatos y asistir en pedidos.
+                  Nuestra plataforma cuenta con <strong>Grafi-bot</strong>, un asistente virtual impulsado por Inteligencia Artificial diseñado para facilitar cotizaciones, revisar formatos y asistir en pedidos.
                 </p>
                 <ul className="list-disc pl-5 space-y-2 text-sm">
                   <li><strong>Privacidad de Archivos:</strong> Los archivos (PDF, DWG, JPG, etc.) que subes a nuestra plataforma son analizados temporalmente por algoritmos de IA únicamente para calcular costos (ej. conteo de páginas, detección de color) y verificar la calidad de impresión.</li>

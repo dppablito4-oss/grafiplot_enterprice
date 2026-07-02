@@ -86,7 +86,7 @@ export function GraphitaUpgradeModal({ isOpen, onClose, onUpgradeSuccess }) {
 
             <div className="bg-brand-red/5 dark:bg-brand-red/10 p-8 flex flex-col items-center text-center">
               <div className="w-24 h-24 bg-white dark:bg-slate-800 rounded-3xl shadow-lg p-3 mb-6 relative">
-                <img src={graphitaLogo} alt="Graphita IA" className="w-full h-full object-contain drop-shadow-md animate-bounce" />
+                <img src={graphitaLogo} alt="Grafi-bot IA" className="w-full h-full object-contain drop-shadow-md animate-bounce" />
                 <div className="absolute -bottom-2 -right-2 bg-emerald-500 w-6 h-6 rounded-full border-2 border-white dark:border-slate-800 flex items-center justify-center">
                   <ShieldCheck className="w-3 h-3 text-white" />
                 </div>

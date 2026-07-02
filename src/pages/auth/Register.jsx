@@ -7,6 +7,7 @@ export function Register() {
   const navigate = useNavigate();
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
@@ -25,9 +26,10 @@ export function Register() {
     setSubmitting(true);
 
     const cleanPhone = phone.replace(/\D/g, '');
-    const fakeEmail = `${cleanPhone}@grafiplot.com`;
+    const registerEmail = email.trim() ? email.trim() : `${cleanPhone}@grafiplot.com`;
+    
     const { data, error } = await supabase.auth.signUp({
-      email: fakeEmail,
+      email: registerEmail,
       password,
       options: {
         data: {
@@ -45,8 +47,11 @@ export function Register() {
     }
 
     if (!data.session) {
-      setSuccessMessage('Cuenta creada. Ya puedes iniciar sesión con tu número celular.');
-      // En entorno real con "Confirm email" desactivado, data.session debería existir.
+      if (email.trim()) {
+        setSuccessMessage('Cuenta creada. Te hemos enviado un correo de verificación. Confírmalo para poder acceder.');
+      } else {
+        setSuccessMessage('Cuenta creada con éxito. Ya puedes iniciar sesión con tu número celular.');
+      }
       return;
     }
 
@@ -117,6 +122,29 @@ export function Register() {
                   placeholder="Ej. 999888777"
                 />
               </div>
+            </div>
+
+            <div>
+              <div className="flex justify-between items-center mb-1">
+                <label htmlFor="email" className="block text-sm font-bold text-slate-700 dark:text-slate-300">
+                  Correo electrónico <span className="text-[10px] text-slate-400 font-normal">(Opcional)</span>
+                </label>
+              </div>
+              <div className="mt-1">
+                <input
+                  id="email"
+                  name="email"
+                  type="email"
+                  value={email}
+                  onChange={(event) => setEmail(event.target.value)}
+                  autoComplete="email"
+                  className="appearance-none block w-full px-4 py-3 border border-slate-300 dark:border-slate-700 rounded-xl shadow-sm placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-brand-red focus:border-brand-red sm:text-sm bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white transition-colors"
+                  placeholder="ejemplo@correo.com"
+                />
+              </div>
+              <p className="mt-1 text-[10px] text-slate-400 dark:text-slate-500 leading-normal">
+                💡 Recomendado: Agrega tu correo principal para recibir notificaciones, validar mejor tu cuenta y recuperar tu contraseña.
+              </p>
             </div>
 
             <div>
