@@ -315,6 +315,15 @@ export function Login() {
             </form>
           )}
 
+          {step === 1 && (
+            <div className="mt-6 text-center text-sm text-slate-600 dark:text-slate-400">
+              ¿No tienes una cuenta?{' '}
+              <Link to="/register" className="font-bold text-brand-red hover:text-red-600 dark:text-brand-red transition-colors hover:underline">
+                Regístrate aquí
+              </Link>
+            </div>
+          )}
+
         </div>
         
         <p className="mt-8 text-center text-xs text-slate-500 max-w-sm mx-auto">
