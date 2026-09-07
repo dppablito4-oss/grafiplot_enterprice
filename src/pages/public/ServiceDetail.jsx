@@ -5,29 +5,17 @@ import { ArrowLeft, CheckCircle2, MessageCircle, Info, Tag, X } from 'lucide-rea
 import { servicesData } from '../../data/servicesData';
 import { PublicNavbar } from '../../components/public/PublicNavbar';
 import { PublicFooter } from '../../components/public/PublicFooter';
-import { supabase } from '../../lib/supabaseClient';
+import { useProfile } from '../../contexts/ProfileContext';
 
 export function ServiceDetail() {
   const { serviceId } = useParams();
   const service = servicesData.find(s => s.id === serviceId);
-  const [profile, setProfile] = useState(null);
+  const { profile } = useProfile();
   const [activeTab, setActiveTab] = useState('opciones'); // 'opciones' | 'detalles'
   const [selectedItem, setSelectedItem] = useState(null); // Estado para el modal
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    const fetchProfile = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (session) {
-        const { data } = await supabase
-          .from('profiles')
-          .select('*')
-          .eq('id', session.user.id)
-          .single();
-        setProfile(data);
-      }
-    };
-    fetchProfile();
   }, [serviceId]);
 
   if (!service) {
@@ -220,7 +208,7 @@ export function ServiceDetail() {
                         ¿Tienes un proyecto especial o necesitas características diferentes?
                       </p>
                       <a
-                        href={`https://wa.me/952628844?text=Hola%2C%20tengo%20una%20consulta%20especial%20sobre%20el%20servicio%20de%20${encodeURIComponent(service.title)}.`}
+                        href={`https://wa.me/51952628844?text=Hola%2C%20tengo%20una%20consulta%20especial%20sobre%20el%20servicio%20de%20${encodeURIComponent(service.title)}.`}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="flex items-center gap-2 py-3 px-6 bg-brand-red text-white font-black text-sm rounded-xl hover:bg-red-700 transition-colors shadow-lg shadow-brand-red/20 shrink-0"
@@ -280,7 +268,7 @@ export function ServiceDetail() {
               </div>
 
               <a
-                href={`https://wa.me/952628844?text=Hola%2C%20quisiera%20solicitar%20el%20servicio%20de%20*${encodeURIComponent(selectedItem.item)}*%20(${encodeURIComponent(service.title)}).`}
+                href={`https://wa.me/51952628844?text=Hola%2C%20quisiera%20solicitar%20el%20servicio%20de%20*${encodeURIComponent(selectedItem.item)}*%20(${encodeURIComponent(service.title)}).`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center justify-center gap-2 w-full py-4 px-6 bg-brand-red hover:bg-red-700 text-white font-black rounded-xl transition-all shadow-lg shadow-brand-red/20 uppercase tracking-wider group"

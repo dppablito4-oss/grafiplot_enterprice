@@ -67,22 +67,16 @@ function AppRoutes() {
         />
 
         {/* Rutas Públicas dentro del Layout del Dashboard */}
-        <Route element={(
-          <CartProvider>
-            <DashboardLayout />
-          </CartProvider>
-        )}>
+        <Route element={<DashboardLayout />}>
           <Route path="/cotizar" element={<NuevoPedido />} />
         </Route>
 
-        {/* Rutas Privadas (Dashboard) — CartProvider solo aquí */}
+        {/* Rutas Privadas (Dashboard) */}
         <Route
           path="/dashboard"
           element={(
             <ProtectedRoute>
-              <CartProvider>
-                <DashboardLayout />
-              </CartProvider>
+              <DashboardLayout />
             </ProtectedRoute>
           )}
         >
@@ -125,7 +119,9 @@ function App() {
 export default function AppWrapper() {
   return (
     <ProfileProvider>
-      <App />
+      <CartProvider>
+        <App />
+      </CartProvider>
     </ProfileProvider>
   );
 }

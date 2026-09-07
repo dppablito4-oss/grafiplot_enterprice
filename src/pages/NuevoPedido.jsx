@@ -1,6 +1,6 @@
 import { useState, useRef, useMemo, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { UploadCloud, FileText, Calculator, MessageCircle, X, AlertCircle, RefreshCcw, Loader2, Layers } from 'lucide-react';
+import { UploadCloud, FileText, Calculator, MessageCircle, X, AlertCircle, RefreshCcw, Loader2, Layers, Smartphone, Mail, KeyRound, LogIn } from 'lucide-react';
 import * as pdfjsLib from 'pdfjs-dist/build/pdf.mjs';
 import PdfWorker from 'pdfjs-dist/build/pdf.worker.mjs?worker';
 import { supabase } from '../lib/supabaseClient';
@@ -21,6 +21,9 @@ export function NuevoPedido() {
   
   // Modal de Autenticación
   const [showAuthModal, setShowAuthModal] = useState(false);
+  const [authMode, setAuthMode] = useState('phone'); // 'phone' | 'email'
+  const [authPhone, setAuthPhone] = useState('');
+  const [authPassword, setAuthPassword] = useState('');
   const [authStep, setAuthStep] = useState(1);
   const [authEmail, setAuthEmail] = useState('');
   const [authToken, setAuthToken] = useState('');
@@ -108,6 +111,40 @@ export function NuevoPedido() {
     }
   };
 
+  const handleAuthPhoneLogin = async (e) => {
+    e.preventDefault();
+    setAuthError('');
+
+    const cleanPhone = authPhone.replace(/\D/g, '');
+    if (cleanPhone.length !== 9) {
+      setAuthError('El número de celular debe tener 9 dígitos.');
+      return;
+    }
+
+    if (!authPassword) {
+      setAuthError('Por favor ingresa tu contraseña.');
+      return;
+    }
+
+    setAuthLoading(true);
+    const fakeEmail = `${cleanPhone}@grafiplot.com`;
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email: fakeEmail,
+      password: authPassword,
+    });
+    setAuthLoading(false);
+
+    if (error) {
+      setAuthError(error.message === 'Invalid login credentials' ? 'Celular o contraseña incorrectos.' : error.message);
+      return;
+    }
+
+    if (data.session) {
+      setShowAuthModal(false);
+      handleSendAndUpload(data.session.user.id);
+    }
+  };
+
   const handleAuthSendOtp = async (e) => {
     e.preventDefault();
     setAuthError('');
@@ -152,7 +189,18 @@ export function NuevoPedido() {
       const { error: uploadError } = await supabase.storage.from('pedidos').upload(filePath, file, { upsert: true });
       if (uploadError) throw uploadError;
 
-      const { data: { publicUrl } } = supabase.storage.from('pedidos').getPublicUrl(filePath);
+      // Generar URL firmada válida por 7 días para acceso directo en WhatsApp
+      let downloadUrl = '';
+      const { data: signedData } = await supabase.storage
+        .from('pedidos')
+        .createSignedUrl(filePath, 60 * 60 * 24 * 7);
+
+      if (signedData?.signedUrl) {
+        downloadUrl = signedData.signedUrl;
+      } else {
+        const { data: { publicUrl } } = supabase.storage.from('pedidos').getPublicUrl(filePath);
+        downloadUrl = publicUrl;
+      }
 
       // Guardar registro en Base de Datos para el Historial
       const { error: dbError } = await supabase.from('pedidos').insert({
@@ -193,7 +241,7 @@ export function NuevoPedido() {
         ` - Impresión: S/ ${printCost.toFixed(2)} ${isWholesale ? '(Precio por Mayor aplicado ✅)' : ''}\n` +
         ` - Acabados: S/ ${finishCost.toFixed(2)}\n` +
         `*TOTAL ESTIMADO:* S/ ${total.toFixed(2)}\n\n` +
-        `📎 *Descargar Archivo:*\n${publicUrl}`;
+        `📎 *Descargar Archivo:*\n${downloadUrl}`;
 
       setWhatsappLink(`https://wa.me/51952628844?text=${encodeURIComponent(text)}`);
     } catch (err) {
@@ -213,30 +261,105 @@ export function NuevoPedido() {
             <motion.div initial={{ scale: 0.95 }} animate={{ scale: 1 }} exit={{ scale: 0.95 }} className="bg-white dark:bg-zinc-900 rounded-3xl p-6 sm:p-8 max-w-md w-full shadow-2xl relative">
               <button onClick={() => setShowAuthModal(false)} className="absolute top-4 right-4 text-slate-400 hover:text-brand-red"><X className="w-5 h-5" /></button>
               <h2 className="text-2xl font-black text-slate-900 dark:text-white mb-2">Inicia Sesión</h2>
-              <p className="text-slate-500 dark:text-slate-400 text-sm mb-6">Para guardar tu pedido y hacerle seguimiento, necesitamos verificar tu correo.</p>
+              <p className="text-slate-500 dark:text-slate-400 text-sm mb-6">Para guardar tu pedido y hacerle seguimiento, por favor ingresa con tu cuenta.</p>
               
-              {authStep === 1 ? (
-                <form onSubmit={handleAuthSendOtp} className="space-y-4">
-                  <input type="email" required placeholder="ejemplo@correo.com" value={authEmail} onChange={e => setAuthEmail(e.target.value)} className="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-zinc-700 bg-slate-50 dark:bg-zinc-950 text-slate-900 dark:text-white focus:ring-2 focus:ring-brand-red focus:outline-none" />
+              {/* Selector de modo: Celular o Correo */}
+              <div className="flex bg-slate-100 dark:bg-zinc-950 p-1 rounded-xl mb-6">
+                <button
+                  type="button"
+                  onClick={() => { setAuthMode('phone'); setAuthError(''); }}
+                  className={`flex-1 flex justify-center items-center gap-2 py-2 text-xs font-bold rounded-lg transition-all ${
+                    authMode === 'phone'
+                      ? 'bg-white dark:bg-zinc-800 shadow-sm text-slate-900 dark:text-white'
+                      : 'text-slate-500 hover:text-slate-700 dark:hover:text-slate-300'
+                  }`}
+                >
+                  <Smartphone className="w-3.5 h-3.5" /> Celular
+                </button>
+                <button
+                  type="button"
+                  onClick={() => { setAuthMode('email'); setAuthError(''); }}
+                  className={`flex-1 flex justify-center items-center gap-2 py-2 text-xs font-bold rounded-lg transition-all ${
+                    authMode === 'email'
+                      ? 'bg-white dark:bg-zinc-800 shadow-sm text-slate-900 dark:text-white'
+                      : 'text-slate-500 hover:text-slate-700 dark:hover:text-slate-300'
+                  }`}
+                >
+                  <Mail className="w-3.5 h-3.5" /> Correo (OTP)
+                </button>
+              </div>
+
+              {authMode === 'phone' ? (
+                <form onSubmit={handleAuthPhoneLogin} className="space-y-4">
+                  <div>
+                    <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
+                      Número de celular
+                    </label>
+                    <div className="relative">
+                      <Smartphone className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                      <input
+                        type="tel"
+                        required
+                        placeholder="Ej. 999888777"
+                        value={authPhone}
+                        onChange={e => setAuthPhone(e.target.value)}
+                        className="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-200 dark:border-zinc-700 bg-slate-50 dark:bg-zinc-950 text-slate-900 dark:text-white focus:ring-2 focus:ring-brand-red focus:outline-none text-sm"
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
+                      Contraseña
+                    </label>
+                    <div className="relative">
+                      <KeyRound className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                      <input
+                        type="password"
+                        required
+                        placeholder="••••••••"
+                        value={authPassword}
+                        onChange={e => setAuthPassword(e.target.value)}
+                        className="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-200 dark:border-zinc-700 bg-slate-50 dark:bg-zinc-950 text-slate-900 dark:text-white focus:ring-2 focus:ring-brand-red focus:outline-none text-sm"
+                      />
+                    </div>
+                  </div>
+
                   {authError && <p className="text-red-500 text-xs font-bold">{authError}</p>}
-                  <button type="submit" disabled={authLoading} className="w-full bg-brand-red hover:bg-red-700 text-white font-bold py-3 rounded-xl transition-colors disabled:opacity-50">
-                    {authLoading ? 'Enviando...' : 'Enviar código al correo'}
+
+                  <button
+                    type="submit"
+                    disabled={authLoading}
+                    className="w-full bg-brand-red hover:bg-red-700 text-white font-bold py-3 rounded-xl transition-colors disabled:opacity-50 flex items-center justify-center gap-2 text-sm shadow-md shadow-brand-red/20"
+                  >
+                    {authLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <LogIn className="w-4 h-4" />}
+                    {authLoading ? 'Iniciando sesión...' : 'Entrar y Guardar Pedido'}
                   </button>
                 </form>
               ) : (
-                <form onSubmit={handleAuthVerifyOtp} className="space-y-4">
-                  <p className="text-xs font-bold text-slate-400">Enviamos un código de 6 dígitos a {authEmail}</p>
-                  <input type="text" required maxLength={6} placeholder="000000" value={authToken} onChange={e => setAuthToken(e.target.value)} className="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-zinc-700 bg-slate-50 dark:bg-zinc-950 text-slate-900 dark:text-white tracking-[0.5em] text-center font-mono focus:ring-2 focus:ring-brand-red focus:outline-none" />
-                  {authError && <p className="text-red-500 text-xs font-bold">{authError}</p>}
-                  <button type="submit" disabled={authLoading || authToken.length < 6} className="w-full bg-brand-red hover:bg-red-700 text-white font-bold py-3 rounded-xl transition-colors disabled:opacity-50">
-                    {authLoading ? 'Verificando...' : 'Verificar y Guardar Pedido'}
-                  </button>
-                  <div className="text-center mt-4">
-                    <button type="button" disabled={resendCooldown > 0 || authLoading} onClick={handleAuthSendOtp} className="text-xs font-bold text-slate-500 hover:text-brand-red disabled:opacity-50 transition-colors">
-                      {resendCooldown > 0 ? `Reenviar código en ${resendCooldown}s` : '¿No recibiste el código? Reenviar'}
+                authStep === 1 ? (
+                  <form onSubmit={handleAuthSendOtp} className="space-y-4">
+                    <input type="email" required placeholder="ejemplo@correo.com" value={authEmail} onChange={e => setAuthEmail(e.target.value)} className="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-zinc-700 bg-slate-50 dark:bg-zinc-950 text-slate-900 dark:text-white focus:ring-2 focus:ring-brand-red focus:outline-none text-sm" />
+                    {authError && <p className="text-red-500 text-xs font-bold">{authError}</p>}
+                    <button type="submit" disabled={authLoading} className="w-full bg-brand-red hover:bg-red-700 text-white font-bold py-3 rounded-xl transition-colors disabled:opacity-50 text-sm">
+                      {authLoading ? 'Enviando...' : 'Enviar código al correo'}
                     </button>
-                  </div>
-                </form>
+                  </form>
+                ) : (
+                  <form onSubmit={handleAuthVerifyOtp} className="space-y-4">
+                    <p className="text-xs font-bold text-slate-400">Enviamos un código de 6 dígitos a {authEmail}</p>
+                    <input type="text" required maxLength={6} placeholder="000000" value={authToken} onChange={e => setAuthToken(e.target.value)} className="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-zinc-700 bg-slate-50 dark:bg-zinc-950 text-slate-900 dark:text-white tracking-[0.5em] text-center font-mono focus:ring-2 focus:ring-brand-red focus:outline-none" />
+                    {authError && <p className="text-red-500 text-xs font-bold">{authError}</p>}
+                    <button type="submit" disabled={authLoading || authToken.length < 6} className="w-full bg-brand-red hover:bg-red-700 text-white font-bold py-3 rounded-xl transition-colors disabled:opacity-50 text-sm">
+                      {authLoading ? 'Verificando...' : 'Verificar y Guardar Pedido'}
+                    </button>
+                    <div className="text-center mt-4">
+                      <button type="button" disabled={resendCooldown > 0 || authLoading} onClick={handleAuthSendOtp} className="text-xs font-bold text-slate-500 hover:text-brand-red disabled:opacity-50 transition-colors">
+                        {resendCooldown > 0 ? `Reenviar código en ${resendCooldown}s` : '¿No recibiste el código? Reenviar'}
+                      </button>
+                    </div>
+                  </form>
+                )
               )}
             </motion.div>
           </motion.div>

@@ -39,9 +39,9 @@ export const PRINT_CONFIG = {
 export const PAPER_OPTIONS = {
   'bond-75': { label: 'Papel bond 75g', absolutePriceBySize: { any: null } },
   fotografico: { label: 'Papel fotográfico', absolutePriceBySize: { a4: 1.5, a3: 3 } },
-  couche: { label: 'Papel couché', absolutePriceBySize: { a4: 2, a3: 4 } },
+  couche: { label: 'Papel couché', absolutePriceBySize: { a4: 1.5, a3: 3 } },
   'cartulina-escolar': { label: 'Cartulina escolar', absolutePriceBySize: { a4: 0.5, a3: 1 } },
-  'cartulina-hilo': { label: 'Cartulina de hilo', absolutePriceBySize: { a4: 1, a3: 2 } },
+  'cartulina-hilo': { label: 'Cartulina de hilo', absolutePriceBySize: { a4: 1.5, a3: 3 } },
 };
 
 // PRECIOS DE IMPRESIÓN CENTRALIZADOS

@@ -1,20 +1,52 @@
-import { createContext, useContext, useState, useCallback } from 'react';
+import { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { BULK_THRESHOLD, getAutoBindingTotal } from './pricing';
 
 const CartContext = createContext(null);
+const CART_STORAGE_KEY = 'grafiplot_cart_items';
+const NOTE_STORAGE_KEY = 'grafiplot_cart_note';
 
 function recompute(item) {
   const base = item.bulkUnitPrice && item.quantity > BULK_THRESHOLD
     ? item.bulkUnitPrice
     : item.baseUnitPrice;
   const unit = typeof item.paperPriceOverride === 'number' ? item.paperPriceOverride : base;
-  const bindingTotal = item.includeBinding ? getAutoBindingTotal(item.quantity) : 0;
+  const bindingTotal = item.includeBinding ? getAutoBindingTotal(item.quantity, Boolean(item.isDuplex)) : 0;
   return { ...item, unitPrice: unit, bindingTotal, subtotal: unit * item.quantity + bindingTotal };
 }
 
 export function CartProvider({ children }) {
-  const [items, setItems] = useState([]);
-  const [note, setNote] = useState('');
+  const [items, setItems] = useState(() => {
+    try {
+      const saved = localStorage.getItem(CART_STORAGE_KEY);
+      return saved ? JSON.parse(saved) : [];
+    } catch {
+      return [];
+    }
+  });
+
+  const [note, setNote] = useState(() => {
+    try {
+      return localStorage.getItem(NOTE_STORAGE_KEY) || '';
+    } catch {
+      return '';
+    }
+  });
+
+  useEffect(() => {
+    try {
+      localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(items));
+    } catch (e) {
+      console.warn('Error al guardar carrito en localStorage:', e);
+    }
+  }, [items]);
+
+  useEffect(() => {
+    try {
+      localStorage.setItem(NOTE_STORAGE_KEY, note);
+    } catch (e) {
+      console.warn('Error al guardar notas en localStorage:', e);
+    }
+  }, [note]);
 
   const addItem = useCallback((newItem) => {
     setItems(prev => {

@@ -66,7 +66,7 @@ export function HeroSection() {
             className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center lg:justify-start gap-4 mb-16 px-4 md:px-0"
           >
             <Link
-              to="/register"
+              to="/cotizar"
               className="group relative px-8 py-5 bg-brand-yellow text-slate-900 font-black text-[10px] md:text-xs tracking-[0.2em] rounded-2xl overflow-hidden transition-all hover:scale-[1.02] active:scale-95 shadow-xl shadow-brand-yellow/20 dark:shadow-brand-yellow/10 uppercase text-center"
             >
               Ir a tienda online
@@ -83,7 +83,7 @@ export function HeroSection() {
               </Link>
 
               <a
-                href="https://wa.me/952628844?text=Hola%20Grafiplot%2C%20quiero%20consultar%20un%20producto"
+                href="https://wa.me/51952628844?text=Hola%20Grafiplot%2C%20quiero%20consultar%20un%20producto"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex-1 sm:flex-none px-6 py-5 bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-2xl text-slate-900 dark:text-white font-black text-[10px] md:text-xs tracking-[0.2em] hover:bg-slate-100 dark:hover:bg-white/10 transition-all shadow-sm flex items-center justify-center gap-2 uppercase"

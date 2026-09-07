@@ -1,5 +1,5 @@
 -- ==============================================================================
--- 🚀 GRAFIPLOT ENTERPRISE — ESQUEMA COMPLETO Y UNIFICADO DE BASE DE DATOS (V3)
+-- 🚀 GRAFIPLOT ENTERPRISE — ESQUEMA UNIFICADO DE BASE DE DATOS Y SEGURIDAD (V3)
 -- ==============================================================================
 -- INSTRUCCIONES DE ACTUALIZACIÓN:
 -- 1. Abre el panel de tu proyecto en Supabase (https://supabase.com/dashboard).

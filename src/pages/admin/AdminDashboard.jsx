@@ -11,7 +11,9 @@ export function AdminDashboard() {
   const [activeTab, setActiveTab] = useState('pedidos');
 
   const handleLogout = async () => {
-    await supabase.auth.signOut();
+    if (supabase) {
+      await supabase.auth.signOut();
+    }
     window.location.href = '/';
   };
 

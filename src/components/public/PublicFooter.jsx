@@ -62,7 +62,7 @@ export function PublicFooter() {
           <div className="flex flex-col items-center md:items-end gap-2">
             <p className="text-[10px] text-slate-400 uppercase tracking-[0.3em] font-black">Designed & Developed by</p>
             <a 
-              href="https://wa.me/918165428" 
+              href="https://wa.me/51918165428" 
               target="_blank" 
               rel="noopener noreferrer"
               className="text-sm font-black text-slate-900 dark:text-white hover:text-brand-red dark:hover:text-brand-yellow transition-colors flex items-center gap-3 group tracking-tighter"

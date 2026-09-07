@@ -135,14 +135,15 @@ export function calculatePrice(config, numPages) {
 
 /**
  * getAutoBindingTotal — Calcula el costo de encuadernación automática
- * Usado por el cartStore para el cálculo rápido de anillados.
+ * Usado por el cartStore para el cálculo rápido de anillados consistente con el cotizador.
  * 
- * @param {number} pages - Número de páginas
+ * @param {number} pages - Número de páginas del documento
+ * @param {boolean} [isDuplex=false] - Si la impresión es a doble cara
  * @returns {number} Costo total de encuadernación
  */
-export function getAutoBindingTotal(pages) {
-  if (pages <= 100) return 1.5;
-  if (pages <= 200) return 2;
-  if (pages <= 499) return 3;
-  return Math.ceil(pages / 250) * 3;
+export function getAutoBindingTotal(pages, isDuplex = false) {
+  if (!pages || pages <= 0) return 0;
+  const sheets = isDuplex ? Math.ceil(pages / 2) : pages;
+  const tier = FINISH_PRICES.anillado_simple.find(t => sheets <= t.maxSheets);
+  return tier?.price || 5.0;
 }
